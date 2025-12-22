@@ -1,11 +1,11 @@
 import { create } from "zustand";
 
-type PassageStore = {
+type SentenceFillerStore = {
   passage: string;
   setPassage: (text: string) => void;
 };
 
-export const usePassageStore = create<PassageStore>((set) => ({
+export const useSentenceFillerStore = create<SentenceFillerStore>((set) => ({
   passage: "TESTING",
   setPassage: (text) => set({ passage: text }),
 }));
