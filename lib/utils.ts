@@ -29,10 +29,11 @@ export function sentenceCounter(passage: string) {
 export function removeAbbreviations(passage: string) {
   let safe = passage;
 
-  // 1) Protect abbreviation dots: "Mr." -> "Mr"
   for (const abbr of ABBREVIATIONS) {
-    const escaped = abbr.replace(".", "\\."); // escape the dot for regex
-    safe = safe.replace(new RegExp(escaped, "g"), abbr.replace(".", ""));
+    const escaped = abbr.replace(".", "\\.");
+    const pattern = new RegExp(`\\b${escaped}`, "gi");
+
+    safe = safe.replace(pattern, (match) => match.replace(".", "<<DOT>>"));
   }
 
   return safe;
