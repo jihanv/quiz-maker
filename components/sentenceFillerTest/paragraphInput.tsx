@@ -42,7 +42,7 @@ export default function ParagraphInput() {
     return (
         <>
             <div
-                className="flex flex-col w-3/4 2xl:w-275 mx-auto px-2.5">
+                className="flex flex-col w-3/4 max-w-5xl mx-auto px-2.5">
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div className="flex flex-col gap-2 p-5 bg-white rounded-[7px]" translate="no">
                         <div className="rounded-[5px] border border-[#ccc]">
@@ -51,9 +51,8 @@ export default function ParagraphInput() {
                                     id="message"
                                     {...register("sentence")}
                                     spellCheck="false"
-                                    className=" h-[50vh] border-none outline-none resize-none bg-none text-[18px] px-3.75 py-2.5 "
+                                    className=" h-[50vh] w-full border-none outline-none resize-none px-2 text-[18px] py-2.5 "
                                     placeholder="Paste the article here."
-                                    maxLength={500}
                                 ></textarea>
                             </div>
                         </div>
