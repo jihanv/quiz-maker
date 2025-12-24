@@ -38,3 +38,10 @@ export function removeAbbreviations(passage: string) {
 
   return safe;
 }
+
+export function switchQuotedEndings(passage: string) {
+  return passage
+    .replace(/\."/g, "<<SWITCH PERIOD>>.")
+    .replace(/!"/g, "<<SWITCH EX>>!")
+    .replace(/\?"/g, "<<SWITCH QU>>?");
+}
