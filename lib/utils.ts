@@ -45,3 +45,10 @@ export function switchQuotedEndings(passage: string) {
     .replace(/!"/g, "<<SWITCH EX>>!")
     .replace(/\?"/g, "<<SWITCH QU>>?");
 }
+
+export function restoreQuotedEndings(passage: string) {
+  return passage
+    .replace(/<<SWITCH PERIOD>>\./g, '."')
+    .replace(/<<SWITCH EX>>!/g, '!"')
+    .replace(/<<SWITCH QU>>\?/g, '?"');
+}
