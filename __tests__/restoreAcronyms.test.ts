@@ -42,4 +42,9 @@ describe("restoreAcronyms", () => {
     const input = "Grade [A-] is not an acronym.";
     expect(restoreAcronyms(input)).toBe("Grade A. is not an acronym.");
   });
+
+  it("restores lowercase acronyms", () => {
+    const input = "[e-g-] i love rice";
+    expect(restoreAcronyms(input)).toBe("e.g. i love rice");
+  });
 });

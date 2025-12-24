@@ -47,4 +47,9 @@ describe("replaceAcronyms", () => {
     const input = "Grade A. is not an acronym.";
     expect(replaceAcronyms(input)).toBe("Grade A. is not an acronym.");
   });
+
+  it("works on lowercase acronyms", () => {
+    const input = "e.g.";
+    expect(replaceAcronyms(input)).toBe("[e-g-]");
+  });
 });

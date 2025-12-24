@@ -39,6 +39,10 @@ export function removeAbbreviations(passage: string) {
   return safe;
 }
 
+export function restoreAbbreviations(passage: string) {
+  return passage.replace(/<<DOT>>/g, ".");
+}
+
 export function switchQuotedEndings(passage: string) {
   return passage
     .replace(/\."/g, "<<SWITCH PERIOD>>.")
@@ -54,7 +58,7 @@ export function restoreQuotedEndings(passage: string) {
 }
 
 export function replaceAcronyms(passage: string) {
-  const ACRONYM_RE = /\b(?:[A-Z]\.){1,}[A-Z](?:\.)?(?=$|[^\w])/g;
+  const ACRONYM_RE = /\b(?:[A-Za-z]\.){1,}[A-Za-z](?:\.)?(?=$|[^\w])/g;
 
   return passage.replace(ACRONYM_RE, (match) => {
     const hasTrailingDot = match.endsWith(".");
@@ -69,7 +73,7 @@ export function replaceAcronyms(passage: string) {
 }
 
 export function restoreAcronyms(passage: string) {
-  return passage.replace(/\[[A-Z-]+\]/g, (match) => {
+  return passage.replace(/\[[A-Za-z-]+\]/g, (match) => {
     const inner = match.slice(1, -1); // remove [ and ]
     const hasTrailingDash = inner.endsWith("-");
 
