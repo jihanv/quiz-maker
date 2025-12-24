@@ -52,3 +52,30 @@ export function restoreQuotedEndings(passage: string) {
     .replace(/<<SWITCH EX>>!/g, '!"')
     .replace(/<<SWITCH QU>>\?/g, '?"');
 }
+
+export function replaceAcronyms(passage: string) {
+  const ACRONYM_RE = /\b(?:[A-Z]\.){1,}[A-Z](?:\.)?(?=$|[^\w])/g;
+
+  return passage.replace(ACRONYM_RE, (match) => {
+    const hasTrailingDot = match.endsWith(".");
+
+    // Remove dots and split letters
+    const letters = match.replaceAll(".", "").split("");
+
+    const joined = letters.join("-");
+
+    return hasTrailingDot ? `[${joined}-]` : `[${joined}]`;
+  });
+}
+
+export function restoreAcronyms(passage: string) {
+  return passage.replace(/\[[A-Z-]+\]/g, (match) => {
+    const inner = match.slice(1, -1); // remove [ and ]
+    const hasTrailingDash = inner.endsWith("-");
+
+    const letters = inner.replace(/-$/, "").split("-");
+    const acronym = letters.join(".");
+
+    return hasTrailingDash ? `${acronym}.` : acronym;
+  });
+}
