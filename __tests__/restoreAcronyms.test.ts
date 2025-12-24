@@ -47,4 +47,9 @@ describe("restoreAcronyms", () => {
     const input = "[e-g-] i love rice";
     expect(restoreAcronyms(input)).toBe("e.g. i love rice");
   });
+
+  it("restores lowercase acronyms", () => {
+    const input = "[p-m-]";
+    expect(restoreAcronyms(input)).toBe("p.m.");
+  });
 });

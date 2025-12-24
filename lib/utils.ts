@@ -1,17 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-const ABBREVIATIONS = [
-  "Mr.",
-  "Mrs.",
-  "Ms.",
-  "Dr.",
-  "Prof.",
-  "Sr.",
-  "Jr.",
-  "St.",
-  "etc.",
-];
-
+import { ABBREVIATIONS } from "./constants";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -82,4 +71,13 @@ export function restoreAcronyms(passage: string) {
 
     return hasTrailingDash ? `${acronym}.` : acronym;
   });
+}
+
+export function replaceDecimalDots(passage: string) {
+  // Replace dots that are BETWEEN digits (e.g., 3.14, 2.1.3) so they don't look like sentence endings
+  return passage.replace(/(?<=\d)\.(?=\d)/g, "<<DECIMAL_DOT>>");
+}
+
+export function restoreDecimalDots(passage: string) {
+  return passage.replace(/<<DECIMAL_DOT>>/g, ".");
 }
