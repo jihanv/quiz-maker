@@ -270,3 +270,21 @@ export function replaceUrlEmailDomainDots(passage: string) {
 export function restoreUrlEmailDomainDots(passage: string) {
   return passage.replace(/<<URL_DOT>>/g, ".");
 }
+
+export function replaceEnumerationMarkers(passage: string) {
+  let out = passage;
+
+  // 1) Line-start numeric enumerations (start of string or after newline)
+  //    "  12. First" -> "  12<<ENUM_DOT>> First"
+  out = out.replace(/(^|\n)(\s*)(\d+)\.(?=\s+)/g, "$1$2$3<<ENUM_DOT>>");
+
+  // 2) Inline dot enumerations: "a. item", "2. item"
+  //    Note: we intentionally require whitespace after the dot to avoid decimals/versions.
+  out = out.replace(/\b([A-Za-z]|\d+)\.(?=\s+)/g, "$1<<ENUM_DOT>>");
+
+  return out;
+}
+
+export function restoreEnumerationMarkers(passage: string) {
+  return passage.replace(/<<ENUM_DOT>>/g, ".");
+}
