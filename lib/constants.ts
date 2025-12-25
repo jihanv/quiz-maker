@@ -33,6 +33,8 @@ export const ABBREVIATIONS = [
   "Inst.",
   "Acad.",
   "Coll.",
+  "Ph.D.",
+  "Ph.D",
 
   // Military / ranks
   "Gen.",
@@ -102,6 +104,24 @@ export const ABBREVIATIONS = [
   "Ch.",
   "pp.",
   "p.",
+  "Fig.",
+  "Figs.",
+  "Eq.",
+  "Eqs.",
+  "Ref.",
+  "Refs.",
+  "Ch.",
+  "Sec.",
+  "Secs.",
+  "pp.",
+  "p.",
+  "Vol.",
+  "No.",
+  "ed.",
+  "eds.",
+  "et al.",
+  "Sec.",
+  "Chap.",
 ];
 
 export const INITIALS_RE = /\b([A-Za-z]\.)(\s*[A-Za-z]\.)+/g;

@@ -1,4 +1,5 @@
 import { TParagraphSchema, paragraphSchema } from "@/lib/types";
+import { countSentences } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -23,7 +24,7 @@ export async function POST(request: Request) {
 
   const data: TParagraphSchema = result.data;
 
-  const test = data.sentence.toUpperCase();
+  const { s } = countSentences(data.sentence);
 
   // translate
   return NextResponse.json(
@@ -31,7 +32,7 @@ export async function POST(request: Request) {
       ? { errors: zodErrors }
       : {
           success: true,
-          test: test,
+          test: s,
         }
   );
 }

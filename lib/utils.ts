@@ -5,15 +5,22 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function sentenceCounter(passage: string) {
-  if (!passage.trim()) return 0;
+export function countSentences(passage: string) {
+  if (!passage.trim()) return { count: 0, s: "" };
 
   //TODO add more normalizers before counting.
   const count = removeAbbreviations(passage)
     .trim()
     .split(/[.!?]+/)
     .filter((sentence) => sentence.length > 0).length;
-  return count;
+  console.log(passage);
+  let s = removeAbbreviations(passage);
+
+  console.log(s);
+  s = replaceInitials(s);
+  console.log(s);
+
+  return { count: count, s: s };
 }
 
 export function removeAbbreviations(passage: string) {
@@ -287,4 +294,16 @@ export function replaceEnumerationMarkers(passage: string) {
 
 export function restoreEnumerationMarkers(passage: string) {
   return passage.replace(/<<ENUM_DOT>>/g, ".");
+}
+
+export function protectPunctuationClusters(passage: string) {
+  // Protect a period when it is immediately followed by punctuation that
+  // usually indicates the period is not a sentence boundary (e.g., "Cal.,", "Inc.;", "Ltd.)")
+  // Leaves decimals alone because those are digit-dot-digit (handled elsewhere).
+  return passage.replace(/\.([,;:)\]\}])/g, "<<DOT>>$1");
+}
+
+export function restorePunctuationClusters(passage: string) {
+  // Uses the same token as your abbreviation normalizer, so restore is identical
+  return passage.replace(/<<DOT>>/g, ".");
 }
