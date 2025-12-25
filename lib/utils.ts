@@ -220,3 +220,53 @@ export function replaceEllipses(passage: string) {
 export function restoreEllipses(passage: string) {
   return passage.replace(/<<ELLIPSIS>>/g, "...");
 }
+
+export function replaceNumericPunctuation(passage: string) {
+  return (
+    passage
+      // Dots between digits (covers decimals, versions, IPs, section refs)
+      .replace(/(?<=\d)\.(?=\d)/g, "<<NUM_DOT>>")
+      // Commas between digits (covers thousands separators and EU decimal comma)
+      .replace(/(?<=\d),(?=\d)/g, "<<NUM_COMMA>>")
+  );
+}
+
+export function restoreNumericPunctuation(passage: string) {
+  return passage.replace(/<<NUM_DOT>>/g, ".").replace(/<<NUM_COMMA>>/g, ",");
+}
+
+// utils/urlNormalization.ts (or wherever you keep utils)
+
+/**
+ * Protect dots inside URLs / emails / domains so sentence splitting on "." won't break.
+ *
+ * Examples:
+ * - "example.com"        -> "example<<URL_DOT>>com"
+ * - "foo.co.uk)"         -> "foo<<URL_DOT>>co<<URL_DOT>>uk)"
+ * - "name@example.com."  -> "name@example<<URL_DOT>>com."
+ * - "https://a.b/c.d"    -> "https://a<<URL_DOT>>b/c<<URL_DOT>>d"
+ * Bonus: preserves trailing punctuation like ")., \"" etc.
+ */
+export function replaceUrlEmailDomainDots(passage: string) {
+  const RE =
+    /\bhttps?:\/\/[^\s<>()]+|\bwww\.[^\s<>()]+|\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}|\b(?:[A-Z0-9-]+\.)+[A-Z]{2,}(?:\/[^\s<>()]*)?/gi;
+
+  return passage.replace(RE, (match, offset: number, str: string) => {
+    // Avoid matching the domain-part inside emails twice if the domain regex hits after the email regex
+    // (email alternative should win, but this is extra safety).
+    const prevChar = offset > 0 ? str[offset - 1] : "";
+    if (prevChar === "@") return match;
+
+    // Strip common trailing punctuation that often follows URLs/emails in prose
+    // Keep it outside the transformed core so it isn't tokenized.
+    const m = match.match(/^(.*?)([)\]\}"'.,!?;:]+)?$/);
+    const core = m?.[1] ?? match;
+    const trailing = m?.[2] ?? "";
+
+    return core.replace(/\./g, "<<URL_DOT>>") + trailing;
+  });
+}
+
+export function restoreUrlEmailDomainDots(passage: string) {
+  return passage.replace(/<<URL_DOT>>/g, ".");
+}
