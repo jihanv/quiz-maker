@@ -8,6 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 export function sentenceCounter(passage: string) {
   if (!passage.trim()) return 0;
 
+  //TODO add more normalizers before counting.
   const count = removeAbbreviations(passage)
     .trim()
     .split(/[.!?]+/)
@@ -166,4 +167,44 @@ export function restoreInitials(passage: string) {
     }
     return out;
   });
+}
+
+export function replaceSingleLetterPeriodCombos(passage: string) {
+  const RE = /\b([A-Z])\./g;
+
+  return passage.replace(
+    RE,
+    (whole, letter: string, offset: number, str: string) => {
+      const dotIndex = offset + 1;
+
+      // Guard: avoid decimals like "3.14" (extra safety)
+      const prevChar = offset > 0 ? str[offset - 1] : "";
+      const nextChar = dotIndex + 1 < str.length ? str[dotIndex + 1] : "";
+      if (/\d/.test(prevChar) && /\d/.test(nextChar)) return whole;
+
+      // Check if this is part of a multi-initial sequence:
+      // - preceded by "<Letter>.<spaces>"
+      // - followed by "<spaces><Letter>."
+      const before = str.slice(0, offset);
+      const after = str.slice(dotIndex + 1);
+
+      const isPrecededByInitial = /[A-Za-z]\.\s*$/.test(before);
+      const isFollowedByInitial = /^\s*[A-Za-z]\./.test(after);
+
+      if (isPrecededByInitial || isFollowedByInitial) {
+        return whole; // leave initials sequences alone
+      }
+
+      return `<<SINGLE_INITIAL:${letter}>>`;
+    }
+  );
+}
+
+export function restoreSingleLetterPeriodCombos(passage: string) {
+  return passage.replace(
+    /<<SINGLE_INITIAL:([A-Z])>>/g,
+    (_whole, letter: string) => {
+      return `${letter}.`;
+    }
+  );
 }
