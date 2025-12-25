@@ -9,15 +9,28 @@ export function countSentences(passage: string) {
   if (!passage.trim()) return { count: 0, s: "" };
 
   //TODO add more normalizers before counting.
-  const count = removeAbbreviations(passage)
+
+  console.log(passage);
+  let s = passage;
+
+  s = replaceEllipses(s);
+  s = removeAbbreviations(s);
+  s = replaceAcronyms(s);
+  s = replaceInitials(s);
+  s = protectPunctuationClusters(s);
+  s = replaceUrlEmailDomainDots(s);
+  s = replaceNumericPunctuation(s);
+  s = replaceSingleLetterPeriodCombos(s);
+  s = replaceEnumerationMarkers(s);
+  s = switchQuotedEndings(s);
+
+  const count = removeAbbreviations(s)
     .trim()
     .split(/[.!?]+/)
     .filter((sentence) => sentence.length > 0).length;
-  console.log(passage);
-  let s = removeAbbreviations(passage);
 
-  console.log(s);
-  s = replaceInitials(s);
+  console.log(count);
+  console.log(s.trim().split(/\s+/).length);
   console.log(s);
 
   return { count: count, s: s };
