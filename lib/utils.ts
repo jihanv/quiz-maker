@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { ABBREVIATIONS, INITIALS_RE } from "./constants";
+import { ABBREVIATIONS, INITIALS_RE, INITIALS_TOKEN_RE } from "./constants";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -149,5 +149,21 @@ export function replaceInitials(passage: string) {
       .join(",");
 
     return `<<INITIALS:${letters}|${gaps}>>`;
+  });
+}
+export function restoreInitials(passage: string) {
+  return passage.replace(INITIALS_TOKEN_RE, (_whole, lettersRaw, gapsRaw) => {
+    const letters = String(lettersRaw).split("-").filter(Boolean);
+    if (letters.length < 2) return _whole;
+
+    const gapsEnc = String(gapsRaw).length ? String(gapsRaw).split(",") : [];
+    const gapsDec = gapsEnc.map(decodeWs);
+
+    let out = "";
+    for (let i = 0; i < letters.length; i++) {
+      out += `${letters[i]}.`;
+      if (i < letters.length - 1) out += gapsDec[i] ?? "";
+    }
+    return out;
   });
 }
