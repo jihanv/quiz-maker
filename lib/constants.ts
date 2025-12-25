@@ -103,3 +103,7 @@ export const ABBREVIATIONS = [
   "pp.",
   "p.",
 ];
+
+export const INITIALS_RE = /\b([A-Za-z]\.)(\s*[A-Za-z]\.)+/g;
+
+export const INITIALS_TOKEN_RE = /<<INITIALS:([A-Za-z-]+)\|([^>]*)>>/g;
