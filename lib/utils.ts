@@ -208,3 +208,15 @@ export function restoreSingleLetterPeriodCombos(passage: string) {
     }
   );
 }
+
+export function replaceEllipses(passage: string) {
+  // Normalize unicode ellipsis to three dots
+  const normalized = passage.replace(/\u2026/g, "...");
+
+  // Replace "..." (and longer runs like "....") with a token
+  return normalized.replace(/\.{3,}/g, "<<ELLIPSIS>>");
+}
+
+export function restoreEllipses(passage: string) {
+  return passage.replace(/<<ELLIPSIS>>/g, "...");
+}
