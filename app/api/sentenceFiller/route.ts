@@ -24,7 +24,9 @@ export async function POST(request: Request) {
 
   const data: TParagraphSchema = result.data;
 
-  const { s } = countSentences(data.sentence);
+  const test = data.sentence.toUpperCase();
+  const count = countSentences(test);
+  console.log(count);
 
   // translate
   return NextResponse.json(
@@ -32,7 +34,7 @@ export async function POST(request: Request) {
       ? { errors: zodErrors }
       : {
           success: true,
-          test: s,
+          test: test,
         }
   );
 }

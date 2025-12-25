@@ -122,6 +122,8 @@ export const ABBREVIATIONS = [
   "et al.",
   "Sec.",
   "Chap.",
+  "Int’l",
+  "Conf.",
 ];
 
 export const INITIALS_RE = /\b([A-Za-z]\.)(\s*[A-Za-z]\.)+/g;

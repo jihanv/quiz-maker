@@ -6,11 +6,22 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function countSentences(passage: string) {
-  if (!passage.trim()) return { count: 0, s: "" };
+  if (!passage.trim()) return;
 
   //TODO add more normalizers before counting.
 
-  console.log(passage);
+  const s = normalizePassage(passage);
+
+  console.log(s);
+  const count = s
+    .trim()
+    .split(/[.!?]+/)
+    .filter((sentence) => sentence.length > 0).length;
+
+  return count;
+}
+
+export function normalizePassage(passage: string) {
   let s = passage;
 
   s = replaceEllipses(s);
@@ -18,24 +29,46 @@ export function countSentences(passage: string) {
   s = replaceAcronyms(s);
   s = replaceInitials(s);
   s = protectPunctuationClusters(s);
+  s = replaceSectionRefDots(s);
   s = replaceUrlEmailDomainDots(s);
   s = replaceNumericPunctuation(s);
   s = replaceSingleLetterPeriodCombos(s);
   s = replaceEnumerationMarkers(s);
   s = switchQuotedEndings(s);
 
-  const count = removeAbbreviations(s)
-    .trim()
-    .split(/[.!?]+/)
-    .filter((sentence) => sentence.length > 0).length;
-
-  console.log(count);
-  console.log(s.trim().split(/\s+/).length);
-  console.log(s);
-
-  return { count: count, s: s };
+  return s;
 }
 
+export function revertPassage(convertedPassage: string) {
+  let restored = convertedPassage;
+
+  restored = restoreQuotedEndings(restored);
+  restored = restoreEnumerationMarkers(restored);
+  restored = restoreSingleLetterPeriodCombos(restored);
+  restored = restoreNumericPunctuation(restored);
+  restored = restoreUrlEmailDomainDots(restored);
+  restored = restoreSectionRefDots(restored);
+  restored = restorePunctuationClusters(restored);
+  restored = restoreInitials(restored);
+  restored = restoreAcronyms(restored);
+  restored = restoreAbbreviations(restored);
+  restored = restoreEllipses(restored);
+
+  return restored;
+}
+
+export function replaceSectionRefDots(passage: string) {
+  // Examples captured: IV.B, III.A.2, IV.B.1, V.C, II.D
+  // Protect dots that connect roman numerals/letters/digits in section refs
+  return passage.replace(
+    /\b([IVXLCDM]+)(\.(?=[A-Z0-9]))/g,
+    (_m, roman) => `${roman}<<SEC_DOT>>`
+  );
+}
+
+export function restoreSectionRefDots(passage: string) {
+  return passage.replace(/<<SEC_DOT>>/g, ".");
+}
 export function removeAbbreviations(passage: string) {
   let safe = passage;
 
