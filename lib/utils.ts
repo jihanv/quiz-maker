@@ -4,6 +4,12 @@ import { ABBREVIATIONS, INITIALS_RE, INITIALS_TOKEN_RE } from "./constants";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+export function countWords(text: string) {
+  return text
+    .trim() // remove leading/trailing whitespace
+    .split(/\s+/) // split on one or more whitespace characters
+    .filter(Boolean).length;
+}
 
 export function countSentences(passage: string) {
   if (!passage.trim()) return;
@@ -12,7 +18,6 @@ export function countSentences(passage: string) {
 
   const s = normalizePassage(passage);
 
-  console.log(s);
   const count = s
     .trim()
     .split(/[.!?]+/)
