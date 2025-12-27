@@ -1,3 +1,4 @@
+import { TARGET_LENGTH } from "@/lib/constants";
 import { countWords } from "@/lib/utils";
 
 function splitIntoSentences(passage: string): string[] {
@@ -8,44 +9,62 @@ function splitIntoSentences(passage: string): string[] {
 }
 
 export function dividePassage(passage: string) {
-  const text = passage.trim();
-  if (!text) return [];
+  // If passage is all whitespace, return empty
+  if (!passage || !/\S/.test(passage)) return [];
 
-  console.log(splitIntoSentences(passage));
+  const sentenceArray = splitIntoSentences(passage);
+  if (sentenceArray.length === 0) return [];
+  console.log(sentenceArray);
+
+  const counts = sentenceArray.map((sentence) => countWords(sentence));
 
   const passageCount = countWords(passage);
-  const numberOfSections = Math.floor(passageCount / 36);
+  const numberOfSections = Math.floor(passageCount / TARGET_LENGTH);
   console.log(numberOfSections);
 
-  const tokens = text.split(/(\s+)/);
+  const sections: string[] = [];
+  let i = 0;
 
-  const chunks: string[] = [];
-  let currentTokens: string[] = [];
-  let currentWordCount = 0;
+  while (i < sentenceArray.length) {
+    const sectionPieces: string[] = [];
+    let sectionWordCount = 0;
 
-  const isWord = (t: string) => /[A-Za-z0-9]+(?:'[A-Za-z0-9]+)?/.test(t);
-
-  for (const tok of tokens) {
-    // Add token
-    currentTokens.push(tok);
-
-    // If it's a "word" token, increment
-    if (isWord(tok)) currentWordCount++;
-
-    // If we've hit the target, close the chunk
-    if (currentWordCount >= 36) {
-      const chunk = currentTokens.join("");
-      if (chunk) chunks.push(chunk);
-
-      currentTokens = [];
-      currentWordCount = 0;
+    while (
+      i < sentenceArray.length &&
+      sectionWordCount + counts[i] <= TARGET_LENGTH
+    ) {
+      sectionPieces.push(sentenceArray[i]);
+      sectionWordCount += counts[i];
+      i++;
     }
+
+    if (i >= sentenceArray.length) {
+      sections.push(sectionPieces.join("")); // preserve formatting
+      break;
+    }
+
+    const before = sectionWordCount;
+    const after = sectionWordCount + counts[i];
+
+    const diffBefore = Math.abs(TARGET_LENGTH - before);
+    const diffAfter = Math.abs(TARGET_LENGTH - after);
+
+    // If the next "sentence" alone is longer than target and we have nothing yet,
+    // take it to avoid an infinite loop.
+    if (sectionPieces.length === 0) {
+      sections.push(sentenceArray[i]);
+      i++;
+      continue;
+    }
+
+    if (diffAfter < diffBefore) {
+      sectionPieces.push(sentenceArray[i]);
+      sectionWordCount += counts[i];
+      i++;
+    }
+
+    sections.push(sectionPieces.join("")); // preserve formatting
   }
-
-  // Remainder
-  const remainder = currentTokens.join("").trim();
-  if (remainder) chunks.push(remainder);
-
-  console.log(chunks);
+  console.log(sections);
   return numberOfSections;
 }
