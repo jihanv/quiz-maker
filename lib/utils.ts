@@ -12,7 +12,7 @@ export function countWords(text: string) {
 }
 
 export function countSentences(passage: string) {
-  if (!passage.trim()) return;
+  if (!passage.trim()) return 0;
 
   //TODO add more normalizers before counting.
 
@@ -63,11 +63,8 @@ export function revertPassage(convertedPassage: string) {
 }
 
 export function replaceSectionRefDots(passage: string) {
-  // Examples captured: IV.B, III.A.2, IV.B.1, V.C, II.D
-  // Protect dots that connect roman numerals/letters/digits in section refs
-  return passage.replace(
-    /\b([IVXLCDM]+)(\.(?=[A-Z0-9]))/g,
-    (_m, roman) => `${roman}<<SEC_DOT>>`
+  return passage.replace(/\b[IVXLCDM]+(?:\.[A-Z0-9]+)+\b/g, (match) =>
+    match.replace(/\./g, "<<SEC_DOT>>")
   );
 }
 
@@ -293,8 +290,6 @@ export function restoreNumericPunctuation(passage: string) {
   return passage.replace(/<<NUM_DOT>>/g, ".").replace(/<<NUM_COMMA>>/g, ",");
 }
 
-// utils/urlNormalization.ts (or wherever you keep utils)
-
 /**
  * Protect dots inside URLs / emails / domains so sentence splitting on "." won't break.
  *
@@ -309,14 +304,7 @@ export function replaceUrlEmailDomainDots(passage: string) {
   const RE =
     /\bhttps?:\/\/[^\s<>()]+|\bwww\.[^\s<>()]+|\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}|\b(?:[A-Z0-9-]+\.)+[A-Z]{2,}(?:\/[^\s<>()]*)?/gi;
 
-  return passage.replace(RE, (match, offset: number, str: string) => {
-    // Avoid matching the domain-part inside emails twice if the domain regex hits after the email regex
-    // (email alternative should win, but this is extra safety).
-    const prevChar = offset > 0 ? str[offset - 1] : "";
-    if (prevChar === "@") return match;
-
-    // Strip common trailing punctuation that often follows URLs/emails in prose
-    // Keep it outside the transformed core so it isn't tokenized.
+  return passage.replace(RE, (match: string) => {
     const m = match.match(/^(.*?)([)\]\}"'.,!?;:]+)?$/);
     const core = m?.[1] ?? match;
     const trailing = m?.[2] ?? "";

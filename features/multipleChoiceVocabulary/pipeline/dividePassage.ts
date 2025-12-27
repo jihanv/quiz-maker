@@ -1,5 +1,6 @@
 import { TARGET_LENGTH } from "@/lib/constants";
-import { countWords } from "@/lib/utils";
+import { countWords, revertPassage, normalizePassage } from "@/lib/utils";
+import { pickDifficultWord } from "./pickDifficultWord";
 
 function splitIntoSentences(passage: string): string[] {
   // Captures: "sentence punctuation + trailing whitespace"
@@ -12,7 +13,7 @@ export function dividePassage(passage: string) {
   // If passage is all whitespace, return empty
   if (!passage || !/\S/.test(passage)) return [];
 
-  const sentenceArray = splitIntoSentences(passage);
+  const sentenceArray = splitIntoSentences(normalizePassage(passage));
   if (sentenceArray.length === 0) return [];
   console.log(sentenceArray);
 
@@ -33,7 +34,7 @@ export function dividePassage(passage: string) {
       i < sentenceArray.length &&
       sectionWordCount + counts[i] <= TARGET_LENGTH
     ) {
-      sectionPieces.push(sentenceArray[i]);
+      sectionPieces.push(revertPassage(sentenceArray[i]));
       sectionWordCount += counts[i];
       i++;
     }
@@ -52,13 +53,13 @@ export function dividePassage(passage: string) {
     // If the next "sentence" alone is longer than target and we have nothing yet,
     // take it to avoid an infinite loop.
     if (sectionPieces.length === 0) {
-      sections.push(sentenceArray[i]);
+      sections.push(revertPassage(sentenceArray[i]));
       i++;
       continue;
     }
 
     if (diffAfter < diffBefore) {
-      sectionPieces.push(sentenceArray[i]);
+      sectionPieces.push(revertPassage(sentenceArray[i]));
       sectionWordCount += counts[i];
       i++;
     }
@@ -66,5 +67,6 @@ export function dividePassage(passage: string) {
     sections.push(sectionPieces.join("")); // preserve formatting
   }
   console.log(sections);
+  pickDifficultWord(sections);
   return numberOfSections;
 }
