@@ -68,5 +68,5 @@ export function dividePassage(passage: string) {
   }
   console.log(sections);
   pickDifficultWord(sections);
-  return numberOfSections;
+  return sections;
 }

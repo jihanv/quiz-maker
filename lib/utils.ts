@@ -29,13 +29,13 @@ export function countSentences(passage: string) {
 export function normalizePassage(passage: string) {
   let s = passage;
 
+  s = replaceUrlEmailDomainDots(s);
   s = replaceEllipses(s);
   s = removeAbbreviations(s);
   s = replaceAcronyms(s);
   s = replaceInitials(s);
   s = protectPunctuationClusters(s);
   s = replaceSectionRefDots(s);
-  s = replaceUrlEmailDomainDots(s);
   s = replaceNumericPunctuation(s);
   s = replaceSingleLetterPeriodCombos(s);
   s = replaceEnumerationMarkers(s);
@@ -51,13 +51,13 @@ export function revertPassage(convertedPassage: string) {
   restored = restoreEnumerationMarkers(restored);
   restored = restoreSingleLetterPeriodCombos(restored);
   restored = restoreNumericPunctuation(restored);
-  restored = restoreUrlEmailDomainDots(restored);
   restored = restoreSectionRefDots(restored);
   restored = restorePunctuationClusters(restored);
   restored = restoreInitials(restored);
   restored = restoreAcronyms(restored);
   restored = restoreAbbreviations(restored);
   restored = restoreEllipses(restored);
+  restored = restoreUrlEmailDomainDots(restored);
 
   return restored;
 }

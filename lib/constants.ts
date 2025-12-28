@@ -131,3 +131,5 @@ export const INITIALS_RE = /\b([A-Za-z]\.)(\s*[A-Za-z]\.)+/g;
 export const INITIALS_TOKEN_RE = /<<INITIALS:([A-Za-z-]+)\|([^>]*)>>/g;
 
 export const TARGET_LENGTH = 36;
+
+export const MIN_SECTION_WORDS = Math.floor(TARGET_LENGTH * 0.8);
