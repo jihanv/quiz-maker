@@ -1,54 +1,89 @@
 import nlp from "compromise";
 import { zipfFrequency } from "nodewordfreq";
+import fs from "node:fs";
+
+const data = JSON.parse(fs.readFileSync("./data/dictionary.json", "utf8"));
+const dict = new Set(data.dictionary); // Set = fast lookup
 
 type MultipleChoiceSection = {
   order: number;
   sectionText: string;
-  // difficultWord: string | null;
-  // difficultWordTokenIndex: number | null;
+  difficultWord: string | null;
+  difficultWordTokenIndex: number | null;
   // difficultWordSpan: { start: number; end: number } | null;
 };
 
 export function createTestData(
   passageSections: string[]
 ): MultipleChoiceSection[] {
-  const object = passageSections.map((sectionText, i) => ({
-    order: i + 1,
-    sectionText,
-    // difficultWord: null,
-    // difficultWordTokenIndex: null,
-    // difficultWordSpan: null,
-  }));
+  const object = passageSections.map((sectionText, i) => {
+    const targetWord = pickDifficultWord(sectionText);
+    return {
+      order: i + 1,
+      sectionText,
+      difficultWord: targetWord.difficultWord,
+      difficultWordTokenIndex: targetWord.wordIndex,
+      // difficultWordSpan: null,
+    };
+  });
   console.log(object);
   return object;
 }
 
 export function pickDifficultWord(sectionText: string) {
   console.log(sectionText);
-  const doc = nlp("she sells seashells by the seashore.");
-  console.log(doc.verbs().toPastTense());
-  console.log(doc.text());
-  getZipf("boulder");
+  let difficultyLevel = 100;
+  let difficultWordIndex = 0;
+  let word = "";
+  const doc = nlp(sectionText);
+  const properNouns = doc.match("#ProperNoun");
+  const properNounArray = tokenizeWords(properNouns.text());
+  console.log(properNounArray);
+  // tokenize
+  const wordTokens = tokenizeWords(sectionText);
+
+  // for each thing in tokenized version, normalize, retrieve, zipF find max
+  for (let i = 0; i < wordTokens.length; i++) {
+    // console.log(isProperNounPhrase(wordTokens[i]), wordTokens[i]);
+
+    if (
+      isInDictionary(normalizeForLookup(wordTokens[i])) &&
+      !properNounArray.includes(wordTokens[i])
+    ) {
+      console.log(getZipf(wordTokens[i]), wordTokens[i]);
+      if (getZipf(wordTokens[i]) < difficultyLevel) {
+        difficultyLevel = getZipf(wordTokens[i]);
+        difficultWordIndex = i;
+        word = wordTokens[i];
+      }
+    }
+  }
+
+  return {
+    wordIndex: difficultWordIndex,
+    difficultWord: word,
+    // isProperNoun: isProperNounPhrase(word),
+  };
 }
 
-export function tokenizeWords(sentence: string) {
+function tokenizeWords(passage: string) {
   // returns an array of word-strings in reading order
   // example: "Hi there, Bob!" -> ["Hi", "there", "Bob"]
-  return nlp(sentence).terms().out("array");
+  return nlp(passage).terms().out("array");
 }
 
-export function normalizeForLookup(token: string) {
-  return token.toLowerCase().replace(/^[^a-z]+|[^a-z]+$/g, ""); // strip non-letters at edges
+function normalizeForLookup(token: string) {
+  // return token.toLowerCase().replace(/^[^a-z]+|[^a-z]+$/g, ""); // strip non-letters at edges
+  return token.toLowerCase().replace(/[^a-z]/g, "");
 }
 
-export function getZipf(word: string): number {
+function getZipf(word: string): number {
   const z = zipfFrequency(word, "en");
-  return Number.isFinite(z) ? z : 10; // unknown => treat as very common/easy
+  return Number.isFinite(z) ? z : -Infinity; // unknown => treat as very common/easy
 }
 
-export function isProperNoun(word: string) {
-  const doc = nlp(word);
-  if (doc.wordCount() !== 1) return false; // optional guard
-  return doc.has("#ProperNoun");
+function isInDictionary(word: string) {
+  return dict.has(word.toLowerCase());
 }
+
 //export const runtime = "nodejs"; add this in route.ts

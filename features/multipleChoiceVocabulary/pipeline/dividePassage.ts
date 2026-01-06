@@ -68,3 +68,6 @@ export function dividePassage(passage: string) {
   console.log(sections);
   return sections;
 }
+
+// pnpm test -- dividePassage
+// pnpm vitest __tests__/multipleChoice/dividePassage.test.ts
