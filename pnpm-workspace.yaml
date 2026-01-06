@@ -1,5 +1,9 @@
 packages:
   - .
+
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
+
+patchedDependencies:
+  nodewordfreq@0.2.1: patches/nodewordfreq@0.2.1.patch

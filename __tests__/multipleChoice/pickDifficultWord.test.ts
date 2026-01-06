@@ -10,3 +10,4 @@ describe("pickDifficultWord", () => {
 });
 
 // pnpm test -- pickDifficultWord
+// pnpm vitest -t "pickDifficultWord"

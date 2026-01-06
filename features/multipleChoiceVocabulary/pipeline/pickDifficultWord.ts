@@ -28,7 +28,7 @@ export function pickDifficultWord(sectionText: string) {
   const doc = nlp("she sells seashells by the seashore.");
   console.log(doc.verbs().toPastTense());
   console.log(doc.text());
-  // getZipf("boulder");
+  getZipf("boulder");
 }
 
 export function tokenizeWords(sentence: string) {
@@ -40,3 +40,5 @@ export function tokenizeWords(sentence: string) {
 export function normalizeForLookup(token: string) {
   return token.toLowerCase().replace(/^[^a-z]+|[^a-z]+$/g, ""); // strip non-letters at edges
 }
+
+//export const runtime = "nodejs"; add this in route.ts

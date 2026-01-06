@@ -1,0 +1,15 @@
+diff --git a/dist/index.js b/dist/index.js
+index e7f05a80fb60b84b3c8ab5ab9b5c9176f2ec599b..d48ad73cbe40a33c0042ca6e587d857176844170 100644
+--- a/dist/index.js
++++ b/dist/index.js	
+@@ -310,7 +310,9 @@ function uncurlQuotes(text) {
+ // src/tokenize/index.ts
+ var PUNCT_RE = /[\p{P}\p{S}]+/u;
+ var segmenterCache = /* @__PURE__ */ new Map();
+-var requireFromEsm = typeof __dirname !== "undefined" ? createRequire(`${__dirname}/`) : createRequire(import.meta.url);
++// var requireFromEsm = typeof __dirname !== "undefined" ? createRequire(`${__dirname}/`) : createRequire(import.meta.url);
++var requireFromEsm = createRequire(import.meta.url);
++
+ var nodeJieba = null;
+ var jiebaMainLoaded = false;
+ var jiebaOrigLoaded = false;
