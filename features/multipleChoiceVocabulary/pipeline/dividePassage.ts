@@ -1,6 +1,5 @@
 import { TARGET_LENGTH } from "@/lib/constants";
 import { countWords, revertPassage, normalizePassage } from "@/lib/utils";
-import { pickDifficultWord } from "./pickDifficultWord";
 
 function splitIntoSentences(passage: string): string[] {
   // Captures: "sentence punctuation + trailing whitespace"
@@ -15,7 +14,7 @@ export function dividePassage(passage: string) {
 
   const sentenceArray = splitIntoSentences(normalizePassage(passage));
   if (sentenceArray.length === 0) return [];
-  console.log(sentenceArray);
+  // console.log(sentenceArray);
 
   const counts = sentenceArray.map((sentence) => countWords(sentence));
 
@@ -67,6 +66,5 @@ export function dividePassage(passage: string) {
     sections.push(sectionPieces.join("")); // preserve formatting
   }
   console.log(sections);
-  pickDifficultWord(sections);
   return sections;
 }
