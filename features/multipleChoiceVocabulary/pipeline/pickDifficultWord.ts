@@ -1,5 +1,5 @@
 import nlp from "compromise";
-import { getZipf } from "./wordFrequency";
+import { zipfFrequency } from "nodewordfreq";
 
 type MultipleChoiceSection = {
   order: number;
@@ -41,4 +41,14 @@ export function normalizeForLookup(token: string) {
   return token.toLowerCase().replace(/^[^a-z]+|[^a-z]+$/g, ""); // strip non-letters at edges
 }
 
+export function getZipf(word: string): number {
+  const z = zipfFrequency(word, "en");
+  return Number.isFinite(z) ? z : 10; // unknown => treat as very common/easy
+}
+
+export function isProperNoun(word: string) {
+  const doc = nlp(word);
+  if (doc.wordCount() !== 1) return false; // optional guard
+  return doc.has("#ProperNoun");
+}
 //export const runtime = "nodejs"; add this in route.ts
