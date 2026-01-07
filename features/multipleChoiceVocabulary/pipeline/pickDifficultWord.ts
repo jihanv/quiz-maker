@@ -1,7 +1,8 @@
 import nlp from "compromise/two";
 import { zipfFrequency } from "nodewordfreq";
 import fs from "node:fs";
-import { determinePartOfSpeech } from "./createWordChoices";
+import { COARSE } from "./createWordChoices";
+// import { determinePartOfSpeech } from "./createWordChoices";
 
 const data = JSON.parse(fs.readFileSync("./data/dictionary.json", "utf8"));
 const dict = new Set(data.dictionary); // Set = fast lookup
@@ -41,6 +42,7 @@ export function pickDifficultWord(sectionText: string) {
   let difficultWordIndex = 0;
   let word = "";
   const doc = nlp(sectionText);
+  console.log("Type of DOC is" + typeof doc);
   const properNouns = doc.match("#ProperNoun");
   const properNounArray = tokenizeWords(properNouns.text());
   console.log(properNounArray);
@@ -91,4 +93,18 @@ function isInDictionary(word: string) {
   return dict.has(word.toLowerCase());
 }
 
-//export const runtime = "nodejs"; add this in route.ts
+// export const runtime = "nodejs"; add this in route.ts
+export function determinePartOfSpeech(
+  sentence: string,
+  word: string,
+  occurrence = 0
+) {
+  const doc = nlp(sentence);
+  const hit = doc.match(word).terms().eq(occurrence);
+  if (!hit.found) return null;
+
+  for (const tag of COARSE) {
+    if (hit.has(tag)) return tag.slice(1); // remove '#'
+  }
+  return "Unknown";
+}
