@@ -1,20 +1,10 @@
 import nlp from "compromise/two";
 import { zipfFrequency } from "nodewordfreq";
 import fs from "node:fs";
+import { determinePartOfSpeech } from "./createWordChoices";
 
 const data = JSON.parse(fs.readFileSync("./data/dictionary.json", "utf8"));
 const dict = new Set(data.dictionary); // Set = fast lookup
-
-const COARSE = [
-  "#Verb",
-  "#Noun",
-  "#Adjective",
-  "#Adverb",
-  "#Pronoun",
-  "#Preposition",
-  "#Conjunction",
-  "#Determiner",
-];
 
 export type MultipleChoiceSection = {
   order: number;
@@ -99,18 +89,6 @@ function getZipf(word: string): number {
 
 function isInDictionary(word: string) {
   return dict.has(word.toLowerCase());
-}
-
-// determine difficultWord's part of speech
-function determinePartOfSpeech(sentence: string, word: string, occurrence = 0) {
-  const doc = nlp(sentence);
-  const hit = doc.match(word).terms().eq(occurrence);
-  if (!hit.found) return null;
-
-  for (const tag of COARSE) {
-    if (hit.has(tag)) return tag.slice(1); // remove '#'
-  }
-  return "Unknown";
 }
 
 //export const runtime = "nodejs"; add this in route.ts
