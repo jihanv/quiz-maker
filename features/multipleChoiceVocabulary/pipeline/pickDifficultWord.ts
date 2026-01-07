@@ -1,15 +1,27 @@
-import nlp from "compromise";
+import nlp from "compromise/two";
 import { zipfFrequency } from "nodewordfreq";
 import fs from "node:fs";
 
 const data = JSON.parse(fs.readFileSync("./data/dictionary.json", "utf8"));
 const dict = new Set(data.dictionary); // Set = fast lookup
 
-type MultipleChoiceSection = {
+const COARSE = [
+  "#Verb",
+  "#Noun",
+  "#Adjective",
+  "#Adverb",
+  "#Pronoun",
+  "#Preposition",
+  "#Conjunction",
+  "#Determiner",
+];
+
+export type MultipleChoiceSection = {
   order: number;
   sectionText: string;
   difficultWord: string | null;
   difficultWordTokenIndex: number | null;
+  grammarLabel: string | null;
   // difficultWordSpan: { start: number; end: number } | null;
 };
 
@@ -23,7 +35,10 @@ export function createTestData(
       sectionText,
       difficultWord: targetWord.difficultWord,
       difficultWordTokenIndex: targetWord.wordIndex,
-      // difficultWordSpan: null,
+      grammarLabel: determinePartOfSpeech(
+        sectionText,
+        normalizeForLookup(targetWord.difficultWord)
+      ),
     };
   });
   console.log(object);
@@ -73,8 +88,8 @@ function tokenizeWords(passage: string) {
 }
 
 function normalizeForLookup(token: string) {
-  // return token.toLowerCase().replace(/^[^a-z]+|[^a-z]+$/g, ""); // strip non-letters at edges
-  return token.toLowerCase().replace(/[^a-z]/g, "");
+  return token.toLowerCase().replace(/^[^a-z]+|[^a-z]+$/g, ""); // strip non-letters at edges
+  // return token.toLowerCase().replace(/[^a-z]/g, "");
 }
 
 function getZipf(word: string): number {
@@ -84,6 +99,18 @@ function getZipf(word: string): number {
 
 function isInDictionary(word: string) {
   return dict.has(word.toLowerCase());
+}
+
+// determine difficultWord's part of speech
+function determinePartOfSpeech(sentence: string, word: string, occurrence = 0) {
+  const doc = nlp(sentence);
+  const hit = doc.match(word).terms().eq(occurrence);
+  if (!hit.found) return null;
+
+  for (const tag of COARSE) {
+    if (hit.has(tag)) return tag.slice(1); // remove '#'
+  }
+  return "Unknown";
 }
 
 //export const runtime = "nodejs"; add this in route.ts
