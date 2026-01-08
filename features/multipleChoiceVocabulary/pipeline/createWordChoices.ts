@@ -2,6 +2,41 @@ import nlp from "compromise";
 import fs from "node:fs";
 import wordListPath from "word-list";
 export type View = ReturnType<typeof nlp>;
+import path from "node:path";
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
+
+/** Walk upward until we find a folder containing package.json */
+function findPackageRoot(fromFile: string): string {
+  let dir = path.dirname(fromFile);
+  while (true) {
+    const candidate = path.join(dir, "package.json");
+    if (fs.existsSync(candidate)) return dir;
+
+    const parent = path.dirname(dir);
+    if (parent === dir)
+      throw new Error("Could not find package root (package.json).");
+    dir = parent;
+  }
+}
+
+// ✅ This is an exported path, so resolve works
+const entry = require.resolve("@sholvoir/vocabulary");
+const pkgRoot = findPackageRoot(entry);
+
+// ✅ This file is in the package’s /dest folder :contentReference[oaicite:1]{index=1}
+const ngslPath = path.join(
+  pkgRoot,
+  "dest",
+  "Service-NewGeneralServiceList.txt"
+);
+
+export const NGSL_WORDS: string[] = fs
+  .readFileSync(ngslPath, "utf8")
+  .split(/\r?\n/)
+  .map((s) => s.trim())
+  .filter(Boolean);
 
 export const COARSE = [
   "#Verb",
@@ -130,13 +165,13 @@ export function getFormInSentence(
 
   return { pos, form: "Other" };
 }
-console.log(getFormInSentence("I saw two octopi.", "octopi"));
-// -> { pos: "Noun", form: "Plural" } (likely)
+// console.log(getFormInSentence("I saw two octopi.", "octopi"));
+// // -> { pos: "Noun", form: "Plural" } (likely)
 
-console.log(getFormInSentence("I am running late.", "running"));
-// -> { pos: "Verb", form: "Gerund" }
+// console.log(getFormInSentence("I am running late.", "running"));
+// // -> { pos: "Verb", form: "Gerund" }
 
-console.log(getFormInSentence("This is bigger than that.", "bigger"));
+// console.log(getFormInSentence("This is bigger than that.", "bigger"));
 // -> { pos: "Adjective", form: "Comparative" }
 // ----- word pool -----
 const WORDS: string[] = fs
@@ -215,7 +250,7 @@ export function randomSamePosSameFormFromContext(
   while (out.size < count && tries < maxTries) {
     tries++;
 
-    const base = WORDS[(Math.random() * WORDS.length) | 0];
+    const base = NGSL_WORDS[(Math.random() * NGSL_WORDS.length) | 0];
     if (!base || base.length < 2) continue;
     if (!matchesPos(base, pos)) continue;
 
@@ -235,13 +270,13 @@ export function randomSamePosSameFormFromContext(
   return [...out];
 }
 
-// const info = getFormInSentence("I saw two octopi.", "octopi");
-// if (info) {
-//   const choices = randomSamePosSameFormFromContext(
-//     info.pos,
-//     info.form,
-//     "octopi"
-//   );
-//   console.log(choices);
-// }
+const info = getFormInSentence("I saw two large elephants.", "elephants");
+if (info) {
+  const choices = randomSamePosSameFormFromContext(
+    info.pos,
+    info.form,
+    "elephants"
+  );
+  console.log(choices);
+}
 // pnpm ts-node features/multipleChoiceVocabulary/pipeline/createWordChoices.ts

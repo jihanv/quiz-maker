@@ -19,6 +19,9 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.2.4
         version: 1.2.4(@types/react@19.2.7)(react@19.2.3)
+      '@sholvoir/vocabulary':
+        specifier: jsr:^0.4.7
+        version: '@jsr/sholvoir__vocabulary@0.4.7'
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -833,6 +836,18 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
+
+  '@jsr/sholvoir__vocabulary@0.4.7':
+    resolution: {integrity: sha512-3LDAJA+GZ5gOE9ZWuGUBhrXSLf9X1G0Bk/KEc4nQw4fGLJqOEeedTSZYTVlc6uugLNDcu40b+byuvWqVmbu7MA==, tarball: https://npm.jsr.io/~/11/@jsr/sholvoir__vocabulary/0.4.7.tgz}
+
+  '@jsr/std__cli@1.0.25':
+    resolution: {integrity: sha512-2t7VjuQJ/tgs8DvmBjqAd1Tcdr1Zf30tqp3QW37R4eZEm17NCKFg1SLquotV+sdnWqkALneR4WTdX3pwWhdf+w==, tarball: https://npm.jsr.io/~/11/@jsr/std__cli/1.0.25.tgz}
+
+  '@jsr/std__internal@1.0.12':
+    resolution: {integrity: sha512-6xReMW9p+paJgqoFRpOE2nogJFvzPfaLHLIlyADYjKMUcwDyjKZxryIbgcU+gxiTygn8yCjld1HoI0ET4/iZeA==, tarball: https://npm.jsr.io/~/11/@jsr/std__internal/1.0.12.tgz}
+
+  '@jsr/std__yaml@1.0.10':
+    resolution: {integrity: sha512-1WIM023Kvi48pvPE3UO5YcieambLgywUooLhAkkaObIcMB77F/YP2ILdl+vNfik+vElkl9znmuST9AZo8mbCpA==, tarball: https://npm.jsr.io/~/11/@jsr/std__yaml/1.0.10.tgz}
 
   '@mapbox/node-pre-gyp@1.0.11':
     resolution: {integrity: sha512-Yhlar6v9WQgUp/He7BdgzOz8lqMQ8sU+jkCq7Wx8Myc5YFJLbEe7lgui/V7G1qB1DJykHSGwreceSaD60Y0PUQ==}
@@ -4863,6 +4878,19 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@jsr/sholvoir__vocabulary@0.4.7':
+    dependencies:
+      '@jsr/std__cli': 1.0.25
+      '@jsr/std__yaml': 1.0.10
+
+  '@jsr/std__cli@1.0.25':
+    dependencies:
+      '@jsr/std__internal': 1.0.12
+
+  '@jsr/std__internal@1.0.12': {}
+
+  '@jsr/std__yaml@1.0.10': {}
 
   '@mapbox/node-pre-gyp@1.0.11':
     dependencies:
