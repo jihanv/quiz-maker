@@ -2,12 +2,13 @@
   "name": "quiz-maker",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "jest",
+    "test": "vitest",
     "test:watch": "jest --watch",
     "test:vitest": "vitest",
     "test:vitest:watch": "vitest --watch",
@@ -16,7 +17,6 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-slot": "^1.2.4",
-    "@sholvoir/vocabulary": "jsr:^0.4.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "compromise": "^14.14.5",

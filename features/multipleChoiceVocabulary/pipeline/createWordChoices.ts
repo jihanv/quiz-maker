@@ -1,44 +1,32 @@
 import nlp from "compromise";
-import fs from "node:fs";
-import wordListPath from "word-list";
+// import fs from "node:fs";
 export type View = ReturnType<typeof nlp>;
-import path from "node:path";
-import { createRequire } from "node:module";
+// import path from "node:path";
+import { NGSL_WORDS } from "../../../lib/server/lexicons.ts";
 
-const require = createRequire(import.meta.url);
+// const ngslPath = path.join(process.cwd(), "data", "academicwordlist.txt");
 
-/** Walk upward until we find a folder containing package.json */
-function findPackageRoot(fromFile: string): string {
-  let dir = path.dirname(fromFile);
-  while (true) {
-    const candidate = path.join(dir, "package.json");
-    if (fs.existsSync(candidate)) return dir;
+// export const NGSL_WORDS: string[] = fs
+//   .readFileSync(ngslPath, "utf8")
+//   .split(/\r?\n/)
+//   .map((s) => s.trim().toLowerCase())
+//   .filter(Boolean);
+export function determinePartOfSpeech(
+  sentence: string,
+  word: string,
+  occurrence = 0
+) {
+  const doc = nlp(sentence);
+  const hit = doc.match(word).terms().eq(occurrence);
+  if (!hit.found) return null;
 
-    const parent = path.dirname(dir);
-    if (parent === dir)
-      throw new Error("Could not find package root (package.json).");
-    dir = parent;
+  for (const tag of COARSE) {
+    if (hit.has(tag)) return tag.slice(1); // remove '#'
   }
+  return "Unknown";
 }
 
-// ✅ This is an exported path, so resolve works
-const entry = require.resolve("@sholvoir/vocabulary");
-const pkgRoot = findPackageRoot(entry);
-
-// ✅ This file is in the package’s /dest folder :contentReference[oaicite:1]{index=1}
-const ngslPath = path.join(
-  pkgRoot,
-  "dest",
-  "Service-NewGeneralServiceList.txt"
-);
-
-export const NGSL_WORDS: string[] = fs
-  .readFileSync(ngslPath, "utf8")
-  .split(/\r?\n/)
-  .map((s) => s.trim())
-  .filter(Boolean);
-
-export const COARSE = [
+const COARSE = [
   "#Verb",
   "#Noun",
   "#Adjective",
@@ -49,7 +37,7 @@ export const COARSE = [
   "#Determiner",
 ];
 
-export type CoarsePOS =
+type CoarsePOS =
   | "Noun"
   | "Verb"
   | "Adjective"
@@ -71,7 +59,7 @@ const COARSE_TAGS: Array<[CoarsePOS, string]> = [
   ["Conjunction", "#Conjunction"],
 ];
 
-export type WordForm =
+type WordForm =
   // nouns
   | "Singular"
   | "Plural"
@@ -87,17 +75,6 @@ export type WordForm =
   | "BaseAdj"
   // other/unknown
   | "Other";
-
-// const COARSE_TAGS: Array<[CoarsePOS, string]> = [
-//   ["Verb", "#Verb"],
-//   ["Noun", "#Noun"],
-//   ["Adjective", "#Adjective"],
-//   ["Adverb", "#Adverb"],
-//   ["Pronoun", "#Pronoun"],
-//   ["Determiner", "#Determiner"],
-//   ["Preposition", "#Preposition"],
-//   ["Conjunction", "#Conjunction"],
-// ];
 
 const POS_TO_TAG: Record<Exclude<CoarsePOS, "Unknown">, string> = {
   Noun: "#Noun",
@@ -117,14 +94,14 @@ type TaggableSelection = {
   text: () => string;
 };
 
-export function getCoarsePOS(hit: TaggableSelection): CoarsePOS {
+function getCoarsePOS(hit: TaggableSelection): CoarsePOS {
   for (const [label, tag] of COARSE_TAGS) {
     if (hit.has(tag)) return label;
   }
   return "Unknown";
 }
 
-export function getFormInSentence(
+function getFormInSentence(
   sentence: string,
   word: string,
   occurrence = 0
@@ -165,20 +142,6 @@ export function getFormInSentence(
 
   return { pos, form: "Other" };
 }
-// console.log(getFormInSentence("I saw two octopi.", "octopi"));
-// // -> { pos: "Noun", form: "Plural" } (likely)
-
-// console.log(getFormInSentence("I am running late.", "running"));
-// // -> { pos: "Verb", form: "Gerund" }
-
-// console.log(getFormInSentence("This is bigger than that.", "bigger"));
-// -> { pos: "Adjective", form: "Comparative" }
-// ----- word pool -----
-const WORDS: string[] = fs
-  .readFileSync(wordListPath, "utf8")
-  .split("\n")
-  .map((s) => s.trim())
-  .filter(Boolean);
 
 // ----- form application -----
 function applyForm(base: string, pos: CoarsePOS, form: WordForm): string {
@@ -270,12 +233,15 @@ export function randomSamePosSameFormFromContext(
   return [...out];
 }
 
-const info = getFormInSentence("I saw two large elephants.", "elephants");
+const info = getFormInSentence(
+  "US forces boarded the Russian-flagged Marinera after a pursuit lasting almost two weeks as it travelled through the waters between Iceland and Scotland. The UK Royal Navy gave logistical support by air and sea.",
+  "travelled"
+);
 if (info) {
   const choices = randomSamePosSameFormFromContext(
     info.pos,
     info.form,
-    "elephants"
+    "travelled"
   );
   console.log(choices);
 }

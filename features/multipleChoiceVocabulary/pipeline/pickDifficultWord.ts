@@ -1,7 +1,7 @@
 import nlp from "compromise/two";
 import { zipfFrequency } from "nodewordfreq";
 import fs from "node:fs";
-import { COARSE } from "./createWordChoices";
+import { determinePartOfSpeech } from "./createWordChoices";
 // import { determinePartOfSpeech } from "./createWordChoices";
 
 const data = JSON.parse(fs.readFileSync("./data/dictionary.json", "utf8"));
@@ -86,7 +86,7 @@ function normalizeForLookup(token: string) {
 
 function getZipf(word: string): number {
   const z = zipfFrequency(word, "en");
-  return Number.isFinite(z) ? z : -Infinity; // unknown => treat as very common/easy
+  return Number.isFinite(z) ? z : 100; // unknown => treat as very common/easy
 }
 
 function isInDictionary(word: string) {
@@ -94,17 +94,3 @@ function isInDictionary(word: string) {
 }
 
 // export const runtime = "nodejs"; add this in route.ts
-export function determinePartOfSpeech(
-  sentence: string,
-  word: string,
-  occurrence = 0
-) {
-  const doc = nlp(sentence);
-  const hit = doc.match(word).terms().eq(occurrence);
-  if (!hit.found) return null;
-
-  for (const tag of COARSE) {
-    if (hit.has(tag)) return tag.slice(1); // remove '#'
-  }
-  return "Unknown";
-}
