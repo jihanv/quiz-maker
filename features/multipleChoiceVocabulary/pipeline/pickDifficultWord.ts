@@ -1,7 +1,7 @@
 import nlp from "compromise/two";
 import { zipfFrequency } from "nodewordfreq";
 import fs from "node:fs";
-import { determinePartOfSpeech } from "./createWordChoices";
+import { generateChoices } from "./createWordChoices";
 // import { determinePartOfSpeech } from "./createWordChoices";
 
 const data = JSON.parse(fs.readFileSync("./data/dictionary.json", "utf8"));
@@ -12,8 +12,7 @@ export type MultipleChoiceSection = {
   sectionText: string;
   difficultWord: string | null;
   difficultWordTokenIndex: number | null;
-  grammarLabel: string | null;
-  // difficultWordSpan: { start: number; end: number } | null;
+  answerChoices: string[] | undefined;
 };
 
 export function createTestData(
@@ -26,10 +25,7 @@ export function createTestData(
       sectionText,
       difficultWord: targetWord.difficultWord,
       difficultWordTokenIndex: targetWord.wordIndex,
-      grammarLabel: determinePartOfSpeech(
-        sectionText,
-        normalizeForLookup(targetWord.difficultWord)
-      ),
+      answerChoices: generateChoices(sectionText, targetWord.difficultWord),
     };
   });
   console.log(object);
@@ -51,8 +47,6 @@ export function pickDifficultWord(sectionText: string) {
 
   // for each thing in tokenized version, normalize, retrieve, zipF find max
   for (let i = 0; i < wordTokens.length; i++) {
-    // console.log(isProperNounPhrase(wordTokens[i]), wordTokens[i]);
-
     if (
       isInDictionary(normalizeForLookup(wordTokens[i])) &&
       !properNounArray.includes(wordTokens[i])

@@ -4,39 +4,6 @@ export type View = ReturnType<typeof nlp>;
 // import path from "node:path";
 import { NGSL_WORDS } from "../../../lib/server/lexicons.ts";
 
-// const ngslPath = path.join(process.cwd(), "data", "academicwordlist.txt");
-
-// export const NGSL_WORDS: string[] = fs
-//   .readFileSync(ngslPath, "utf8")
-//   .split(/\r?\n/)
-//   .map((s) => s.trim().toLowerCase())
-//   .filter(Boolean);
-export function determinePartOfSpeech(
-  sentence: string,
-  word: string,
-  occurrence = 0
-) {
-  const doc = nlp(sentence);
-  const hit = doc.match(word).terms().eq(occurrence);
-  if (!hit.found) return null;
-
-  for (const tag of COARSE) {
-    if (hit.has(tag)) return tag.slice(1); // remove '#'
-  }
-  return "Unknown";
-}
-
-const COARSE = [
-  "#Verb",
-  "#Noun",
-  "#Adjective",
-  "#Adverb",
-  "#Pronoun",
-  "#Preposition",
-  "#Conjunction",
-  "#Determiner",
-];
-
 type CoarsePOS =
   | "Noun"
   | "Verb"
@@ -233,16 +200,16 @@ export function randomSamePosSameFormFromContext(
   return [...out];
 }
 
-const info = getFormInSentence(
-  "US forces boarded the Russian-flagged Marinera after a pursuit lasting almost two weeks as it travelled through the waters between Iceland and Scotland. The UK Royal Navy gave logistical support by air and sea.",
-  "travelled"
-);
-if (info) {
-  const choices = randomSamePosSameFormFromContext(
-    info.pos,
-    info.form,
-    "travelled"
-  );
-  console.log(choices);
+export function generateChoices(sententence: string, word: string) {
+  const wordInfo = getFormInSentence(sententence, word);
+  if (wordInfo) {
+    const choices = randomSamePosSameFormFromContext(
+      wordInfo?.pos,
+      wordInfo?.form,
+      word
+    );
+    console.table(choices);
+    return choices;
+  }
 }
 // pnpm ts-node features/multipleChoiceVocabulary/pipeline/createWordChoices.ts
