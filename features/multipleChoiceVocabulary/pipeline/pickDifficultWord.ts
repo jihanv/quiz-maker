@@ -1,11 +1,13 @@
 import nlp from "compromise/two";
 import { zipfFrequency } from "nodewordfreq";
 import fs from "node:fs";
-import { generateChoices } from "./createWordChoices.ts";
+import { generateChoices } from "./createWordChoices";
 // import { determinePartOfSpeech } from "./createWordChoices";
 
 const data = JSON.parse(fs.readFileSync("./data/dictionary.json", "utf8"));
 const dict = new Set(data.dictionary); // Set = fast lookup
+
+const temporaryDifficultWords: string[] = [];
 
 export type MultipleChoiceSection = {
   order: number;
@@ -45,28 +47,33 @@ export function pickDifficultWord(sectionText: string) {
   const doc = nlp(sectionText);
   const properNouns = doc.match("#ProperNoun");
   const properNounArray = tokenizeWords(properNouns.text());
-  // console.log(properNounArray);
+  console.log(properNounArray);
   // tokenize
   const wordTokens = tokenizeWords(sectionText);
 
   // for each thing in tokenized version, normalize, retrieve, zipF find max
   for (let i = 0; i < wordTokens.length; i++) {
+    const tempWord = wordTokens[i].replace(/[^a-z]/gi, "");
     if (
       isInDictionary(normalizeForLookup(wordTokens[i])) &&
-      !properNounArray.includes(wordTokens[i].replace(/^[^a-z]+|[^a-z]+$/g, ""))
+      !properNounArray.includes(tempWord)
     ) {
       // console.log(getZipf(wordTokens[i]), wordTokens[i]);
-      if (getZipf(wordTokens[i]) < difficultyLevel) {
-        difficultyLevel = getZipf(wordTokens[i]);
+      if (
+        getZipf(tempWord) < difficultyLevel &&
+        !temporaryDifficultWords.includes(tempWord)
+      ) {
+        temporaryDifficultWords.push(tempWord);
+        difficultyLevel = getZipf(tempWord);
         difficultWordIndex = i;
-        word = wordTokens[i];
+        word = tempWord;
       }
     }
   }
 
   return {
     wordIndex: difficultWordIndex,
-    difficultWord: word,
+    difficultWord: word.replace(/[^a-z]/gi, ""),
     // isProperNoun: isProperNounPhrase(word),
   };
 }
