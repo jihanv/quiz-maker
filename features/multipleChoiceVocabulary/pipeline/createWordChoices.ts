@@ -208,8 +208,21 @@ export function generateChoices(sententence: string, word: string) {
       wordInfo?.form,
       word
     );
-    console.table(choices);
+    choices.push(word);
+    // console.table(choices);
+    console.log(choices);
+    shuffleInPlace(choices);
+    // console.table(choices);
+    console.log(choices);
     return choices;
   }
+}
+
+function shuffleInPlace(choices: string[]) {
+  for (let i = choices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1)); // 0..i
+    [choices[i], choices[j]] = [choices[j], choices[i]];
+  }
+  return choices;
 }
 // pnpm ts-node features/multipleChoiceVocabulary/pipeline/createWordChoices.ts

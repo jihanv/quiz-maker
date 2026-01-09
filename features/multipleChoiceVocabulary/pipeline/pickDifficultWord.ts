@@ -38,7 +38,6 @@ export function pickDifficultWord(sectionText: string) {
   let difficultWordIndex = 0;
   let word = "";
   const doc = nlp(sectionText);
-  console.log("Type of DOC is" + typeof doc);
   const properNouns = doc.match("#ProperNoun");
   const properNounArray = tokenizeWords(properNouns.text());
   console.log(properNounArray);
@@ -49,7 +48,7 @@ export function pickDifficultWord(sectionText: string) {
   for (let i = 0; i < wordTokens.length; i++) {
     if (
       isInDictionary(normalizeForLookup(wordTokens[i])) &&
-      !properNounArray.includes(wordTokens[i])
+      !properNounArray.includes(wordTokens[i].replace(/^[^a-z]+|[^a-z]+$/g, ""))
     ) {
       console.log(getZipf(wordTokens[i]), wordTokens[i]);
       if (getZipf(wordTokens[i]) < difficultyLevel) {
@@ -88,3 +87,6 @@ function isInDictionary(word: string) {
 }
 
 // export const runtime = "nodejs"; add this in route.ts
+// function getCorrectAnswerIndex(answer: string, choices: string[]){
+
+// }
