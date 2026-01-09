@@ -1,7 +1,7 @@
 import nlp from "compromise/two";
 import { zipfFrequency } from "nodewordfreq";
 import fs from "node:fs";
-import { generateChoices } from "./createWordChoices";
+import { generateChoices } from "./createWordChoices.ts";
 // import { determinePartOfSpeech } from "./createWordChoices";
 
 const data = JSON.parse(fs.readFileSync("./data/dictionary.json", "utf8"));
@@ -13,6 +13,7 @@ export type MultipleChoiceSection = {
   difficultWord: string | null;
   difficultWordTokenIndex: number | null;
   answerChoices: string[] | undefined;
+  answerIndex: number | undefined;
 };
 
 export function createTestData(
@@ -20,12 +21,16 @@ export function createTestData(
 ): MultipleChoiceSection[] {
   const object = passageSections.map((sectionText, i) => {
     const targetWord = pickDifficultWord(sectionText);
+    const choices = generateChoices(sectionText, targetWord.difficultWord);
+    const answerIndex = choices?.indexOf(targetWord.difficultWord);
+
     return {
       order: i + 1,
       sectionText,
       difficultWord: targetWord.difficultWord,
       difficultWordTokenIndex: targetWord.wordIndex,
-      answerChoices: generateChoices(sectionText, targetWord.difficultWord),
+      answerChoices: choices,
+      answerIndex: answerIndex,
     };
   });
   console.log(object);
@@ -33,14 +38,14 @@ export function createTestData(
 }
 
 export function pickDifficultWord(sectionText: string) {
-  console.log(sectionText);
+  // console.log(sectionText);
   let difficultyLevel = 100;
   let difficultWordIndex = 0;
   let word = "";
   const doc = nlp(sectionText);
   const properNouns = doc.match("#ProperNoun");
   const properNounArray = tokenizeWords(properNouns.text());
-  console.log(properNounArray);
+  // console.log(properNounArray);
   // tokenize
   const wordTokens = tokenizeWords(sectionText);
 
@@ -50,7 +55,7 @@ export function pickDifficultWord(sectionText: string) {
       isInDictionary(normalizeForLookup(wordTokens[i])) &&
       !properNounArray.includes(wordTokens[i].replace(/^[^a-z]+|[^a-z]+$/g, ""))
     ) {
-      console.log(getZipf(wordTokens[i]), wordTokens[i]);
+      // console.log(getZipf(wordTokens[i]), wordTokens[i]);
       if (getZipf(wordTokens[i]) < difficultyLevel) {
         difficultyLevel = getZipf(wordTokens[i]);
         difficultWordIndex = i;
@@ -87,6 +92,3 @@ function isInDictionary(word: string) {
 }
 
 // export const runtime = "nodejs"; add this in route.ts
-// function getCorrectAnswerIndex(answer: string, choices: string[]){
-
-// }

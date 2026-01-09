@@ -210,10 +210,10 @@ export function generateChoices(sententence: string, word: string) {
     );
     choices.push(word);
     // console.table(choices);
-    console.log(choices);
+    // console.log(choices);
     shuffleInPlace(choices);
     // console.table(choices);
-    console.log(choices);
+    // console.log(choices);
     return choices;
   }
 }
