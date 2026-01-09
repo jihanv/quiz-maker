@@ -2,7 +2,7 @@ import nlp from "compromise";
 // import fs from "node:fs";
 export type View = ReturnType<typeof nlp>;
 // import path from "node:path";
-import { NGSL_WORDS } from "../../../lib/server/lexicons.ts";
+import { NGSL_WORDS } from "@/lib/server/lexicons";
 
 type CoarsePOS =
   | "Noun"
@@ -225,4 +225,4 @@ function shuffleInPlace(choices: string[]) {
   }
   return choices;
 }
-// pnpm ts-node features/multipleChoiceVocabulary/pipeline/createWordChoices.ts
+// pnpm tsx features/multipleChoiceVocabulary/pipeline/createWordChoices.ts

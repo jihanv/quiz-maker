@@ -8,14 +8,14 @@ import { useSentenceFillerStore } from "@/stores/sentenceFillerStore";
 export default function Home() {
 
   const text = useSentenceFillerStore((state) => state.passage)
-
+  const apiId = "/api/sentenceFiller"
   return (
     <>
       <div className="h-dvh flex flex-col bg-gray-200">
         <BackgroundImage />
         <div className="z-10">
           <H1>{text}</H1>
-          <ParagraphInput />
+          <ParagraphInput apiId={apiId} />
         </div>
 
       </div>

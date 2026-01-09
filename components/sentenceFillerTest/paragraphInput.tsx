@@ -6,7 +6,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ParagraphSuccessResponse, TParagraphSchema, paragraphSchema } from "@/lib/types";
 
-export default function ParagraphInput() {
+type ParagraphInputProps = {
+    apiId: string
+}
+
+export default function ParagraphInput({ apiId }: ParagraphInputProps) {
 
     const {
         register,
@@ -25,7 +29,7 @@ export default function ParagraphInput() {
 
     const onSubmit = async (data: TParagraphSchema) => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
-        const response = await fetch("/api/sentenceFiller", {
+        const response = await fetch(apiId, {
             method: "post",
             body: JSON.stringify(data),
             headers: {

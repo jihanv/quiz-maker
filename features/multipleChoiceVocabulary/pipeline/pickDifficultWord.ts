@@ -35,7 +35,7 @@ export function createTestData(
       answerIndex: answerIndex,
     };
   });
-  console.log(object);
+  // console.log(object);
   return object;
 }
 
@@ -47,7 +47,7 @@ export function pickDifficultWord(sectionText: string) {
   const doc = nlp(sectionText);
   const properNouns = doc.match("#ProperNoun");
   const properNounArray = tokenizeWords(properNouns.text());
-  console.log(properNounArray);
+  // console.log(properNounArray);
   // tokenize
   const wordTokens = tokenizeWords(sectionText);
 
