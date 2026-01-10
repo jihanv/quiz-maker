@@ -35,7 +35,10 @@ export async function POST(request: Request) {
       ? { errors: zodErrors }
       : {
           success: true,
-          test: data.sentence, //to do
+          testData: {
+            passage: test.editedPassage,
+            questions: test.answerChoices,
+          }, //to do
         }
   );
 }

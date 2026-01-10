@@ -1,3 +1,4 @@
+import { MultipleChoiceData } from "@/features/multipleChoiceVocabulary/fileDownloader";
 import z from "zod";
 
 export const paragraphSchema = z.object({
@@ -10,5 +11,5 @@ export type TParagraphSchema = z.infer<typeof paragraphSchema>;
 
 export type ParagraphSuccessResponse = {
   success: true;
-  test: string;
+  testData: MultipleChoiceData;
 };

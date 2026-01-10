@@ -11,38 +11,38 @@ import {
   convertInchesToTwip,
 } from "docx";
 
-type Item = {
+export type MultipleChoiceData = {
   passage: string;
   questions: { choices: string[]; answer: number }[];
 };
 
-const item: Item = {
-  passage: `President Donald Trump says the US needs to "own" Greenland to prevent Russia and China from doing so.
+// const item: MultipleChoiceData = {
+//   passage: `President Donald Trump says the US needs to "own" Greenland to prevent Russia and China from doing so.
 
-"Countries have to have ownership and you defend ownership, you don't defend [1]. And we'll have to defend Greenland," Trump told [2] on Friday, in response to a question from the BBC.
+// "Countries have to have ownership and you defend ownership, you don't defend [1]. And we'll have to defend Greenland," Trump told [2] on Friday, in response to a question from the BBC.
 
-We will do it "the easy way" or "the hard way", he added. The White House said recently the administration is considering buying the semi-autonomous territory of fellow Nato member Denmark, but it would not rule out the option of [3] it by force.
+// We will do it "the easy way" or "the hard way", he added. The White House said recently the administration is considering buying the semi-autonomous territory of fellow Nato member Denmark, but it would not rule out the option of [3] it by force.
 
-Denmark and Greenland say the territory is not for sale. Denmark has said military action would [4] the end of the trans-Atlantic defence alliance.`,
-  questions: [
-    {
-      choices: ["heartbeats", "volatilities", "Chinese", "leases"],
-      answer: 3,
-    },
-    {
-      choices: ["professors", "reporters", "proprietorships", "reassessments"],
-      answer: 1,
-    },
-    {
-      choices: ["annexing", "stifling", "broiling", "dressing"],
-      answer: 0,
-    },
-    {
-      choices: ["spell", "bereaved", "unsung", "effeminate"],
-      answer: 0,
-    },
-  ],
-};
+// Denmark and Greenland say the territory is not for sale. Denmark has said military action would [4] the end of the trans-Atlantic defence alliance.`,
+//   questions: [
+//     {
+//       choices: ["heartbeats", "volatilities", "Chinese", "leases"],
+//       answer: 3,
+//     },
+//     {
+//       choices: ["professors", "reporters", "proprietorships", "reassessments"],
+//       answer: 1,
+//     },
+//     {
+//       choices: ["annexing", "stifling", "broiling", "dressing"],
+//       answer: 0,
+//     },
+//     {
+//       choices: ["spell", "bereaved", "unsung", "effeminate"],
+//       answer: 0,
+//     },
+//   ],
+// };
 
 function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
@@ -56,7 +56,10 @@ function downloadBlob(blob: Blob, filename: string) {
   URL.revokeObjectURL(url);
 }
 
-export async function downloadDocxFromItem(filename = "item.docx") {
+export async function downloadDocxFromItem(
+  item: MultipleChoiceData,
+  filename = "item.docx"
+) {
   const children: Array<Paragraph | Table> = [];
 
   // Title

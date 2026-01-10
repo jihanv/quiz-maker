@@ -1,11 +1,11 @@
 "use client"
 
-import { useState } from "react";
+// import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ParagraphSuccessResponse, TParagraphSchema, paragraphSchema } from "@/lib/types";
-import { downloadDocxFromItem } from "@/features/multipleChoiceVocabulary/fileDownloader";
+import { downloadDocxFromItem, MultipleChoiceData } from "@/features/multipleChoiceVocabulary/fileDownloader";
 // import { downloadFile } from "@/testfolder/documentcreator";
 
 type ParagraphInputProps = {
@@ -27,7 +27,7 @@ export default function ParagraphInput({ apiId }: ParagraphInputProps) {
     });
 
     // The test that will be output
-    const [output, setOuput] = useState("");
+    // const [output, setOuput] = useState("");
 
     const onSubmit = async (data: TParagraphSchema) => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -43,11 +43,17 @@ export default function ParagraphInput({ apiId }: ParagraphInputProps) {
             return
         }
         const text: ParagraphSuccessResponse = await response.json()
-        setOuput(`${text.test}`)
+        if (text.success) {
+            console.log("SUCCESS BITCHES!")
+        }
+
+        const testDataToPrint: MultipleChoiceData = text.testData
+        console.log(text.testData.passage)
+        // setOuput(`${text}`)
 
         if (apiId === "/api/multipleChoiceVocabulary") {
-            console.log(item)
-            await downloadDocxFromItem()
+            console.log(text.testData)
+            await downloadDocxFromItem(testDataToPrint)
 
         }
         else console.log("HI")
@@ -81,30 +87,30 @@ export default function ParagraphInput({ apiId }: ParagraphInputProps) {
     );
 }
 
-const item = {
-    passage: `President Donald Trump says the US needs to "own" Greenland to prevent Russia and China from doing so.
+// const item = {
+//     passage: `President Donald Trump says the US needs to "own" Greenland to prevent Russia and China from doing so.
 
-"Countries have to have ownership and you defend ownership, you don't defend [1]. And we'll have to defend Greenland," Trump told [2] on Friday, in response to a question from the BBC.
+// "Countries have to have ownership and you defend ownership, you don't defend [1]. And we'll have to defend Greenland," Trump told [2] on Friday, in response to a question from the BBC.
 
-We will do it "the easy way" or "the hard way", he added. The White House said recently the administration is considering buying the semi-autonomous territory of fellow Nato member Denmark, but it would not rule out the option of [3] it by force.
+// We will do it "the easy way" or "the hard way", he added. The White House said recently the administration is considering buying the semi-autonomous territory of fellow Nato member Denmark, but it would not rule out the option of [3] it by force.
 
-Denmark and Greenland say the territory is not for sale. Denmark has said military action would [4] the end of the trans-Atlantic defence alliance.`,
-    questions: [
-        {
-            choices: ["heartbeats", "volatilities", "Chinese", "leases"],
-            answer: 3
-        },
-        {
-            choices: ["professors", "reporters", "proprietorships", "reassessments"],
-            answer: 1
-        },
-        {
-            choices: ["annexing", "stifling", "broiling", "dressing"],
-            answer: 0
-        },
-        {
-            choices: ["spell", "bereaved", "unsung", "effeminate"],
-            answer: 0
-        }
-    ]
-};
+// Denmark and Greenland say the territory is not for sale. Denmark has said military action would [4] the end of the trans-Atlantic defence alliance.`,
+//     questions: [
+//         {
+//             choices: ["heartbeats", "volatilities", "Chinese", "leases"],
+//             answer: 3
+//         },
+//         {
+//             choices: ["professors", "reporters", "proprietorships", "reassessments"],
+//             answer: 1
+//         },
+//         {
+//             choices: ["annexing", "stifling", "broiling", "dressing"],
+//             answer: 0
+//         },
+//         {
+//             choices: ["spell", "bereaved", "unsung", "effeminate"],
+//             answer: 0
+//         }
+//     ]
+// };
