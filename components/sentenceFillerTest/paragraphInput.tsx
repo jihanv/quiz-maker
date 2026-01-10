@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ParagraphSuccessResponse, TParagraphSchema, paragraphSchema } from "@/lib/types";
+import { downloadDocxFromItem } from "@/features/multipleChoiceVocabulary/fileDownloader";
+// import { downloadFile } from "@/testfolder/documentcreator";
 
 type ParagraphInputProps = {
     apiId: string
@@ -42,6 +44,13 @@ export default function ParagraphInput({ apiId }: ParagraphInputProps) {
         }
         const text: ParagraphSuccessResponse = await response.json()
         setOuput(`${text.test}`)
+
+        if (apiId === "/api/multipleChoiceVocabulary") {
+            console.log(item)
+            await downloadDocxFromItem()
+
+        }
+        else console.log("HI")
     };
     return (
         <>
@@ -67,7 +76,35 @@ export default function ParagraphInput({ apiId }: ParagraphInputProps) {
                     </div>
                 </form>
             </div>
-            {console.log(output)}
+            {/* {console.log(output)} */}
         </>
     );
 }
+
+const item = {
+    passage: `President Donald Trump says the US needs to "own" Greenland to prevent Russia and China from doing so.
+
+"Countries have to have ownership and you defend ownership, you don't defend [1]. And we'll have to defend Greenland," Trump told [2] on Friday, in response to a question from the BBC.
+
+We will do it "the easy way" or "the hard way", he added. The White House said recently the administration is considering buying the semi-autonomous territory of fellow Nato member Denmark, but it would not rule out the option of [3] it by force.
+
+Denmark and Greenland say the territory is not for sale. Denmark has said military action would [4] the end of the trans-Atlantic defence alliance.`,
+    questions: [
+        {
+            choices: ["heartbeats", "volatilities", "Chinese", "leases"],
+            answer: 3
+        },
+        {
+            choices: ["professors", "reporters", "proprietorships", "reassessments"],
+            answer: 1
+        },
+        {
+            choices: ["annexing", "stifling", "broiling", "dressing"],
+            answer: 0
+        },
+        {
+            choices: ["spell", "bereaved", "unsung", "effeminate"],
+            answer: 0
+        }
+    ]
+};

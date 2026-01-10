@@ -1,6 +1,5 @@
 import { generateMultipleChoice } from "@/features/multipleChoiceVocabulary/generateMultipleChoice";
 import { TParagraphSchema, paragraphSchema } from "@/lib/types";
-import { countSentences } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -36,7 +35,7 @@ export async function POST(request: Request) {
       ? { errors: zodErrors }
       : {
           success: true,
-          test: data.sentence,
+          test: data.sentence, //to do
         }
   );
 }
