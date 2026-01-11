@@ -16,33 +16,7 @@ export type MultipleChoiceData = {
   questions: { choices: string[]; answer: number }[];
 };
 
-// const item: MultipleChoiceData = {
-//   passage: `President Donald Trump says the US needs to "own" Greenland to prevent Russia and China from doing so.
-
-// "Countries have to have ownership and you defend ownership, you don't defend [1]. And we'll have to defend Greenland," Trump told [2] on Friday, in response to a question from the BBC.
-
-// We will do it "the easy way" or "the hard way", he added. The White House said recently the administration is considering buying the semi-autonomous territory of fellow Nato member Denmark, but it would not rule out the option of [3] it by force.
-
-// Denmark and Greenland say the territory is not for sale. Denmark has said military action would [4] the end of the trans-Atlantic defence alliance.`,
-//   questions: [
-//     {
-//       choices: ["heartbeats", "volatilities", "Chinese", "leases"],
-//       answer: 3,
-//     },
-//     {
-//       choices: ["professors", "reporters", "proprietorships", "reassessments"],
-//       answer: 1,
-//     },
-//     {
-//       choices: ["annexing", "stifling", "broiling", "dressing"],
-//       answer: 0,
-//     },
-//     {
-//       choices: ["spell", "bereaved", "unsung", "effeminate"],
-//       answer: 0,
-//     },
-//   ],
-// };
+const margins = 0.5;
 
 function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
@@ -101,12 +75,23 @@ export async function downloadDocxFromItem(
 
   // 4-column table
   const rows = item.questions.map((q, i) => {
-    const cells = q.choices.map((choice, j) => {
+    // 1) First column: question number only (small)
+    const numberCell = new TableCell({
+      width: { size: 4, type: WidthType.PERCENTAGE }, // small column
+      children: [
+        new Paragraph({
+          children: [new TextRun({ text: `${i + 1}.`, size: 24 })],
+        }),
+      ],
+    });
+
+    // 2) Next 4 columns: choices (equal larger columns)
+    const choiceCells = q.choices.map((choice, j) => {
       const letter = String.fromCharCode(97 + j); // a, b, c, d
-      const prefix = j === 0 ? `${i + 1}. (${letter}) ` : `(${letter}) `;
+      const prefix = `(${letter}) `;
 
       return new TableCell({
-        width: { size: 25, type: WidthType.PERCENTAGE },
+        width: { size: 24, type: WidthType.PERCENTAGE }, // 90% / 4
         children: [
           new Paragraph({
             children: [new TextRun({ text: `${prefix}${choice}`, size: 24 })],
@@ -115,7 +100,10 @@ export async function downloadDocxFromItem(
       });
     });
 
-    return new TableRow({ children: cells });
+    // 3) Combine into 5 cells total
+    return new TableRow({
+      children: [numberCell, ...choiceCells],
+    });
   });
 
   children.push(
@@ -139,10 +127,10 @@ export async function downloadDocxFromItem(
               height: convertInchesToTwip(mmToInches(297)),
             },
             margin: {
-              top: convertInchesToTwip(1),
-              bottom: convertInchesToTwip(1),
-              left: convertInchesToTwip(1),
-              right: convertInchesToTwip(1),
+              top: convertInchesToTwip(margins),
+              bottom: convertInchesToTwip(margins),
+              left: convertInchesToTwip(margins),
+              right: convertInchesToTwip(margins),
             },
           },
         },

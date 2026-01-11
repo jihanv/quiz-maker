@@ -1,11 +1,15 @@
+import { MultipleChoiceData } from "@/features/clozeGenerator/fileDownloader";
 import { create } from "zustand";
 
-type ClozerStore = {
-  passage: string;
-  setPassage: (text: string) => void;
+type ClozeStore = {
+  data: MultipleChoiceData;
+  setData: (data: MultipleChoiceData) => void;
 };
 
-export const useSentenceFillerStore = create<ClozerStore>((set) => ({
-  passage: "TESTING",
-  setPassage: (text) => set({ passage: text }),
+export const useClozeStore = create<ClozeStore>((set) => ({
+  data: {
+    passage: "",
+    questions: [],
+  },
+  setData: (data: MultipleChoiceData) => set({ data: data }),
 }));
