@@ -1,3 +1,4 @@
+import { toCircledNumber } from "@/lib/utils";
 import { dividePassage } from "./pipeline/dividePassage";
 import {
   createTestData,
@@ -14,7 +15,7 @@ export function generateMultipleChoice(passage: string) {
   for (const question of testData) {
     const temp = question.sectionText.replace(
       question.difficultWord!,
-      `[${question.order}]`
+      ` ${toCircledNumber(question.order)} `
     );
     newText = newText + temp;
   }

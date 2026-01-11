@@ -53,8 +53,6 @@ export default function ParagraphInput() {
         console.log(text.testData)
         await downloadDocxFromItem(testDataToPrint)
 
-
-
     };
     return (
         <>

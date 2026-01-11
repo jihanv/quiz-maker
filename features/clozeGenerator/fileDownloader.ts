@@ -58,6 +58,10 @@ export async function downloadDocxFromItem(
   for (const p of passageParagraphs) {
     children.push(
       new Paragraph({
+        spacing: {
+          line: 360, // 1.5 lines (see note below)
+          lineRule: "auto",
+        },
         children: [new TextRun({ text: p.trim(), size: 24 })],
       })
     );

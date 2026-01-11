@@ -46,8 +46,11 @@ export function pickDifficultWord(sectionText: string) {
   let word = "";
   const doc = nlp(sectionText);
   const properNouns = doc.match("#ProperNoun");
-  const properNounArray = tokenizeWords(properNouns.text());
-  // console.log(properNounArray);
+  const properNounArray1 = tokenizeWords(properNouns.text());
+  const properNounArray = properNounArray1.map((word: string) =>
+    word.replace(/[^a-z]/gi, "")
+  );
+  console.log(properNounArray);
   // tokenize
   const wordTokens = tokenizeWords(sectionText);
 

@@ -346,3 +346,17 @@ export function restorePunctuationClusters(passage: string) {
   // Uses the same token as your abbreviation normalizer, so restore is identical
   return passage.replace(/<<DOT>>/g, ".");
 }
+
+export function toCircledNumber(n: number): string {
+  // ①..⑳ (1–20)
+  if (n >= 1 && n <= 20) return String.fromCharCode(0x2460 + (n - 1));
+
+  // ㉑..㉟ (21–35)
+  if (n >= 21 && n <= 35) return String.fromCharCode(0x3251 + (n - 21));
+
+  // ㊱..㊿ (36–50)
+  if (n >= 36 && n <= 50) return String.fromCharCode(0x32b1 + (n - 36));
+
+  // Fallback if you go past 50
+  return String(n);
+}
