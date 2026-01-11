@@ -1,4 +1,4 @@
-import { pickDifficultWord } from "@/features/multipleChoiceVocabulary/pipeline/pickDifficultWord";
+import { pickDifficultWord } from "@/features/clozeGenerator/pipeline/pickDifficultWord";
 
 describe("pickDifficultWord", () => {
   it("selects difficult word", () => {

@@ -10,7 +10,7 @@ import { useSentenceFillerStore } from "@/stores/sentenceFillerStore";
 export default function Home() {
 
     const text = useSentenceFillerStore((state) => state.passage)
-    const apiId = "/api/multipleChoiceVocabulary"
+    const apiId = "/api/clozeGenerator"
     return (
         <>
             <div className="h-dvh flex flex-col bg-gray-200">

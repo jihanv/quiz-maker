@@ -1,4 +1,4 @@
-import { generateMultipleChoice } from "@/features/multipleChoiceVocabulary/generateMultipleChoice";
+import { generateMultipleChoice } from "@/features/clozeGenerator/generateMultipleChoice";
 import { TParagraphSchema, paragraphSchema } from "@/lib/types";
 import { NextResponse } from "next/server";
 

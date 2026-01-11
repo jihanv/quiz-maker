@@ -225,4 +225,4 @@ function shuffleInPlace(choices: string[]) {
   }
   return choices;
 }
-// pnpm tsx features/multipleChoiceVocabulary/pipeline/createWordChoices.ts
+// pnpm tsx features/clozeGenerator/pipeline/createWordChoices.ts
