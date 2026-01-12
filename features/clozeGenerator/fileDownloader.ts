@@ -1,3 +1,4 @@
+import { toCircledNumber } from "@/lib/utils";
 import {
   Document,
   Packer,
@@ -136,20 +137,51 @@ export async function downloadDocxFromItem(
   );
   children.push(new Paragraph(""));
 
-  const answerKey = item.questions;
-  for (const p of answerKey) {
-    const answer = p.choices[p.answer];
-    children.push(
-      new Paragraph({
-        spacing: {
-          line: 360, // 1.5 lines (see note below)
-          lineRule: "auto",
-        },
-        children: [new TextRun({ text: answer, size: 24 })],
-      })
-    );
-    children.push(new Paragraph(""));
-  }
+  const keys = item.questions.map((q, i) => {
+    // 1) First column: question number only (small)
+    const numberCell = new TableCell({
+      width: { size: 4, type: WidthType.PERCENTAGE }, // small column
+      children: [
+        new Paragraph({
+          spacing: {
+            line: LINE_1_5,
+            lineRule: LineRuleType.AUTO,
+          },
+          children: [new TextRun({ text: toCircledNumber(i + 1), size: 22 })],
+        }),
+      ],
+    });
+
+    // Second Column Correct Answer
+    const correct = `(${String.fromCharCode(97 + q.answer)})  ${
+      q.choices[q.answer]
+    }`;
+
+    const ans = new TableCell({
+      width: { size: 30, type: WidthType.PERCENTAGE }, // 90% / 4
+      children: [
+        new Paragraph({
+          spacing: {
+            line: LINE_1_5,
+            lineRule: LineRuleType.AUTO,
+          },
+          children: [new TextRun({ text: correct, size: 22 })],
+        }),
+      ],
+    });
+    // 3) Combine into 5 cells total
+    return new TableRow({
+      children: [numberCell, ans],
+    });
+  });
+
+  children.push(
+    new Table({
+      width: { size: 100, type: WidthType.PERCENTAGE },
+      rows: keys,
+      borders: TableBorders.NONE,
+    })
+  );
   // A4 + margins (same as you learned)
   const mmToInches = (mm: number) => mm / 25.4;
 
