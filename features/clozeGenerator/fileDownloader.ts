@@ -9,7 +9,10 @@ import {
   WidthType,
   TableBorders,
   convertInchesToTwip,
+  LineRuleType,
+  PageBreak,
 } from "docx";
+const LINE_1_5 = 480;
 
 export type MultipleChoiceData = {
   passage: string;
@@ -36,20 +39,22 @@ export async function downloadDocxFromItem(
 ) {
   const children: Array<Paragraph | Table> = [];
 
-  // Title
-  children.push(
-    new Paragraph({
-      children: [new TextRun({ text: "Export", bold: true, size: 24 })],
-    })
-  );
   children.push(new Paragraph(""));
 
   // Passage label
   children.push(
     new Paragraph({
-      children: [new TextRun({ text: "Passage", bold: true, size: 24 })],
+      children: [
+        new TextRun({
+          text: `Read the following passage and choose the most appropriate word or phrase for each item (1 - ${item.questions.length}). `,
+          bold: true,
+          size: 24,
+        }),
+      ],
     })
   );
+
+  children.push(new Paragraph(""));
 
   // Passage paragraphs (split on blank lines)
   const passageParagraphs = item.passage
@@ -71,20 +76,20 @@ export async function downloadDocxFromItem(
   children.push(new Paragraph(""));
 
   // Questions heading
-  children.push(
-    new Paragraph({
-      children: [new TextRun({ text: "Questions", bold: true, size: 24 })],
-    })
-  );
+  children.push(new Paragraph(""));
 
-  // 4-column table
+  // 5-column table
   const rows = item.questions.map((q, i) => {
     // 1) First column: question number only (small)
     const numberCell = new TableCell({
       width: { size: 4, type: WidthType.PERCENTAGE }, // small column
       children: [
         new Paragraph({
-          children: [new TextRun({ text: `${i + 1}.`, size: 24 })],
+          spacing: {
+            line: LINE_1_5,
+            lineRule: LineRuleType.AUTO,
+          },
+          children: [new TextRun({ text: `${i + 1}.`, size: 22 })],
         }),
       ],
     });
@@ -98,7 +103,11 @@ export async function downloadDocxFromItem(
         width: { size: 24, type: WidthType.PERCENTAGE }, // 90% / 4
         children: [
           new Paragraph({
-            children: [new TextRun({ text: `${prefix}${choice}`, size: 24 })],
+            spacing: {
+              line: LINE_1_5,
+              lineRule: LineRuleType.AUTO,
+            },
+            children: [new TextRun({ text: `${prefix}${choice}`, size: 22 })],
           }),
         ],
       });
@@ -118,6 +127,29 @@ export async function downloadDocxFromItem(
     })
   );
 
+  children.push(new Paragraph({ children: [new PageBreak()] }));
+
+  children.push(
+    new Paragraph({
+      children: [new TextRun({ text: "Answer Key", bold: true, size: 24 })],
+    })
+  );
+  children.push(new Paragraph(""));
+
+  const answerKey = item.questions;
+  for (const p of answerKey) {
+    const answer = p.choices[p.answer];
+    children.push(
+      new Paragraph({
+        spacing: {
+          line: 360, // 1.5 lines (see note below)
+          lineRule: "auto",
+        },
+        children: [new TextRun({ text: answer, size: 24 })],
+      })
+    );
+    children.push(new Paragraph(""));
+  }
   // A4 + margins (same as you learned)
   const mmToInches = (mm: number) => mm / 25.4;
 

@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ParagraphSuccessResponse, TParagraphSchema, paragraphSchema } from "@/lib/types";
 import { downloadDocxFromItem, MultipleChoiceData } from "@/features/clozeGenerator/fileDownloader";
-// import { downloadFile } from "@/testfolder/documentcreator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 
 
@@ -41,14 +41,9 @@ export default function ParagraphInput() {
             return
         }
         const text: ParagraphSuccessResponse = await response.json()
-        if (text.success) {
-            console.log("SUCCESS BITCHES!")
-        }
 
         const testDataToPrint: MultipleChoiceData = text.testData
         console.log(text.testData.passage)
-        // setOuput(`${text}`)
-
 
         console.log(text.testData)
         await downloadDocxFromItem(testDataToPrint)
@@ -56,8 +51,17 @@ export default function ParagraphInput() {
     };
     return (
         <>
+
             <div
-                className="flex flex-col w-3/4 max-w-5xl mx-auto px-2.5">
+                className="flex flex-col justify-center w-3/4 max-w-5xl mx-auto px-2.5">
+                <Tabs defaultValue="account" className="flex flex-col items-center ">
+                    <TabsList>
+                        <TabsTrigger value="account">Auto-Generate</TabsTrigger>
+                        <TabsTrigger value="password">Custom</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="account">Make changes to your account here.</TabsContent>
+                    <TabsContent value="password">Change your password here.</TabsContent>
+                </Tabs>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div className="flex flex-col gap-2 p-5 bg-white rounded-[7px]" translate="no">
                         <div className="rounded-[5px] border border-[#ccc]">
@@ -71,9 +75,15 @@ export default function ParagraphInput() {
                                 ></textarea>
                             </div>
                         </div>
-                        <Button className="bg-black text-white" disabled={isSubmitting}>
-                            Generate Test
-                        </Button>
+                        <div className="flex gap-1 justify-center">
+                            <Button className="bg-black text-white transition-transform duration-150 ease-out hover:scale-[1.05] active:scale-[0.98] disabled:hover:scale-100" disabled={isSubmitting} type="submit">
+                                Generate Test
+                            </Button>
+                            <Button className="bg-black text-white transition-transform duration-150 ease-out hover:scale-[1.05] active:scale-[0.98] disabled:hover:scale-100" disabled={isSubmitting} type="button" onClick={() => { console.log("BIE") }}>
+                                Bye
+                            </Button>
+                        </div>
+
 
                     </div>
                 </form>
