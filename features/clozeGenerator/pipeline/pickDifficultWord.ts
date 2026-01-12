@@ -2,12 +2,15 @@ import nlp from "compromise/two";
 import { zipfFrequency } from "nodewordfreq";
 import fs from "node:fs";
 import { generateChoices } from "./createWordChoices";
+import { clean } from "@/lib/utils";
+import { stemmer } from "stemmer";
 // import { determinePartOfSpeech } from "./createWordChoices";
 
 const data = JSON.parse(fs.readFileSync("./data/dictionary.json", "utf8"));
 const dict = new Set(data.dictionary); // Set = fast lookup
 
 const temporaryDifficultWords: string[] = [];
+const stem = new Set<string>();
 
 export type MultipleChoiceSection = {
   order: number;
@@ -53,7 +56,6 @@ export function pickDifficultWord(sectionText: string) {
   console.log(properNounArray);
   // tokenize
   const wordTokens = tokenizeWords(sectionText);
-
   // for each thing in tokenized version, normalize, retrieve, zipF find max
   for (let i = 0; i < wordTokens.length; i++) {
     const tempWord = wordTokens[i].replace(/[^a-z]/gi, "");
@@ -64,15 +66,19 @@ export function pickDifficultWord(sectionText: string) {
       // console.log(getZipf(wordTokens[i]), wordTokens[i]);
       if (
         getZipf(tempWord) < difficultyLevel &&
-        !temporaryDifficultWords.includes(tempWord)
+        !temporaryDifficultWords.includes(tempWord) &&
+        !stem.has(stemmer(tempWord))
       ) {
-        temporaryDifficultWords.push(tempWord);
         difficultyLevel = getZipf(tempWord);
         difficultWordIndex = i;
         word = tempWord;
       }
     }
   }
+  stem.add(stemmer(clean(word)));
+  temporaryDifficultWords.push(word);
+  console.log(temporaryDifficultWords);
+  console.log(stem);
 
   return {
     wordIndex: difficultWordIndex,

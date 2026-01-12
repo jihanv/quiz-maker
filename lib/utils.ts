@@ -1,6 +1,8 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ABBREVIATIONS, INITIALS_RE, INITIALS_TOKEN_RE } from "./constants";
+import { stemmer } from "stemmer";
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -359,4 +361,21 @@ export function toCircledNumber(n: number): string {
 
   // Fallback if you go past 50
   return String(n);
+}
+
+export function clean(word: string) {
+  return word.toLowerCase().replace(/[^a-z]/g, "");
+}
+
+export function makeStemSet(wordArray: string[]) {
+  const set = new Set();
+  for (const w of wordArray) {
+    set.add(stemmer(clean(w)));
+  }
+  return set;
+}
+
+export function isSameFamilyAsAny(word: string, stemSet: ReadonlySet<string>) {
+  const wStem = stemmer(clean(word));
+  return stemSet.has(wStem);
 }
