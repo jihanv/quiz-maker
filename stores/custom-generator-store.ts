@@ -12,6 +12,7 @@ type CustomGeneratorStore = {
   // actions (functions that change the state)
   setWords: (words: WordObj[]) => void;
   clearWords: () => void;
+  toggleWord: (position: number) => void;
 };
 
 export const UseCustomGeneratorStore = create<CustomGeneratorStore>((set) => ({
@@ -19,4 +20,11 @@ export const UseCustomGeneratorStore = create<CustomGeneratorStore>((set) => ({
 
   setWords: (words) => set({ words }),
   clearWords: () => set({ words: [] }),
+
+  toggleWord: (position) =>
+    set((state) => ({
+      words: state.words.map((w) =>
+        w.position === position ? { ...w, selected: !w.selected } : w
+      ),
+    })),
 }));

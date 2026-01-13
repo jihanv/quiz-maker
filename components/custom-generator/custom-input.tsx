@@ -13,7 +13,9 @@ import { UseCustomGeneratorStore } from "@/stores/custom-generator-store";
 
 export default function CustomInput() {
 
+    const words = UseCustomGeneratorStore((state) => state.words);
     const setWords = UseCustomGeneratorStore((state) => state.setWords);
+    const toggleWord = UseCustomGeneratorStore((state) => state.toggleWord);
 
     const {
         register,
@@ -93,6 +95,19 @@ export default function CustomInput() {
                                 Next
                             </Button>
                         </div>
+                        <div className="mt-4 p-4 border rounded whitespace-pre-wrap">
+                            {words.map((w) => (
+                                <span
+                                    key={w.position}
+                                    className={`cursor-pointer px-1 rounded ${w.selected ? "bg-yellow-200" : ""
+                                        }`}
+                                    onClick={() => toggleWord(w.position)}
+                                >
+                                    {w.word}{" "}
+                                </span>
+                            ))}
+                        </div>
+
                     </div>
                 </form>
             </div>
