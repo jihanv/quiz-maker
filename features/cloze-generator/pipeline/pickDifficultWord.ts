@@ -2,9 +2,8 @@ import nlp from "compromise/two";
 import { zipfFrequency } from "nodewordfreq";
 import fs from "node:fs";
 import { generateChoices } from "./createWordChoices";
-import { clean } from "@/lib/utils";
+import { clean, startsWithUppercase } from "@/lib/utils";
 import { stemmer } from "stemmer";
-// import { determinePartOfSpeech } from "./createWordChoices";
 
 const data = JSON.parse(fs.readFileSync("./data/dictionary.json", "utf8"));
 const dict = new Set(data.dictionary); // Set = fast lookup
@@ -26,8 +25,14 @@ export function createTestData(
 ): MultipleChoiceSection[] {
   const object = passageSections.map((sectionText, i) => {
     const targetWord = pickDifficultWord(sectionText);
-    const choices = generateChoices(sectionText, targetWord.difficultWord);
+    let choices = generateChoices(sectionText, targetWord.difficultWord);
     const answerIndex = choices?.indexOf(targetWord.difficultWord);
+
+    if (startsWithUppercase(targetWord.difficultWord)) {
+      choices = choices?.map((s) =>
+        s.length ? s[0].toUpperCase() + s.slice(1) : s
+      );
+    }
 
     return {
       order: i + 1,
@@ -53,7 +58,7 @@ export function pickDifficultWord(sectionText: string) {
   const properNounArray = properNounArray1.map((word: string) =>
     word.replace(/[^a-z]/gi, "")
   );
-  console.log(properNounArray);
+  // console.log(properNounArray);
   // tokenize
   const wordTokens = tokenizeWords(sectionText);
   // for each thing in tokenized version, normalize, retrieve, zipF find max

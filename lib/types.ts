@@ -1,4 +1,4 @@
-import { MultipleChoiceData } from "@/features/clozeGenerator/fileDownloader";
+import { MultipleChoiceData } from "@/features/cloze-generator/fileDownloader";
 import z from "zod";
 
 export const paragraphSchema = z.object({

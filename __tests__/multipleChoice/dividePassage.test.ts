@@ -1,4 +1,4 @@
-import { dividePassage } from "@/features/clozeGenerator/pipeline/dividePassage";
+import { dividePassage } from "@/features/cloze-generator/pipeline/dividePassage";
 
 describe("dividePassage", () => {
   it("divides one paragraph properly", () => {

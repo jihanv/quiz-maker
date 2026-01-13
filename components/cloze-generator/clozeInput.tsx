@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ParagraphSuccessResponse, TParagraphSchema, paragraphSchema } from "@/lib/types";
-import { downloadDocxFromItem, MultipleChoiceData } from "@/features/clozeGenerator/fileDownloader";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { downloadDocxFromItem, MultipleChoiceData } from "@/features/cloze-generator/fileDownloader";
+// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 
 
@@ -29,7 +29,7 @@ export default function ParagraphInput() {
 
     const onSubmit = async (data: TParagraphSchema) => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
-        const response = await fetch("/api/clozeGenerator", {
+        const response = await fetch("/api/cloze-generator", {
             method: "post",
             body: JSON.stringify(data),
             headers: {
@@ -51,17 +51,16 @@ export default function ParagraphInput() {
     };
     return (
         <>
-
             <div
                 className="flex flex-col justify-center w-3/4 max-w-5xl mx-auto px-2.5">
-                <Tabs defaultValue="account" className="flex flex-col items-center ">
+                {/* <Tabs defaultValue="account" className="flex flex-col items-center ">
                     <TabsList>
-                        <TabsTrigger value="account">Auto-Generate</TabsTrigger>
-                        <TabsTrigger value="password">Custom</TabsTrigger>
+                        <TabsTrigger value="automatic">Auto-Generate</TabsTrigger>
+                        <TabsTrigger value="custom">Custom</TabsTrigger>
                     </TabsList>
-                    <TabsContent value="account">Make changes to your account here.</TabsContent>
-                    <TabsContent value="password">Change your password here.</TabsContent>
-                </Tabs>
+                    <TabsContent value="automatic">Make changes to your account here.</TabsContent>
+                    <TabsContent value="custom">Change your password here.</TabsContent>
+                </Tabs> */}
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div className="flex flex-col gap-2 p-5 bg-white rounded-[7px]" translate="no">
                         <div className="rounded-[5px] border border-[#ccc]">

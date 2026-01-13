@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ParagraphSuccessResponse, TParagraphSchema, paragraphSchema } from "@/lib/types";
-import { downloadDocxFromItem, MultipleChoiceData } from "@/features/clozeGenerator/fileDownloader";
+import { downloadDocxFromItem, MultipleChoiceData } from "@/features/cloze-generator/fileDownloader";
 // import { downloadFile } from "@/testfolder/documentcreator";
 
 type ParagraphInputProps = {
@@ -51,7 +51,7 @@ export default function ParagraphInput({ apiId }: ParagraphInputProps) {
         console.log(text.testData.passage)
         // setOuput(`${text}`)
 
-        if (apiId === "/api/clozeGenerator") {
+        if (apiId === "/api/cloze-generator") {
             console.log(text.testData)
             await downloadDocxFromItem(testDataToPrint)
 

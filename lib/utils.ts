@@ -379,3 +379,8 @@ export function isSameFamilyAsAny(word: string, stemSet: ReadonlySet<string>) {
   const wStem = stemmer(clean(word));
   return stemSet.has(wStem);
 }
+
+export function startsWithUppercase(word: string): boolean {
+  if (word.length === 0) return false;
+  return word[0] === word[0].toUpperCase() && word[0] !== word[0].toLowerCase();
+}
