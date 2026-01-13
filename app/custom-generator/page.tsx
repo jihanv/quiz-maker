@@ -2,7 +2,7 @@
 
 import BackgroundImage from "@/components/backgroundImage";
 import H1 from "@/components/H1";
-import ParagraphInput from "@/components/cloze-generator/clozeInput";
+import CustomInput from "@/components/custom-generator/custom-input";
 // import { useSentenceFillerStore } from "@/stores/sentenceFillerStore";
 
 
@@ -16,7 +16,7 @@ export default function Home() {
                 <BackgroundImage />
                 <div className="z-10">
                     <H1>{"Vocabulary"}</H1>
-                    <ParagraphInput />
+                    <CustomInput />
                 </div>
 
             </div>

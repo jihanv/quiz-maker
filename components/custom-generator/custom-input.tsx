@@ -6,11 +6,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ParagraphSuccessResponse, TParagraphSchema, paragraphSchema } from "@/lib/types";
 import { downloadDocxFromItem, MultipleChoiceData } from "@/features/cloze-generator/fileDownloader";
-// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { UseCustomGeneratorStore } from "@/stores/custom-generator-store";
+// import { UseCustomGeneratorStore } from "@/stores/custom-generator-store";
 
 
 
-export default function ParagraphInput() {
+export default function CustomInput() {
+
+    const setWords = UseCustomGeneratorStore((state) => state.setWords);
 
     const {
         register,
@@ -27,7 +30,22 @@ export default function ParagraphInput() {
 
     // The test that will be output
     // const [output, setOuput] = useState("");
+    const handleNext = () => {
+        const text = getValues("sentence") || "";
 
+        const wordObjects = text
+            .trim()
+            .split(/\s+/) // split by spaces/newlines/tabs
+            .filter(Boolean)
+            .map((word, index) => ({
+                word,
+                position: index,
+                selected: false,
+            }));
+
+        setWords(wordObjects);
+        console.log(wordObjects)
+    }
     const onSubmit = async (data: TParagraphSchema) => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         const response = await fetch("/api/cloze-generator", {
@@ -71,7 +89,7 @@ export default function ParagraphInput() {
                             <Button className="bg-black text-white transition-transform duration-150 ease-out hover:scale-[1.05] active:scale-[0.98] disabled:hover:scale-100" disabled={isSubmitting} type="submit">
                                 Generate Test
                             </Button>
-                            <Button className="bg-black text-white transition-transform duration-150 ease-out hover:scale-[1.05] active:scale-[0.98] disabled:hover:scale-100" disabled={isSubmitting} type="button" onClick={() => { console.log(getValues().sentence) }}>
+                            <Button className="bg-black text-white transition-transform duration-150 ease-out hover:scale-[1.05] active:scale-[0.98] disabled:hover:scale-100" disabled={isSubmitting} type="button" onClick={() => handleNext()}>
                                 Next
                             </Button>
                         </div>
