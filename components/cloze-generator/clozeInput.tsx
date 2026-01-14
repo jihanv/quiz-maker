@@ -15,7 +15,6 @@ export default function ParagraphInput() {
     const {
         register,
         handleSubmit,
-        getValues,
         formState: {
             // errors,
             isSubmitting
@@ -71,12 +70,11 @@ export default function ParagraphInput() {
                             <Button className="bg-black text-white transition-transform duration-150 ease-out hover:scale-[1.05] active:scale-[0.98] disabled:hover:scale-100" disabled={isSubmitting} type="submit">
                                 Generate Test
                             </Button>
-                            <Button className="bg-black text-white transition-transform duration-150 ease-out hover:scale-[1.05] active:scale-[0.98] disabled:hover:scale-100" disabled={isSubmitting} type="button" onClick={() => { console.log(getValues().sentence) }}>
-                                Next
-                            </Button>
                         </div>
                     </div>
                 </form>
+                <footer className="text-xs">© Jihan V. 2026</footer>
+                <footer className="text-xs">Multiple Choice Generator</footer>
             </div>
         </>
     );

@@ -3,7 +3,6 @@
 import BackgroundImage from "@/components/backgroundImage";
 import H1 from "@/components/H1";
 import CustomInput from "@/components/custom-generator/custom-input";
-// import { useSentenceFillerStore } from "@/stores/sentenceFillerStore";
 
 
 

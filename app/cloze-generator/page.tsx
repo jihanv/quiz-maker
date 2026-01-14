@@ -15,9 +15,10 @@ export default function Home() {
             <div className="h-dvh flex flex-col bg-gray-200">
                 <BackgroundImage />
                 <div className="z-10">
-                    <H1>{"Vocabulary"}</H1>
+                    <H1>{"Vocabulary Test Generator"}</H1>
                     <ParagraphInput />
                 </div>
+
 
             </div>
         </>
