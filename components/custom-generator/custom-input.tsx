@@ -14,9 +14,11 @@ import { UseCustomGeneratorStore } from "@/stores/custom-generator-store";
 export default function CustomInput() {
 
     const words = UseCustomGeneratorStore((state) => state.words);
-    const setWords = UseCustomGeneratorStore((state) => state.setWords);
-    const toggleWord = UseCustomGeneratorStore((state) => state.toggleWord);
-
+    // const setWords = UseCustomGeneratorStore((state) => state.setWords);
+    // const toggleWord = UseCustomGeneratorStore((state) => state.toggleWord);
+    const setParagraphs = UseCustomGeneratorStore((s) => s.setParagraphs);
+    const paragraphs = UseCustomGeneratorStore((s) => s.paragraphs);
+    const toggleWord = UseCustomGeneratorStore((s) => s.toggleWord);
     const {
         register,
         handleSubmit,
@@ -35,18 +37,31 @@ export default function CustomInput() {
     const handleNext = () => {
         const text = getValues("sentence") || "";
 
-        const wordObjects = text
+        // Split by blank lines (paragraph breaks)
+        const rawParagraphs = text
             .trim()
-            .split(/\s+/) // split by spaces/newlines/tabs
-            .filter(Boolean)
-            .map((word, index) => ({
-                word,
-                position: index,
-                selected: false,
-            }));
+            .split(/\n\s*\n+/) // one or more blank lines
+            .filter(Boolean);
 
-        setWords(wordObjects);
-        console.log(wordObjects)
+        let globalPosition = 0;
+
+        const paragraphs = rawParagraphs.map((para, paragraphIndex) => {
+            const words = para
+                .trim()
+                .split(/\s+/) // split by whitespace; commas stay attached
+                .filter(Boolean)
+                .map((word) => ({
+                    word,
+                    position: globalPosition++,
+                    paragraphIndex,
+                    selected: false,
+                }));
+
+            return { paragraphIndex, words };
+        });
+
+        setParagraphs(paragraphs);
+
     }
     const onSubmit = async (data: TParagraphSchema) => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -94,23 +109,32 @@ export default function CustomInput() {
                             <Button className="bg-black text-white transition-transform duration-150 ease-out hover:scale-[1.05] active:scale-[0.98] disabled:hover:scale-100" disabled={isSubmitting} type="button" onClick={() => handleNext()}>
                                 Next
                             </Button>
+
                         </div>
-                        <div className="mt-4 p-4 border rounded whitespace-pre-wrap">
-                            {words.map((w) => (
-                                <span
-                                    key={w.position}
-                                    className={`cursor-pointer px-1 rounded ${w.selected ? "bg-yellow-200" : ""
-                                        }`}
-                                    onClick={() => toggleWord(w.position)}
-                                >
-                                    {w.word}{" "}
-                                </span>
+                        <div className="mt-4 p-4 border rounded">
+                            {paragraphs.map((p) => (
+                                <p key={p.paragraphIndex} className="mb-4">
+                                    {p.words.map((w) => (
+                                        <span
+                                            key={w.position}
+                                            className={`cursor-pointer bold px-0.4 rounded ${w.selected ? "bg-yellow-200" : ""
+                                                }`}
+                                            onClick={() => toggleWord(w.position)}
+                                        >
+                                            {w.word}{" "}
+                                        </span>
+                                    ))}
+                                </p>
                             ))}
                         </div>
 
+
                     </div>
+
                 </form>
+
             </div>
+
         </>
     );
 }
