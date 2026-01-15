@@ -1,17 +1,18 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // 1) Make sure Vercel bundles the extra data files your server code reads at runtime
-  //    (nodewordfreq wordlists + your local dictionary.json)
   outputFileTracingIncludes: {
     "/api/cloze-generator": [
-      "node_modules/nodewordfreq/**/*",
+      // IMPORTANT: avoid node_modules/nodewordfreq (symlink under pnpm)
+      "node_modules/.pnpm/nodewordfreq@*/node_modules/nodewordfreq/**",
+
+      // your local file
       "data/dictionary.json",
     ],
   },
 
-  // 2) Optional: tells Next not to try to bundle this package (helps with Node-specific deps)
-  serverExternalPackages: ["nodewordfreq"],
+  // For now, REMOVE serverExternalPackages if you added it
+  // serverExternalPackages: ["nodewordfreq"],
 };
 
 export default nextConfig;
