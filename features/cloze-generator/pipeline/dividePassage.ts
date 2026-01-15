@@ -18,8 +18,8 @@ export function dividePassage(passage: string) {
 
   const counts = sentenceArray.map((sentence) => countWords(sentence));
 
-  const passageCount = countWords(passage);
-  const numberOfSections = Math.floor(passageCount / TARGET_LENGTH);
+  // const passageCount = countWords(passage);
+  // const numberOfSections = Math.floor(passageCount / TARGET_LENGTH);
   // console.log(numberOfSections);
 
   const sections: string[] = [];

@@ -7,7 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ParagraphSuccessResponse, TParagraphSchema, paragraphSchema } from "@/lib/types";
 import { downloadDocxFromItem, MultipleChoiceData } from "@/features/cloze-generator/fileDownloader";
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { Loader2 } from "lucide-react"
 
 
 export default function ParagraphInput() {
@@ -75,7 +76,29 @@ export default function ParagraphInput() {
                 </form>
                 <footer className="text-xs">© Jihan V. 2026</footer>
                 <footer className="text-xs">Multiple Choice Generator</footer>
+                <Dialog open={isSubmitting}>
+                    <DialogContent
+                        className="sm:max-w-md"
+                        // hides the X button (DialogContent renders a close button by default)
+                        // if your shadcn version supports it:
+                        // closeButton={false}
+                        onPointerDownOutside={(e) => e.preventDefault()}
+                        onEscapeKeyDown={(e) => e.preventDefault()}
+                    >
+                        <DialogHeader>
+                            <DialogTitle className="flex items-center gap-2">
+                                <Loader2 className="h-5 w-5 animate-spin" />
+                                Generating test…
+                            </DialogTitle>
+                            <DialogDescription>
+                                Please wait—don’t close this tab/window while we build your document.
+                                作成中です。完了するまでこのタブ／ウィンドウは閉じないでください（切り替えはOKです）。
+                            </DialogDescription>
+                        </DialogHeader>
+                    </DialogContent>
+                </Dialog>
             </div>
+
         </>
     );
 }
