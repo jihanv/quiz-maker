@@ -78,9 +78,9 @@ export default function CustomInput() {
         const text: ParagraphSuccessResponse = await response.json()
 
         const testDataToPrint: MultipleChoiceData = text.testData
-        console.log(text.testData.passage)
+        // console.log(text.testData.passage)
 
-        console.log(text.testData)
+        // console.log(text.testData)
         await downloadDocxFromItem(testDataToPrint)
 
     };

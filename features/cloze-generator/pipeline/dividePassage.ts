@@ -20,7 +20,7 @@ export function dividePassage(passage: string) {
 
   const passageCount = countWords(passage);
   const numberOfSections = Math.floor(passageCount / TARGET_LENGTH);
-  console.log(numberOfSections);
+  // console.log(numberOfSections);
 
   const sections: string[] = [];
   let i = 0;
@@ -65,7 +65,7 @@ export function dividePassage(passage: string) {
 
     sections.push(sectionPieces.join("")); // preserve formatting
   }
-  console.log(sections);
+  // console.log(sections);
   return sections;
 }
 

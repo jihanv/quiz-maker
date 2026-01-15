@@ -26,7 +26,7 @@ export async function POST(request: Request) {
 
   const test = data.sentence.toUpperCase();
   const count = countSentences(test);
-  console.log(count);
+  // console.log(count);
 
   // translate
   return NextResponse.json(

@@ -44,15 +44,15 @@ export default function ParagraphInput({ apiId }: ParagraphInputProps) {
         }
         const text: ParagraphSuccessResponse = await response.json()
         if (text.success) {
-            console.log("SUCCESS BITCHES!")
+            // console.log("SUCCESS BITCHES!")
         }
 
         const testDataToPrint: MultipleChoiceData = text.testData
-        console.log(text.testData.passage)
+        // console.log(text.testData.passage)
         // setOuput(`${text}`)
 
         if (apiId === "/api/cloze-generator") {
-            console.log(text.testData)
+            // console.log(text.testData)
             await downloadDocxFromItem(testDataToPrint)
 
         }

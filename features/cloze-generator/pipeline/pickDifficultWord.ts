@@ -4,8 +4,10 @@ import fs from "node:fs";
 import { generateChoices } from "./createWordChoices";
 import { clean, startsWithUppercase } from "@/lib/utils";
 import { stemmer } from "stemmer";
+import path from "node:path";
 
-const data = JSON.parse(fs.readFileSync("./data/dictionary.json", "utf8"));
+const dictPath = path.join(process.cwd(), "data", "dictionary.json");
+const data = JSON.parse(fs.readFileSync(dictPath, "utf8"));
 const dict = new Set(data.dictionary); // Set = fast lookup
 
 const temporaryDifficultWords: string[] = [];
@@ -82,8 +84,8 @@ export function pickDifficultWord(sectionText: string) {
   }
   stem.add(stemmer(clean(word)));
   temporaryDifficultWords.push(word);
-  console.log(temporaryDifficultWords);
-  console.log(stem);
+  // console.log(temporaryDifficultWords);
+  // console.log(stem);
 
   return {
     wordIndex: difficultWordIndex,
