@@ -11,7 +11,7 @@ export default function Home() {
     // const text = useSentenceFillerStore((state) => state.passage)
     return (
         <>
-            <div className="h-dvh flex flex-col bg-gray-200">
+            <div className="h-dvh flex flex-col">
                 <BackgroundImage />
                 <div className="z-10">
                     <H1>{"Vocabulary"}</H1>

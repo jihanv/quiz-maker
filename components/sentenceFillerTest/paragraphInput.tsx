@@ -44,7 +44,7 @@ export default function ParagraphInput({ apiId }: ParagraphInputProps) {
         }
         const text: ParagraphSuccessResponse = await response.json()
         if (text.success) {
-            // console.log("SUCCESS BITCHES!")
+            // console.log("SUCCESS!")
         }
 
         const testDataToPrint: MultipleChoiceData = text.testData

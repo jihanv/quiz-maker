@@ -57,7 +57,7 @@ export default function ParagraphInput() {
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div className="flex flex-col gap-2 p-5 bg-white rounded-[7px]" translate="no">
                         <div className="rounded-[5px] border border-[#ccc]">
-                            <div className="flex border-b border-[#ccc]">
+                            <div className="flex border-[#ccc]">
                                 <textarea
                                     id="message"
                                     {...register("sentence")}
