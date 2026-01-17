@@ -74,6 +74,7 @@ export default function ParagraphInput() {
                         </div>
                     </div>
                 </form>
+                <br />
                 <footer className="text-xs">© Jihan V. 2026</footer>
                 <footer className="text-xs">Multiple Choice Generator</footer>
                 <Dialog open={isSubmitting}>
@@ -97,7 +98,7 @@ export default function ParagraphInput() {
                         </DialogHeader>
                     </DialogContent>
                 </Dialog>
-            </div>
+            </div >
 
         </>
     );
