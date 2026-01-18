@@ -140,7 +140,7 @@ export default function CustomInput() {
                                 disabled={isSubmitting}
                                 type="submit"
                             >
-                                Generate Test
+                                Back
                             </Button>
 
                             <Button
