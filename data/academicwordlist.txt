@@ -491,7 +491,6 @@ I
 I'd
 I'll
 I'm
-I've
 IBM
 ICI
 ID
@@ -18169,13 +18168,11 @@ rant
 rap
 rapacious
 rapacity
-rape
 rapid
 rapidity
 rapidly
 rapids
 rapine
-rapist
 rapper
 rapport
 rapprochement
@@ -20041,13 +20038,6 @@ sex education
 sexism
 sexist
 sextant
-sexual
-sexual harassment
-sexual intercourse
-sexuality
-sexually
-sexy
-sh
 shabby
 shack
 shackle

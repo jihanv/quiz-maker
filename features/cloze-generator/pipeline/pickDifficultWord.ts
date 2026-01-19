@@ -23,7 +23,7 @@ export type MultipleChoiceSection = {
 };
 
 export function createTestData(
-  passageSections: string[]
+  passageSections: string[],
 ): MultipleChoiceSection[] {
   const object = passageSections.map((sectionText, i) => {
     const targetWord = pickDifficultWord(sectionText);
@@ -32,7 +32,7 @@ export function createTestData(
 
     if (startsWithUppercase(targetWord.difficultWord)) {
       choices = choices?.map((s) =>
-        s.length ? s[0].toUpperCase() + s.slice(1) : s
+        s.length ? s[0].toUpperCase() + s.slice(1) : s,
       );
     }
 
@@ -58,7 +58,7 @@ export function pickDifficultWord(sectionText: string) {
   const properNouns = doc.match("#ProperNoun");
   const properNounArray1 = tokenizeWords(properNouns.text());
   const properNounArray = properNounArray1.map((word: string) =>
-    word.replace(/[^a-z]/gi, "")
+    word.replace(/[^a-z]/gi, ""),
   );
   // console.log(properNounArray);
   // tokenize
@@ -90,7 +90,6 @@ export function pickDifficultWord(sectionText: string) {
   return {
     wordIndex: difficultWordIndex,
     difficultWord: word.replace(/[^a-z]/gi, ""),
-    // isProperNoun: isProperNounPhrase(word),
   };
 }
 

@@ -71,7 +71,7 @@ function getCoarsePOS(hit: TaggableSelection): CoarsePOS {
 function getFormInSentence(
   sentence: string,
   word: string,
-  occurrence = 0
+  occurrence = 0,
 ): { pos: CoarsePOS; form: WordForm } | null {
   const doc = nlp(sentence);
   const hit = doc.match(word).terms().eq(occurrence); // TS will accept this as TaggableSelection structurally
@@ -172,7 +172,7 @@ export function randomSamePosSameFormFromContext(
   form: WordForm,
   originalSurface: string,
   count = 3,
-  maxTries = 6000
+  maxTries = 6000,
 ): string[] {
   const out = new Set<string>();
   let tries = 0;
@@ -181,7 +181,7 @@ export function randomSamePosSameFormFromContext(
     tries++;
 
     const base = NGSL_WORDS[(Math.random() * NGSL_WORDS.length) | 0];
-    if (!base || base.length < 2) continue;
+    if (!base || base.length < 3) continue;
     if (!matchesPos(base, pos)) continue;
 
     const formed = applyForm(base, pos, form);
@@ -190,7 +190,7 @@ export function randomSamePosSameFormFromContext(
     const candidate = formed.trim();
     if (!isSingleWord(candidate)) continue;
     if (candidate.toLowerCase() === originalSurface.toLowerCase()) continue;
-
+    if (isProperNoun(candidate)) continue;
     // sanity: still matches POS after transformation
     if (!matchesPos(candidate, pos)) continue;
 
@@ -206,14 +206,12 @@ export function generateChoices(sententence: string, word: string) {
     const choices = randomSamePosSameFormFromContext(
       wordInfo?.pos,
       wordInfo?.form,
-      word
+      word,
     );
     choices.push(word);
-    // console.table(choices);
-    // console.log(choices);
+
     shuffleInPlace(choices);
-    // console.table(choices);
-    // console.log(choices);
+
     return choices;
   }
 }
@@ -224,5 +222,10 @@ function shuffleInPlace(choices: string[]) {
     [choices[i], choices[j]] = [choices[j], choices[i]];
   }
   return choices;
+}
+
+function isProperNoun(text: string): boolean {
+  // For a single word, this is usually enough
+  return nlp(text).has("#ProperNoun");
 }
 // pnpm tsx features/clozeGenerator/pipeline/createWordChoices.ts
