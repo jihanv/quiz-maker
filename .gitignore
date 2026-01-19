@@ -42,3 +42,5 @@ next-env.d.ts
 
 wordfreq-smoke.mjs
 /testfolder
+
+filterWordlist.js
