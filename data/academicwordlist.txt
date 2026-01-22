@@ -2657,7 +2657,6 @@ bullion
 bullish
 bullock
 bullrush
-bullshit
 bully
 bullyrag
 bulwark
@@ -5021,7 +5020,6 @@ damage
 damages
 damaging
 dame
-damn
 damned
 damning
 damp
@@ -8304,7 +8302,6 @@ formula
 formulaic
 formulate
 formulation
-fornicate
 forsake
 forswear
 fort
@@ -8492,8 +8489,6 @@ frying pan
 ft
 fubsy
 fuchsia
-fuck
-fucking
 fuddle
 fudge
 fuel
@@ -9857,7 +9852,6 @@ horizontal
 hormonal
 hormone
 horn
-horny
 horology
 horoscope
 horrendous
@@ -15717,8 +15711,6 @@ porcine
 porcupine
 pore
 pork
-porn
-pornography
 porosity
 porous
 porpoise
@@ -18751,7 +18743,6 @@ shipyard
 shire
 shirk
 shirt
-shit
 shiver
 shoal
 shock
