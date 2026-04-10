@@ -10,18 +10,20 @@ export async function POST(request: Request) {
     if (!result.success) return NextResponse.json({ success: false }, { status: 400 })
 
     const [firstWord] = result.data.words;
+    let definition: string | null = null;
+
     const fallbackEntries: JapaneseLookupFallbackEntry[] = [];
     const url = `https://api.excelapi.org/dictionary/enja?word=${encodeURIComponent(firstWord)}`;
     try {
         const response = await fetch(url, { headers: { Accept: "text/plain", "User-Agent": "Mozilla/5.0" } });
         const text = (await response.text()).trim();
-        if (!response.ok || !text) {
-            return NextResponse.json({ success: false, word: firstWord, error: text || "No definition found" }, { status: response.ok ? 404 : response.status });
+        if (response.ok && text) {
+            definition = text;
         }
         return NextResponse.json({
             success: true,
             word: firstWord,
-            definition: text,
+            definition,
             fallbackEntries: fallbackEntries,
         });
     } catch (error) {
