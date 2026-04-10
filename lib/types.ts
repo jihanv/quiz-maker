@@ -13,3 +13,9 @@ export type ParagraphSuccessResponse = {
   success: true;
   testData: MultipleChoiceData;
 };
+
+export const japaneseLookupSchema = z.object({
+  words: z.array(z.string().trim().min(1)).min(1),
+});
+
+export type TJapaneseLookupSchema = z.infer<typeof japaneseLookupSchema>;
