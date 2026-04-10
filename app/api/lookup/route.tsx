@@ -1,6 +1,6 @@
 export const runtime = "nodejs";
 
-import { japaneseLookupSchema } from "@/lib/types";
+import { JapaneseLookupFallbackEntry, japaneseLookupSchema } from "@/lib/types";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -10,6 +10,7 @@ export async function POST(request: Request) {
     if (!result.success) return NextResponse.json({ success: false }, { status: 400 })
 
     const [firstWord] = result.data.words;
+    const fallbackEntries: JapaneseLookupFallbackEntry[] = [];
     const url = `https://api.excelapi.org/dictionary/enja?word=${encodeURIComponent(firstWord)}`;
     try {
         const response = await fetch(url, { headers: { Accept: "text/plain", "User-Agent": "Mozilla/5.0" } });
@@ -21,7 +22,7 @@ export async function POST(request: Request) {
             success: true,
             word: firstWord,
             definition: text,
-            fallbackEntries: [],
+            fallbackEntries: fallbackEntries,
         });
     } catch (error) {
         return NextResponse.json({ success: false, word: firstWord, error: error instanceof Error ? error.message : "Lookup failed" }, { status: 500 });
