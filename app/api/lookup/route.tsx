@@ -11,13 +11,14 @@ export async function POST(request: Request) {
 
     const [firstWord] = result.data.words;
     const url = `https://api.excelapi.org/dictionary/enja?word=${encodeURIComponent(firstWord)}`;
-    const response = await fetch(url, { headers: { Accept: "text/plain", "User-Agent": "Mozilla/5.0" } });
-    const text = (await response.text()).trim();
-    if (!response.ok || !text) {
-        return NextResponse.json({ success: false, word: firstWord, error: text || "No definition found" }, { status: response.ok ? 404 : response.status });
+    try {
+        const response = await fetch(url, { headers: { Accept: "text/plain", "User-Agent": "Mozilla/5.0" } });
+        const text = (await response.text()).trim();
+        if (!response.ok || !text) {
+            return NextResponse.json({ success: false, word: firstWord, error: text || "No definition found" }, { status: response.ok ? 404 : response.status });
+        }
+        return new NextResponse(text, { status: 200, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+    } catch (error) {
+        return NextResponse.json({ success: false, word: firstWord, error: error instanceof Error ? error.message : "Lookup failed" }, { status: 500 });
     }
-    return new NextResponse(text, {
-        status: 200,
-        headers: { "Content-Type": "text/plain; charset=utf-8" },
-    });
 }
