@@ -17,7 +17,12 @@ export async function POST(request: Request) {
         if (!response.ok || !text) {
             return NextResponse.json({ success: false, word: firstWord, error: text || "No definition found" }, { status: response.ok ? 404 : response.status });
         }
-        return new NextResponse(text, { status: 200, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+        return NextResponse.json({
+            success: true,
+            word: firstWord,
+            definition: text,
+            fallbackEntries: [],
+        });
     } catch (error) {
         return NextResponse.json({ success: false, word: firstWord, error: error instanceof Error ? error.message : "Lookup failed" }, { status: 500 });
     }
