@@ -19,3 +19,8 @@ export const japaneseLookupSchema = z.object({
 });
 
 export type TJapaneseLookupSchema = z.infer<typeof japaneseLookupSchema>;
+
+export type JapaneseLookupFallbackEntry = {
+  headword: string;
+  summary: string;
+};
