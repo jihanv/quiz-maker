@@ -46,3 +46,5 @@ wordfreq-smoke.mjs
 filterWordlist.js
 
 notes.txt
+
+test-api.http
