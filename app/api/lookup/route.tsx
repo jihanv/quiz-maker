@@ -12,9 +12,12 @@ export async function POST(request: Request) {
     const [firstWord] = result.data.words;
     const url = `https://api.excelapi.org/dictionary/enja?word=${encodeURIComponent(firstWord)}`;
     const response = await fetch(url, { headers: { Accept: "text/plain", "User-Agent": "Mozilla/5.0" } });
-    const text = await response.text();
+    const text = (await response.text()).trim();
+    if (!response.ok || !text) {
+        return NextResponse.json({ success: false, word: firstWord, error: text || "No definition found" }, { status: response.ok ? 404 : response.status });
+    }
     return new NextResponse(text, {
-        status: response.status,
+        status: 200,
         headers: { "Content-Type": "text/plain; charset=utf-8" },
     });
 }
