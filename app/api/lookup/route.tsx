@@ -17,16 +17,13 @@ export async function POST(request: Request) {
     try {
         const response = await fetch(url, { headers: { Accept: "text/plain", "User-Agent": "Mozilla/5.0" } });
         const text = (await response.text()).trim();
-        if (response.ok && text) {
-            definition = text;
-        }
-        return NextResponse.json({
-            success: true,
-            word: firstWord,
-            definition,
-            fallbackEntries: fallbackEntries,
-        });
-    } catch (error) {
-        return NextResponse.json({ success: false, word: firstWord, error: error instanceof Error ? error.message : "Lookup failed" }, { status: 500 });
-    }
+        if (response.ok && text) definition = text;
+    } catch { }
+
+    return NextResponse.json({
+        success: true,
+        word: firstWord,
+        definition,
+        fallbackEntries: fallbackEntries,
+    });
 }
