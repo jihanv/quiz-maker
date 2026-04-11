@@ -46,12 +46,12 @@ export async function POST(request: Request) {
                         ?? searchResults.find((result: { title: string }) => /^[ァ-ヶー・ヴ]+$/.test(result.title))?.title;
                     if (katakanaTitle) fallbackEntries.push({ headword: katakanaTitle, summary: "" });
                 }
-                const firstFallback = fallbackEntries[0];
-                if (firstFallback) {
-                    const wikiUrl = `https://ja.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=1&explaintext=1&redirects=1&titles=${encodeURIComponent(firstFallback.headword)}&format=json`;
-                    const wikiData = await fetch(wikiUrl).then((res) => res.json());
+                for (const fallbackEntry of fallbackEntries) {
+                    const wikiUrl = `https://ja.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=1&explaintext=1&redirects=1&titles=${encodeURIComponent(fallbackEntry.headword)}&format=json`;
+                    const wikiResponse = await fetch(wikiUrl);
+                    const wikiData = await wikiResponse.json();
                     const page = Object.values(wikiData.query?.pages ?? {})[0] as { extract?: string } | undefined;
-                    firstFallback.summary = page?.extract?.trim() ?? "";
+                    fallbackEntry.summary = page?.extract?.trim() ?? "";
                 }
             }
         } catch { }
