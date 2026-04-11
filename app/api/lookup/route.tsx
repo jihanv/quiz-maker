@@ -66,9 +66,11 @@ export async function POST(request: Request) {
                     const page = Object.values(wikiData.query?.pages ?? {})[0] as { extract?: string } | undefined;
                     const summary = page?.extract?.trim() ?? "";
                     const [intro, extraText] = summary.split("\n\n", 2);
-                    const extraDefinitions = extraText?.split("\n").map((line) => line.trim()).filter(Boolean) ?? [];
+                    const extraDefinitions = extraText?.split("\n").map((line) => line.replace(/\[\d+\]/g, "").trim()).filter(Boolean) ?? [];
                     fallbackEntry.summary = summary;
-                    fallbackEntry.definitions = summary ? [intro, ...extraDefinitions].filter(Boolean) : [];
+                    fallbackEntry.definitions = summary
+                        ? [intro.replace(/\[\d+\]/g, "").trim(), ...extraDefinitions].filter(Boolean)
+                        : [];
                 }
             }
         } catch { }
