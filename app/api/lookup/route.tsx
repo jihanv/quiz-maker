@@ -32,6 +32,20 @@ export async function POST(request: Request) {
                 for (const entry of jotobaData.words?.slice(0, 5) ?? []) {
                     fallbackEntries.push({ headword: entry.reading.kanji ?? entry.reading.kana, summary: "" });
                 }
+                if (!fallbackEntries.length) {
+                    const searchUrl = `https://ja.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(firstWord)}&srlimit=5&format=json`;
+                    const searchResponse = await fetch(searchUrl);
+                    const searchData = await searchResponse.json();
+                    const searchResults = searchData.query?.search ?? [];
+                    const lowerWord = firstWord.toLowerCase();
+                    const preferredKatakana = searchResults.find((result: { title: string; snippet?: string }) => {
+                        const plainSnippet = result.snippet?.replace(/<[^>]+>/g, "").toLowerCase() ?? "";
+                        return /^[ァ-ヶー・ヴ]+$/.test(result.title) && (plainSnippet.includes(`(${lowerWord})`) || plainSnippet.includes(`（${lowerWord}）`));
+                    });
+                    const katakanaTitle = preferredKatakana?.title
+                        ?? searchResults.find((result: { title: string }) => /^[ァ-ヶー・ヴ]+$/.test(result.title))?.title;
+                    if (katakanaTitle) fallbackEntries.push({ headword: katakanaTitle, summary: "" });
+                }
                 const firstFallback = fallbackEntries[0];
                 if (firstFallback) {
                     const wikiUrl = `https://ja.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=1&explaintext=1&exchars=120&redirects=1&titles=${encodeURIComponent(firstFallback.headword)}&format=json`;
