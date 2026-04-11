@@ -33,7 +33,11 @@ export async function POST(request: Request) {
             if (jotobaResponse.ok) {
                 const jotobaData = await jotobaResponse.json();
                 for (const entry of jotobaData.words?.slice(0, 5) ?? []) {
-                    fallbackEntries.push({ headword: entry.reading.kanji ?? entry.reading.kana, summary: "" });
+                    fallbackEntries.push({
+                        headword: entry.reading.kanji ?? entry.reading.kana,
+                        summary: "",
+                        definitions: [],
+                    });
                 }
                 if (!fallbackEntries.length) {
                     const searchUrl = `https://ja.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(firstWord)}&srlimit=5&format=json`;
@@ -47,7 +51,13 @@ export async function POST(request: Request) {
                     });
                     const katakanaTitle = preferredKatakana?.title
                         ?? searchResults.find((result: { title: string }) => /^[ァ-ヶー・ヴ]+$/.test(result.title))?.title;
-                    if (katakanaTitle) fallbackEntries.push({ headword: katakanaTitle, summary: "" });
+                    if (katakanaTitle) {
+                        fallbackEntries.push({
+                            headword: katakanaTitle,
+                            summary: "",
+                            definitions: [],
+                        });
+                    }
                 }
                 for (const fallbackEntry of fallbackEntries) {
                     const wikiUrl = `https://ja.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=1&explaintext=1&redirects=1&titles=${encodeURIComponent(fallbackEntry.headword)}&format=json`;

@@ -23,7 +23,7 @@ export type TJapaneseLookupSchema = z.infer<typeof japaneseLookupSchema>;
 export type JapaneseLookupFallbackEntry = {
   headword: string;
   summary: string;
-  definitions?: string[];
+  definitions: string[];
 };
 
 export type JapaneseLookupSuccessResponse = {
