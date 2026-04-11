@@ -21,7 +21,19 @@ export async function POST(request: Request) {
     } catch { }
 
     if (!definition) {
-        // Jotoba fallback will go here next.
+        try {
+            const jotobaResponse = await fetch("https://jotoba.de/api/search/words", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", Accept: "application/json" },
+                body: JSON.stringify({ query: firstWord, no_english: false, language: "English" }),
+            });
+            if (jotobaResponse.ok) {
+                const jotobaData = await jotobaResponse.json();
+                for (const entry of jotobaData.words?.slice(0, 5) ?? []) {
+                    fallbackEntries.push({ headword: entry.reading.kanji ?? entry.reading.kana, summary: "" });
+                }
+            }
+        } catch { }
     }
 
     return NextResponse.json({
