@@ -20,6 +20,10 @@ export async function POST(request: Request) {
         if (response.ok && text) definition = text;
     } catch { }
 
+    if (!definition) {
+        // Jotoba fallback will go here next.
+    }
+
     return NextResponse.json({
         success: true,
         word: firstWord,
