@@ -54,6 +54,9 @@ export async function POST(request: Request) {
                     const wikiResponse = await fetch(wikiUrl);
                     const wikiData = await wikiResponse.json();
                     const page = Object.values(wikiData.query?.pages ?? {})[0] as { extract?: string } | undefined;
+                    const summary = page?.extract?.trim() ?? "";
+                    fallbackEntry.summary = summary;
+                    fallbackEntry.definitions = summary ? [summary] : [];
                     fallbackEntry.summary = page?.extract?.trim() ?? "";
                 }
             }
