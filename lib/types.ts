@@ -24,3 +24,10 @@ export type JapaneseLookupFallbackEntry = {
   headword: string;
   summary: string;
 };
+
+export type JapaneseLookupSuccessResponse = {
+  success: true;
+  word: string;
+  definition: string | null;
+  fallbackEntries: JapaneseLookupFallbackEntry[];
+};
