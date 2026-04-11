@@ -1,12 +1,16 @@
 export const runtime = "nodejs";
 
-import { JapaneseLookupFallbackEntry, JapaneseLookupSuccessResponse, japaneseLookupSchema } from "@/lib/types"; import { NextResponse } from "next/server";
+import { JapaneseLookupErrorResponse, JapaneseLookupFallbackEntry, JapaneseLookupSuccessResponse, japaneseLookupSchema } from "@/lib/types";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
     const body: unknown = await request.json();
     const result = japaneseLookupSchema.safeParse(body)
 
-    if (!result.success) return NextResponse.json({ success: false }, { status: 400 })
+    if (!result.success) {
+        const errorBody: JapaneseLookupErrorResponse = { success: false };
+        return NextResponse.json(errorBody, { status: 400 });
+    }
 
     const [firstWord] = result.data.words;
     let definition: string | null = null;
