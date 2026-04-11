@@ -34,7 +34,7 @@ export async function POST(request: Request) {
                 }
                 const firstFallback = fallbackEntries[0];
                 if (firstFallback) {
-                    const wikiUrl = `https://ja.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=1&explaintext=1&exchars=120&titles=${encodeURIComponent(firstFallback.headword)}&format=json`;
+                    const wikiUrl = `https://ja.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=1&explaintext=1&exchars=120&redirects=1&titles=${encodeURIComponent(firstFallback.headword)}&format=json`;
                     const wikiData = await fetch(wikiUrl).then((res) => res.json());
                     const page = Object.values(wikiData.query?.pages ?? {})[0] as { extract?: string } | undefined;
                     firstFallback.summary = page?.extract?.trim() ?? "";
