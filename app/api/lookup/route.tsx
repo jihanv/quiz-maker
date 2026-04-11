@@ -1,7 +1,6 @@
 export const runtime = "nodejs";
 
-import { JapaneseLookupFallbackEntry, japaneseLookupSchema } from "@/lib/types";
-import { NextResponse } from "next/server";
+import { JapaneseLookupFallbackEntry, JapaneseLookupSuccessResponse, japaneseLookupSchema } from "@/lib/types"; import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
     const body: unknown = await request.json();
@@ -57,10 +56,12 @@ export async function POST(request: Request) {
         } catch { }
     }
 
-    return NextResponse.json({
+    const responseBody: JapaneseLookupSuccessResponse = {
         success: true,
         word: firstWord,
         definition,
-        fallbackEntries: fallbackEntries,
-    });
+        fallbackEntries,
+    };
+
+    return NextResponse.json(responseBody);
 }
