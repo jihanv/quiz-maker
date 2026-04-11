@@ -31,3 +31,7 @@ export type JapaneseLookupSuccessResponse = {
   definition: string | null;
   fallbackEntries: JapaneseLookupFallbackEntry[];
 };
+
+export type JapaneseLookupErrorResponse = {
+  success: false;
+};
