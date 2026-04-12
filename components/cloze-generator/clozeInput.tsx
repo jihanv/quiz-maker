@@ -26,6 +26,7 @@ export default function ParagraphInput() {
     });
 
     const [generatedTestData, setGeneratedTestData] = useState<MultipleChoiceData | null>(null);
+
     const onSubmit = async (data: TParagraphSchema) => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         const response = await fetch("/api/cloze-generator", {
@@ -42,9 +43,7 @@ export default function ParagraphInput() {
         const text: ParagraphSuccessResponse = await response.json()
 
         const testDataToPrint: MultipleChoiceData = text.testData;
-        // console.log(text.testData.passage)
-
-        // console.log(text.testData)
+        setGeneratedTestData(testDataToPrint);
         await downloadDocxFromItem(testDataToPrint)
 
     };
