@@ -28,7 +28,8 @@ export type JapaneseLookupFallbackEntry = {
 
 export type JapaneseLookupSuccessResponse = {
   success: true;
-  word: string;
+  originalWord: string;
+  lookupWord: string;
   definition: string | null;
   fallbackEntries: JapaneseLookupFallbackEntry[];
 };
