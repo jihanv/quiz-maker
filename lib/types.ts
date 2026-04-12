@@ -15,7 +15,8 @@ export type ParagraphSuccessResponse = {
 };
 
 export const japaneseLookupSchema = z.object({
-  words: z.array(z.string().trim().min(1)).min(1),
+  word: z.string().trim().min(1),
+  partOfSpeech: z.enum(["noun", "adjective", "adverb", "verb"]),
 });
 
 export type TJapaneseLookupSchema = z.infer<typeof japaneseLookupSchema>;
