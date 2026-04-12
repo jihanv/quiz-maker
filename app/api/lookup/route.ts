@@ -6,7 +6,8 @@ import {
   japaneseLookupSchema,
 } from "@/lib/types";
 import { runJapaneseLookup } from "@/lib/server/runJapaneseLookup";
-import { generateLookupVariants } from "@/lib/server/generateLookupVariants";
+import { getRetryLookupWords } from "@/lib/server/getRetryLookupWords";
+
 import { getStartingLookupWord } from "@/lib/server/getStartingLookupWord";
 
 import { NextResponse } from "next/server";
@@ -29,25 +30,11 @@ export async function POST(request: Request) {
   let lookupWord = startingWord;
 
   if (!finalLookup.definition && finalLookup.fallbackEntries.length === 0) {
-    const retryWords = new Set<string>();
-
-    if (partOfSpeech === "verb") {
-      generateLookupVariants(startingWord).forEach((variant) => {
-        retryWords.add(variant);
-      });
-
-      generateLookupVariants(originalWord).forEach((variant) => {
-        retryWords.add(variant);
-      });
-
-      retryWords.add(originalWord);
-    } else {
-      generateLookupVariants(originalWord).forEach((variant) => {
-        retryWords.add(variant);
-      });
-    }
-
-    retryWords.delete(lookupWord);
+    const retryWords = getRetryLookupWords(
+      originalWord,
+      startingWord,
+      partOfSpeech,
+    );
 
     for (const retryWord of retryWords) {
       const retryLookup = await runJapaneseLookup(retryWord);
