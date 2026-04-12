@@ -71,6 +71,8 @@ export default function ParagraphInput() {
                             <Button className="bg-black text-white transition-transform duration-150 ease-out hover:scale-[1.05] active:scale-[0.98] disabled:hover:scale-100" disabled={isSubmitting} type="submit">
                                 Generate Test
                             </Button>
+                            <Button disabled type="button" variant="outline">Generate Vocabulary Dictionary</Button>
+                            <Button disabled type="button" variant="outline">Generate Full Vocabulary Dictionary</Button>
                         </div>
                     </div>
                 </form>
