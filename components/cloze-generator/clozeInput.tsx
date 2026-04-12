@@ -47,6 +47,15 @@ export default function ParagraphInput() {
         await downloadDocxFromItem(testDataToPrint)
 
     };
+
+    const handleVocabularyDictionaryClick = () => {
+        alert("TODO: Generate Vocabulary Dictionary");
+    };
+
+    const handleFullVocabularyDictionaryClick = () => {
+        alert("TODO: Generate Full Vocabulary Dictionary");
+    };
+
     return (
         <>
             <div
@@ -68,8 +77,22 @@ export default function ParagraphInput() {
                             <Button className="bg-black text-white transition-transform duration-150 ease-out hover:scale-[1.05] active:scale-[0.98] disabled:hover:scale-100" disabled={isSubmitting} type="submit">
                                 Generate Test
                             </Button>
-                            <Button disabled type="button" variant="outline">Generate Vocabulary Dictionary</Button>
-                            <Button disabled type="button" variant="outline">Generate Full Vocabulary Dictionary</Button>
+                            <Button
+                                disabled={isSubmitting || !generatedTestData}
+                                onClick={handleVocabularyDictionaryClick}
+                                type="button"
+                                variant="outline"
+                            >
+                                Generate Vocabulary Dictionary
+                            </Button>
+                            <Button
+                                disabled={isSubmitting || !generatedTestData}
+                                onClick={handleFullVocabularyDictionaryClick}
+                                type="button"
+                                variant="outline"
+                            >
+                                Generate Full Vocabulary Dictionary
+                            </Button>
                         </div>
                     </div>
                 </form>
