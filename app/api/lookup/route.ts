@@ -7,6 +7,7 @@ import {
 } from "@/lib/types";
 import { runJapaneseLookup } from "@/lib/server/runJapaneseLookup";
 import { generateLookupVariants } from "@/lib/server/generateLookupVariants";
+import { getStartingLookupWord } from "@/lib/server/getStartingLookupWord";
 
 import { NextResponse } from "next/server";
 
@@ -22,12 +23,7 @@ export async function POST(request: Request) {
   const { word, partOfSpeech } = result.data;
   const originalWord = word;
 
-  let startingWord = originalWord;
-
-  if (partOfSpeech === "verb") {
-    const { default: lemmatize } = await import("wink-lemmatizer");
-    startingWord = lemmatize.verb(originalWord);
-  }
+  const startingWord = await getStartingLookupWord(originalWord, partOfSpeech);
 
   let finalLookup = await runJapaneseLookup(startingWord);
   let lookupWord = startingWord;
