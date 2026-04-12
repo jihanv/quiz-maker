@@ -116,6 +116,25 @@ describe("POST /api/lookup", () => {
     });
   });
 
+  it("returns 400 for a blank word after trimming", async () => {
+    const request = new Request("http://localhost/api/lookup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ word: "   ", partOfSpeech: "noun" }),
+    });
+
+    const response = await POST(request);
+    const json = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(runJapaneseLookup).not.toHaveBeenCalled();
+    expect(generateLookupVariants).not.toHaveBeenCalled();
+    expect(lemmatize.verb).not.toHaveBeenCalled();
+    expect(json).toEqual({
+      success: false,
+    });
+  });
+
   it("falls back to the original verb flow when the lemmatized lookup fully fails", async () => {
     vi.mocked(lemmatize.verb).mockReturnValue("run");
 
