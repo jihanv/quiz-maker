@@ -19,7 +19,8 @@ export async function POST(request: Request) {
     const fallbackEntries = [...initialLookup.fallbackEntries];
     const responseBody: JapaneseLookupSuccessResponse = {
         success: true,
-        word: firstWord,
+        originalWord: firstWord,
+        lookupWord: firstWord,
         definition,
         fallbackEntries,
     };
