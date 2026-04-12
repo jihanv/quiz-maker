@@ -1,6 +1,6 @@
 "use client"
 
-// import { useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,9 +25,7 @@ export default function ParagraphInput() {
         resolver: zodResolver(paragraphSchema)
     });
 
-    // The test that will be output
-    // const [output, setOuput] = useState("");
-
+    const [generatedTestData, setGeneratedTestData] = useState<MultipleChoiceData | null>(null);
     const onSubmit = async (data: TParagraphSchema) => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         const response = await fetch("/api/cloze-generator", {
