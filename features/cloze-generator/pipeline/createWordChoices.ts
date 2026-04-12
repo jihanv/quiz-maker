@@ -211,7 +211,13 @@ export function randomSamePosSameFormFromContext(
 
   return [...out];
 }
-
+export function getLookupPartOfSpeechFromSentence(
+  sentence: string,
+  word: string,
+) {
+  const wordInfo = getFormInSentence(sentence, word);
+  return wordInfo ? toLookupPartOfSpeech(wordInfo.pos) : null;
+}
 export function generateChoices(sententence: string, word: string) {
   const wordInfo = getFormInSentence(sententence, word);
   if (wordInfo) {
