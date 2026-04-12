@@ -54,6 +54,18 @@ const POS_TO_TAG: Record<Exclude<CoarsePOS, "Unknown">, string> = {
   Conjunction: "#Conjunction",
 };
 
+export type LookupPartOfSpeech = "noun" | "adjective" | "adverb" | "verb";
+
+export function toLookupPartOfSpeech(
+  pos: CoarsePOS,
+): LookupPartOfSpeech | null {
+  if (pos === "Noun") return "noun";
+  if (pos === "Verb") return "verb";
+  if (pos === "Adjective") return "adjective";
+  if (pos === "Adverb") return "adverb";
+  return null;
+}
+
 /** Minimal shape we need from a compromise selection */
 type TaggableSelection = {
   found: boolean;

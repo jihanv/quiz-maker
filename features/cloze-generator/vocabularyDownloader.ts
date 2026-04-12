@@ -37,4 +37,5 @@ export async function downloadVocabularyDictionaryDocx(
     }),
     ...words.map((word, i) => new Paragraph(`${i + 1}. ${word}`)),
   ];
+  const doc = new Document({ sections: [{ children }] });
 }
