@@ -25,3 +25,10 @@ function downloadBlob(blob: Blob, filename: string) {
   a.remove();
   URL.revokeObjectURL(url);
 }
+
+export async function downloadVocabularyDictionaryDocx(
+  item: MultipleChoiceData,
+  filename = "vocabulary-dictionary.docx",
+) {
+  const words = getCorrectAnswerWords(item);
+}
