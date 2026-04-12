@@ -1,5 +1,4 @@
 import { generateLookupVariants } from "@/lib/server/generateLookupVariants";
-
 describe("generateLookupVariants", () => {
   it("includes the cleaned lowercase word", () => {
     expect(generateLookupVariants(" Dogs ")).toContain("dogs");
@@ -30,5 +29,9 @@ describe("generateLookupVariants", () => {
 
   it("adds a generic ed variant that restores trailing e when needed", () => {
     expect(generateLookupVariants("closed")).toContain("close");
+  });
+
+  it("adds a generic ed variant that removes ed when needed", () => {
+    expect(generateLookupVariants("worked")).toContain("work");
   });
 });
