@@ -7,3 +7,7 @@ export function getCorrectAnswerWords(item: MultipleChoiceData) {
 export function getAllChoiceWords(item: MultipleChoiceData) {
   return item.questions.flatMap((q) => q.choices);
 }
+
+export function getAlphabetizedChoiceWords(item: MultipleChoiceData) {
+  return [...getAllChoiceWords(item)].sort((a, b) => a.localeCompare(b));
+}
