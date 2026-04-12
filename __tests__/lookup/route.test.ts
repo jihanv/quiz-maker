@@ -96,4 +96,23 @@ describe("POST /api/lookup", () => {
       fallbackEntries: [],
     });
   });
+
+  it("returns 400 for an invalid part of speech", async () => {
+    const request = new Request("http://localhost/api/lookup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ word: "running", partOfSpeech: "particle" }),
+    });
+
+    const response = await POST(request);
+    const json = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(runJapaneseLookup).not.toHaveBeenCalled();
+    expect(generateLookupVariants).not.toHaveBeenCalled();
+    expect(lemmatize.verb).not.toHaveBeenCalled();
+    expect(json).toEqual({
+      success: false,
+    });
+  });
 });
