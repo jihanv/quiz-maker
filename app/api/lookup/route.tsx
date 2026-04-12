@@ -15,12 +15,16 @@ export async function POST(request: Request) {
         return NextResponse.json(errorBody, { status: 400 });
     }
 
-    const [firstWord] = result.data.words;
-    let finalLookup = await runJapaneseLookup(firstWord);
-    let lookupWord = firstWord;
+    const { word, partOfSpeech } = result.data;
+    const originalWord = word;
+
+    let finalLookup = await runJapaneseLookup(word);
+    let lookupWord = word;
 
     if (!finalLookup.definition && finalLookup.fallbackEntries.length === 0) {
-        const retryWords = generateLookupVariants(firstWord).filter((variant) => variant !== firstWord);
+        const retryWords = generateLookupVariants(word).filter(
+            (variant) => variant !== word,
+        );
 
         for (const retryWord of retryWords) {
             const retryLookup = await runJapaneseLookup(retryWord);
@@ -35,7 +39,7 @@ export async function POST(request: Request) {
 
     const responseBody: JapaneseLookupSuccessResponse = {
         success: true,
-        originalWord: firstWord,
+        originalWord,
         lookupWord,
         definition: finalLookup.definition,
         fallbackEntries: [...finalLookup.fallbackEntries],
