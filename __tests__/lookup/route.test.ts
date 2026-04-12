@@ -115,4 +115,49 @@ describe("POST /api/lookup", () => {
       success: false,
     });
   });
+
+  it("falls back to the original verb flow when the lemmatized lookup fully fails", async () => {
+    vi.mocked(lemmatize.verb).mockReturnValue("run");
+
+    vi.mocked(runJapaneseLookup)
+      .mockResolvedValueOnce({
+        word: "run",
+        definition: null,
+        fallbackEntries: [],
+      })
+      .mockResolvedValueOnce({
+        word: "running",
+        definition: "走っている",
+        fallbackEntries: [],
+      });
+
+    vi.mocked(generateLookupVariants)
+      .mockReturnValueOnce(["run"])
+      .mockReturnValueOnce(["running", "runn", "run"]);
+
+    const request = new Request("http://localhost/api/lookup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ word: "running", partOfSpeech: "verb" }),
+    });
+
+    const response = await POST(request);
+    const json = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(lemmatize.verb).toHaveBeenCalledWith("running");
+    expect(generateLookupVariants).toHaveBeenCalledTimes(2);
+    expect(generateLookupVariants).toHaveBeenNthCalledWith(1, "run");
+    expect(generateLookupVariants).toHaveBeenNthCalledWith(2, "running");
+    expect(runJapaneseLookup).toHaveBeenCalledTimes(2);
+    expect(runJapaneseLookup).toHaveBeenNthCalledWith(1, "run");
+    expect(runJapaneseLookup).toHaveBeenNthCalledWith(2, "running");
+    expect(json).toEqual({
+      success: true,
+      originalWord: "running",
+      lookupWord: "running",
+      definition: "走っている",
+      fallbackEntries: [],
+    });
+  });
 });
