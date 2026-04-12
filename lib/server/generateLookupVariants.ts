@@ -19,6 +19,11 @@ export function generateLookupVariants(word: string): string[] {
     variants.add(lowerWord.slice(0, -3) + "y");
   }
 
+  if (lowerWord.endsWith("ed") && lowerWord.length > 2) {
+    variants.add(lowerWord.slice(0, -2));
+    variants.add(lowerWord.slice(0, -1));
+  }
+
   if (lowerWord.endsWith("ing") && lowerWord.length > 3) {
     variants.add(lowerWord.slice(0, -3));
     variants.add(lowerWord.slice(0, -3) + "e");

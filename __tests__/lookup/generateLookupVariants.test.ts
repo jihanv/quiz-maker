@@ -27,4 +27,8 @@ describe("generateLookupVariants", () => {
   it("adds an ing to e variant", () => {
     expect(generateLookupVariants("making")).toContain("make");
   });
+
+  it("adds a generic ed variant that restores trailing e when needed", () => {
+    expect(generateLookupVariants("closed")).toContain("close");
+  });
 });
