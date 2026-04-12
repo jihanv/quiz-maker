@@ -1,7 +1,7 @@
 import nlp from "compromise/two";
 import { zipfFrequency } from "nodewordfreq";
 import fs from "node:fs";
-import { generateChoices } from "./createWordChoices";
+import { generateChoices, type LookupPartOfSpeech } from "./createWordChoices";
 import { clean, startsWithUppercase } from "@/lib/utils";
 import { stemmer } from "stemmer";
 import path from "node:path";
@@ -20,6 +20,7 @@ export type MultipleChoiceSection = {
   difficultWordTokenIndex: number | null;
   answerChoices: string[] | undefined;
   answerIndex: number | undefined;
+  partOfSpeech?: LookupPartOfSpeech | null;
 };
 
 export function createTestData(
