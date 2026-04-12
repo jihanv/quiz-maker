@@ -31,4 +31,10 @@ export async function downloadVocabularyDictionaryDocx(
   filename = "vocabulary-dictionary.docx",
 ) {
   const words = getCorrectAnswerWords(item);
+  const children = [
+    new Paragraph({
+      children: [new TextRun({ text: "Vocabulary Dictionary", bold: true })],
+    }),
+    ...words.map((word, i) => new Paragraph(`${i + 1}. ${word}`)),
+  ];
 }
