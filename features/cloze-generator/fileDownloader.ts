@@ -1,3 +1,4 @@
+import { LookupPartOfSpeech } from "@/lib/types";
 import { toCircledNumber } from "@/lib/utils";
 import {
   Document,
@@ -20,7 +21,7 @@ export type MultipleChoiceData = {
   questions: {
     choices: string[];
     answer: number;
-    partOfSpeech?: "noun" | "adjective" | "adverb" | "verb" | null;
+    partOfSpeech?: LookupPartOfSpeech | null;
   }[];
 };
 
