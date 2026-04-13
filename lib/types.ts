@@ -44,3 +44,10 @@ export type JapaneseLookupResponse =
   | JapaneseLookupErrorResponse;
 
 export type LookupPartOfSpeech = "noun" | "adjective" | "adverb" | "verb";
+
+export type VocabularyDictionaryEntry = {
+  word: string;
+  partOfSpeech: LookupPartOfSpeech;
+  definition: string | null;
+  fallbackEntries: JapaneseLookupFallbackEntry[];
+};
