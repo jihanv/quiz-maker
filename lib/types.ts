@@ -42,3 +42,5 @@ export type JapaneseLookupErrorResponse = {
 export type JapaneseLookupResponse =
   | JapaneseLookupSuccessResponse
   | JapaneseLookupErrorResponse;
+
+export type LookupPartOfSpeech = "noun" | "adjective" | "adverb" | "verb";

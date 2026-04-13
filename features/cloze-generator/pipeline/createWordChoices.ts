@@ -3,6 +3,7 @@ import nlp from "compromise";
 export type View = ReturnType<typeof nlp>;
 // import path from "node:path";
 import { NGSL_WORDS } from "@/lib/server/lexicons";
+import { LookupPartOfSpeech } from "@/lib/types";
 
 type CoarsePOS =
   | "Noun"
@@ -53,8 +54,6 @@ const POS_TO_TAG: Record<Exclude<CoarsePOS, "Unknown">, string> = {
   Preposition: "#Preposition",
   Conjunction: "#Conjunction",
 };
-
-export type LookupPartOfSpeech = "noun" | "adjective" | "adverb" | "verb";
 
 export function toLookupPartOfSpeech(
   pos: CoarsePOS,

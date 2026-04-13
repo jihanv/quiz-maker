@@ -17,7 +17,11 @@ const LINE_1_5 = 480;
 
 export type MultipleChoiceData = {
   passage: string;
-  questions: { choices: string[]; answer: number }[];
+  questions: {
+    choices: string[];
+    answer: number;
+    partOfSpeech?: "noun" | "adjective" | "adverb" | "verb" | null;
+  }[];
 };
 
 const margins = 0.5;
@@ -36,7 +40,7 @@ function downloadBlob(blob: Blob, filename: string) {
 
 export async function downloadDocxFromItem(
   item: MultipleChoiceData,
-  filename = "item.docx"
+  filename = "item.docx",
 ) {
   const children: Array<Paragraph | Table> = [];
 
@@ -52,7 +56,7 @@ export async function downloadDocxFromItem(
           size: 24,
         }),
       ],
-    })
+    }),
   );
 
   children.push(new Paragraph(""));
@@ -69,7 +73,7 @@ export async function downloadDocxFromItem(
           lineRule: "auto",
         },
         children: [new TextRun({ text: p.trim(), size: 24 })],
-      })
+      }),
     );
     children.push(new Paragraph(""));
   }
@@ -125,7 +129,7 @@ export async function downloadDocxFromItem(
       width: { size: 100, type: WidthType.PERCENTAGE },
       rows,
       borders: TableBorders.NONE,
-    })
+    }),
   );
 
   children.push(new Paragraph({ children: [new PageBreak()] }));
@@ -133,7 +137,7 @@ export async function downloadDocxFromItem(
   children.push(
     new Paragraph({
       children: [new TextRun({ text: "Answer Key", bold: true, size: 24 })],
-    })
+    }),
   );
   children.push(new Paragraph(""));
 
@@ -180,7 +184,7 @@ export async function downloadDocxFromItem(
       width: { size: 100, type: WidthType.PERCENTAGE },
       rows: keys,
       borders: TableBorders.NONE,
-    })
+    }),
   );
   // A4 + margins (same as you learned)
   const mmToInches = (mm: number) => mm / 25.4;

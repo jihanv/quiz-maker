@@ -4,11 +4,11 @@ import fs from "node:fs";
 import {
   generateChoices,
   getLookupPartOfSpeechFromSentence,
-  type LookupPartOfSpeech,
 } from "./createWordChoices";
 import { clean, startsWithUppercase } from "@/lib/utils";
 import { stemmer } from "stemmer";
 import path from "node:path";
+import { LookupPartOfSpeech } from "@/lib/types";
 
 const dictPath = path.join(process.cwd(), "data", "dictionary.json");
 const data = JSON.parse(fs.readFileSync(dictPath, "utf8"));
