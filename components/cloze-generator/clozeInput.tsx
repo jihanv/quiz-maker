@@ -49,7 +49,12 @@ export default function ParagraphInput() {
     };
 
     const handleVocabularyDictionaryClick = () => {
-        alert("TODO: Generate Vocabulary Dictionary");
+        if (!generatedTestData) return;
+        const lookupRows = generatedTestData.questions.map((q) => ({
+            word: q.choices[q.answer],
+            partOfSpeech: q.partOfSpeech,
+        }));
+        alert(JSON.stringify(lookupRows, null, 2));
     };
 
     const handleFullVocabularyDictionaryClick = () => {
