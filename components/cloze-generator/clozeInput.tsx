@@ -51,21 +51,13 @@ export default function ParagraphInput() {
     const handleVocabularyDictionaryClick = async () => {
         if (!generatedTestData) return;
         const lookupRows = generatedTestData.questions.map((q) => ({ word: q.choices[q.answer], partOfSpeech: q.partOfSpeech })).filter((row) => row.partOfSpeech);
-        const firstRow = lookupRows[0];
-        if (!firstRow?.partOfSpeech) return;
-        const response = await fetch("/api/lookup", { method: "post", body: JSON.stringify(firstRow), headers: { "Content-Type": "application/json" } });
-        if (!response.ok) {
-            alert("Unable to look up this vocabulary word.");
-            return;
+        const dictionaryEntries: VocabularyDictionaryEntry[] = [];
+        for (const row of lookupRows.slice(0, 2)) {
+            const response = await fetch("/api/lookup", { method: "post", body: JSON.stringify(row), headers: { "Content-Type": "application/json" } });
+            if (!response.ok) continue;
+            const lookupResult: JapaneseLookupResponse = await response.json();
+            if (lookupResult.success) dictionaryEntries.push({ word: row.word, partOfSpeech: row.partOfSpeech!, definition: lookupResult.definition, fallbackEntries: lookupResult.fallbackEntries });
         }
-        const lookupResult: JapaneseLookupResponse = await response.json();
-        const dictionaryEntry: VocabularyDictionaryEntry | null = lookupResult.success ? {
-            word: firstRow.word,
-            partOfSpeech: firstRow.partOfSpeech,
-            definition: lookupResult.definition,
-            fallbackEntries: lookupResult.fallbackEntries,
-        } : null;
-        const dictionaryEntries = dictionaryEntry ? [dictionaryEntry] : [];
         alert(JSON.stringify(dictionaryEntries, null, 2));
     };
 
