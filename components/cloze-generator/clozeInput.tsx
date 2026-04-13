@@ -53,7 +53,8 @@ export default function ParagraphInput() {
         const lookupRows = generatedTestData.questions.map((q) => ({
             word: q.choices[q.answer],
             partOfSpeech: q.partOfSpeech,
-        }));
+        }))
+            .filter((row) => row.partOfSpeech);;
         alert(JSON.stringify(lookupRows, null, 2));
     };
 
