@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ParagraphSuccessResponse, TParagraphSchema, paragraphSchema } from "@/lib/types";
+import { JapaneseLookupResponse, ParagraphSuccessResponse, TParagraphSchema, paragraphSchema } from "@/lib/types";
 import { downloadDocxFromItem, MultipleChoiceData } from "@/features/cloze-generator/fileDownloader";
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
@@ -58,7 +58,8 @@ export default function ParagraphInput() {
             alert("Unable to look up this vocabulary word.");
             return;
         }
-        alert(JSON.stringify(await response.json(), null, 2));
+        const lookupResult: JapaneseLookupResponse = await response.json();
+        alert(JSON.stringify(lookupResult, null, 2));
     };
 
     const handleFullVocabularyDictionaryClick = () => {
