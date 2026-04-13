@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { JapaneseLookupResponse, ParagraphSuccessResponse, TParagraphSchema, VocabularyDictionaryEntry, paragraphSchema } from "@/lib/types";
 import { downloadDocxFromItem, MultipleChoiceData } from "@/features/cloze-generator/fileDownloader";
+import { downloadVocabularyDictionaryDocx } from "@/features/cloze-generator/vocabularyDownloader";
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Loader2 } from "lucide-react"
@@ -60,6 +61,7 @@ export default function ParagraphInput() {
             if (lookupResult.success) dictionaryEntries.push({ word: row.word, partOfSpeech: row.partOfSpeech!, definition: lookupResult.definition, fallbackEntries: lookupResult.fallbackEntries });
         }
         setGeneratedVocabularyEntries(dictionaryEntries);
+        await downloadVocabularyDictionaryDocx(dictionaryEntries);
         alert(`Loaded ${dictionaryEntries.length} vocabulary entries.`);
     };
 
