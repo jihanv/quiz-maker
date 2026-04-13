@@ -35,7 +35,14 @@ export async function downloadVocabularyDictionaryDocx(
     new Paragraph({
       children: [new TextRun({ text: "Vocabulary Dictionary", bold: true })],
     }),
-    ...entries.map((entry, i) => new Paragraph(`${i + 1}. ${entry.word}`)),
+    ...entries.map((entry, i) => {
+      const definitionText =
+        entry.definition ??
+        entry.fallbackEntries[0]?.definitions[0] ??
+        entry.fallbackEntries[0]?.summary ??
+        "No definition available";
+      return new Paragraph(`${i + 1}. ${entry.word}: ${definitionText}`);
+    }),
   ];
   const doc = new Document({ sections: [{ children }] });
   const blob = await Packer.toBlob(doc);
