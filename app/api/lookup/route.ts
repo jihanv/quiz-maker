@@ -26,10 +26,10 @@ export async function POST(request: Request) {
 
   const startingWord = await getStartingLookupWord(originalWord, partOfSpeech);
 
-  let finalLookup = await runJapaneseLookup(startingWord);
+  let finalLookup = await runJapaneseLookup(startingWord, false);
   let lookupWord = startingWord;
 
-  if (!finalLookup.definition && finalLookup.fallbackEntries.length === 0) {
+  if (!finalLookup.definition) {
     const retryWords = getRetryLookupWords(
       originalWord,
       startingWord,
@@ -37,15 +37,18 @@ export async function POST(request: Request) {
     );
 
     for (const retryWord of retryWords) {
-      const retryLookup = await runJapaneseLookup(retryWord);
+      const retryLookup = await runJapaneseLookup(retryWord, false);
 
-      if (retryLookup.definition || retryLookup.fallbackEntries.length > 0) {
+      if (retryLookup.definition) {
         finalLookup = retryLookup;
         lookupWord = retryWord;
         break;
       }
     }
   }
+
+  if (!finalLookup.definition)
+    finalLookup = await runJapaneseLookup(lookupWord);
 
   const responseBody: JapaneseLookupSuccessResponse = {
     success: true,

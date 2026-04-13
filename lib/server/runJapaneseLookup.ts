@@ -23,7 +23,7 @@ export async function runJapaneseLookup(
     if (response.ok && text) definition = text;
   } catch {}
 
-  if (!definition) {
+  if (!definition && includeFallback) {
     try {
       const jotobaResponse = await fetch("https://jotoba.de/api/search/words", {
         method: "POST",

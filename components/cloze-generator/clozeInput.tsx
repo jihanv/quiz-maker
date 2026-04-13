@@ -86,11 +86,12 @@ export default function ParagraphInput() {
                                 ></textarea>
                             </div>
                         </div>
-                        <div className="flex gap-1 justify-center">
+                        <div className="flex gap-3 justify-center">
                             <Button className="bg-black text-white transition-transform duration-150 ease-out hover:scale-[1.05] active:scale-[0.98] disabled:hover:scale-100" disabled={isSubmitting} type="submit">
                                 Generate Test
                             </Button>
                             <Button
+                                className="bg-black text-white transition-transform duration-150 ease-out hover:scale-[1.05] active:scale-[0.98] disabled:hover:scale-100"
                                 disabled={isSubmitting || !generatedTestData}
                                 onClick={handleVocabularyDictionaryClick}
                                 type="button"
@@ -98,14 +99,14 @@ export default function ParagraphInput() {
                             >
                                 Generate Vocabulary Dictionary
                             </Button>
-                            <Button
+                            {/* <Button
                                 disabled={isSubmitting || !generatedTestData}
                                 onClick={handleFullVocabularyDictionaryClick}
                                 type="button"
                                 variant="outline"
                             >
                                 Generate Full Vocabulary Dictionary
-                            </Button>
+                            </Button> */}
                         </div>
                     </div>
                 </form>
