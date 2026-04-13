@@ -26,6 +26,7 @@ export default function ParagraphInput() {
     });
 
     const [generatedTestData, setGeneratedTestData] = useState<MultipleChoiceData | null>(null);
+    const [generatedVocabularyEntries, setGeneratedVocabularyEntries] = useState<VocabularyDictionaryEntry[]>([]);
 
     const onSubmit = async (data: TParagraphSchema) => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
