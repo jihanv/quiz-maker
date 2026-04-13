@@ -8,6 +8,7 @@ export type JapaneseLookupPassResult = {
 
 export async function runJapaneseLookup(
   word: string,
+  includeFallback = true,
 ): Promise<JapaneseLookupPassResult> {
   let definition: string | null = null;
   const fallbackEntries: JapaneseLookupFallbackEntry[] = [];
