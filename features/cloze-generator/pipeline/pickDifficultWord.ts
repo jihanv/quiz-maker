@@ -1,7 +1,11 @@
 import nlp from "compromise/two";
 import { zipfFrequency } from "nodewordfreq";
 import fs from "node:fs";
-import { generateChoices, type LookupPartOfSpeech } from "./createWordChoices";
+import {
+  generateChoices,
+  getLookupPartOfSpeechFromSentence,
+  type LookupPartOfSpeech,
+} from "./createWordChoices";
 import { clean, startsWithUppercase } from "@/lib/utils";
 import { stemmer } from "stemmer";
 import path from "node:path";
@@ -30,6 +34,10 @@ export function createTestData(
     const targetWord = pickDifficultWord(sectionText);
     let choices = generateChoices(sectionText, targetWord.difficultWord);
     const answerIndex = choices?.indexOf(targetWord.difficultWord);
+    const partOfSpeech = getLookupPartOfSpeechFromSentence(
+      sectionText,
+      targetWord.difficultWord,
+    );
 
     if (startsWithUppercase(targetWord.difficultWord)) {
       choices = choices?.map((s) =>
@@ -44,6 +52,7 @@ export function createTestData(
       difficultWordTokenIndex: targetWord.wordIndex,
       answerChoices: choices,
       answerIndex: answerIndex,
+      partOfSpeech: partOfSpeech,
     };
   });
   // console.log(object);
