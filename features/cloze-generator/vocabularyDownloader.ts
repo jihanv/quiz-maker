@@ -1,4 +1,5 @@
 import type { MultipleChoiceData } from "./fileDownloader";
+import type { VocabularyDictionaryEntry } from "@/lib/types";
 import { Document, Packer, Paragraph, TextRun } from "docx";
 
 export function getCorrectAnswerWords(item: MultipleChoiceData) {
@@ -27,15 +28,14 @@ function downloadBlob(blob: Blob, filename: string) {
 }
 
 export async function downloadVocabularyDictionaryDocx(
-  item: MultipleChoiceData,
+  entries: VocabularyDictionaryEntry[],
   filename = "vocabulary-dictionary.docx",
 ) {
-  const words = getCorrectAnswerWords(item);
   const children = [
     new Paragraph({
       children: [new TextRun({ text: "Vocabulary Dictionary", bold: true })],
     }),
-    ...words.map((word, i) => new Paragraph(`${i + 1}. ${word}`)),
+    ...entries.map((entry, i) => new Paragraph(`${i + 1}. ${entry.word}`)),
   ];
   const doc = new Document({ sections: [{ children }] });
 }

@@ -59,7 +59,8 @@ export default function ParagraphInput() {
             const lookupResult: JapaneseLookupResponse = await response.json();
             if (lookupResult.success) dictionaryEntries.push({ word: row.word, partOfSpeech: row.partOfSpeech!, definition: lookupResult.definition, fallbackEntries: lookupResult.fallbackEntries });
         }
-        alert(JSON.stringify(dictionaryEntries, null, 2));
+        setGeneratedVocabularyEntries(dictionaryEntries);
+        alert(`Loaded ${dictionaryEntries.length} vocabulary entries.`);
     };
 
     const handleFullVocabularyDictionaryClick = () => {
