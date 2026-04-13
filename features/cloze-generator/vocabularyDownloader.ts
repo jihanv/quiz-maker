@@ -38,4 +38,6 @@ export async function downloadVocabularyDictionaryDocx(
     ...entries.map((entry, i) => new Paragraph(`${i + 1}. ${entry.word}`)),
   ];
   const doc = new Document({ sections: [{ children }] });
+  const blob = await Packer.toBlob(doc);
+  downloadBlob(blob, filename);
 }
