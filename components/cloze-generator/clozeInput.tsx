@@ -52,7 +52,7 @@ export default function ParagraphInput() {
         if (!generatedTestData) return;
         const lookupRows = generatedTestData.questions.map((q) => ({ word: q.choices[q.answer], partOfSpeech: q.partOfSpeech })).filter((row) => row.partOfSpeech);
         const dictionaryEntries: VocabularyDictionaryEntry[] = [];
-        for (const row of lookupRows.slice(0, 2)) {
+        for (const row of lookupRows) {
             const response = await fetch("/api/lookup", { method: "post", body: JSON.stringify(row), headers: { "Content-Type": "application/json" } });
             if (!response.ok) continue;
             const lookupResult: JapaneseLookupResponse = await response.json();
