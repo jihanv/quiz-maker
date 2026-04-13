@@ -65,7 +65,8 @@ export default function ParagraphInput() {
             definition: lookupResult.definition,
             fallbackEntries: lookupResult.fallbackEntries,
         } : null;
-        alert(JSON.stringify(dictionaryEntry, null, 2));
+        const dictionaryEntries = dictionaryEntry ? [dictionaryEntry] : [];
+        alert(JSON.stringify(dictionaryEntries, null, 2));
     };
 
     const handleFullVocabularyDictionaryClick = () => {
