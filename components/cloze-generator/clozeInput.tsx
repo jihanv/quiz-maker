@@ -54,6 +54,10 @@ export default function ParagraphInput() {
         const firstRow = lookupRows[0];
         if (!firstRow?.partOfSpeech) return;
         const response = await fetch("/api/lookup", { method: "post", body: JSON.stringify(firstRow), headers: { "Content-Type": "application/json" } });
+        if (!response.ok) {
+            alert("Unable to look up this vocabulary word.");
+            return;
+        }
         alert(JSON.stringify(await response.json(), null, 2));
     };
 
