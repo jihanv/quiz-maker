@@ -59,8 +59,13 @@ export default function ParagraphInput() {
             return;
         }
         const lookupResult: JapaneseLookupResponse = await response.json();
-        const definitionText = lookupResult.success ? lookupResult.definition : null;
-        alert(definitionText ?? "No definition found.");
+        const dictionaryEntry = lookupResult.success ? {
+            word: firstRow.word,
+            partOfSpeech: firstRow.partOfSpeech,
+            definition: lookupResult.definition,
+            fallbackEntries: lookupResult.fallbackEntries,
+        } : null;
+        alert(JSON.stringify(dictionaryEntry, null, 2));
     };
 
     const handleFullVocabularyDictionaryClick = () => {
