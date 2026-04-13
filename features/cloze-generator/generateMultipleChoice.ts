@@ -15,7 +15,7 @@ export function generateMultipleChoice(passage: string) {
   for (const question of testData) {
     const temp = question.sectionText.replace(
       question.difficultWord!,
-      ` ${toCircledNumber(question.order)} `
+      ` ${toCircledNumber(question.order)} `,
     );
     newText = newText + temp;
   }
@@ -23,6 +23,7 @@ export function generateMultipleChoice(passage: string) {
   const vocabularyRows = testData.map((row) => ({
     choices: row.answerChoices,
     answer: row.answerIndex,
+    partOfSpeech: row.partOfSpeech,
   }));
 
   return {
