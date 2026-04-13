@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { JapaneseLookupResponse, ParagraphSuccessResponse, TParagraphSchema, paragraphSchema } from "@/lib/types";
+import { JapaneseLookupResponse, ParagraphSuccessResponse, TParagraphSchema, VocabularyDictionaryEntry, paragraphSchema } from "@/lib/types";
 import { downloadDocxFromItem, MultipleChoiceData } from "@/features/cloze-generator/fileDownloader";
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
@@ -59,7 +59,7 @@ export default function ParagraphInput() {
             return;
         }
         const lookupResult: JapaneseLookupResponse = await response.json();
-        const dictionaryEntry = lookupResult.success ? {
+        const dictionaryEntry: VocabularyDictionaryEntry | null = lookupResult.success ? {
             word: firstRow.word,
             partOfSpeech: firstRow.partOfSpeech,
             definition: lookupResult.definition,
