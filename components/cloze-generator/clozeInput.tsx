@@ -48,14 +48,13 @@ export default function ParagraphInput() {
 
     };
 
-    const handleVocabularyDictionaryClick = () => {
+    const handleVocabularyDictionaryClick = async () => {
         if (!generatedTestData) return;
-        const lookupRows = generatedTestData.questions.map((q) => ({
-            word: q.choices[q.answer],
-            partOfSpeech: q.partOfSpeech,
-        }))
-            .filter((row) => row.partOfSpeech);;
-        alert(JSON.stringify(lookupRows, null, 2));
+        const lookupRows = generatedTestData.questions.map((q) => ({ word: q.choices[q.answer], partOfSpeech: q.partOfSpeech })).filter((row) => row.partOfSpeech);
+        const firstRow = lookupRows[0];
+        if (!firstRow?.partOfSpeech) return;
+        const response = await fetch("/api/lookup", { method: "post", body: JSON.stringify(firstRow), headers: { "Content-Type": "application/json" } });
+        alert(JSON.stringify(await response.json(), null, 2));
     };
 
     const handleFullVocabularyDictionaryClick = () => {
