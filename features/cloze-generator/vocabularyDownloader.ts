@@ -35,14 +35,33 @@ export async function downloadVocabularyDictionaryDocx(
     new Paragraph({
       children: [new TextRun({ text: "Vocabulary Dictionary", bold: true })],
     }),
-    ...entries.map((entry, i) => {
+    ...entries.flatMap((entry, i) => {
       const fallbackDefinitions = entry.fallbackEntries[0]?.definitions ?? [];
-      const definitionText =
-        entry.definition ??
-        (fallbackDefinitions.length
-          ? fallbackDefinitions.map((d, j) => `${j + 1}. ${d}`).join("  ")
-          : (entry.fallbackEntries[0]?.summary ?? "No definition available"));
-      return new Paragraph(`${i + 1}. ${entry.word}: ${definitionText}`);
+      if (entry.definition)
+        return [new Paragraph(`${i + 1}. ${entry.word}: ${entry.definition}`)];
+      if (fallbackDefinitions.length === 1) {
+        return [
+          new Paragraph({
+            children: [
+              new TextRun(`${i + 1}. `),
+              new TextRun(`${entry.word}: `),
+              new TextRun(fallbackDefinitions[0]),
+            ],
+          }),
+        ];
+      }
+      if (fallbackDefinitions.length > 1)
+        return [
+          new Paragraph(`${i + 1}. ${entry.word}:`),
+          ...fallbackDefinitions.map(
+            (d, j) => new Paragraph(`   ${j + 1}. ${d}`),
+          ),
+        ];
+      return [
+        new Paragraph(
+          `${i + 1}. ${entry.word}: ${entry.fallbackEntries[0]?.summary ?? "No definition available"}`,
+        ),
+      ];
     }),
   ];
   const doc = new Document({ sections: [{ children }] });
