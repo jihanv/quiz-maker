@@ -36,11 +36,12 @@ export async function downloadVocabularyDictionaryDocx(
       children: [new TextRun({ text: "Vocabulary Dictionary", bold: true })],
     }),
     ...entries.map((entry, i) => {
+      const fallbackDefinitions = entry.fallbackEntries[0]?.definitions ?? [];
       const definitionText =
         entry.definition ??
-        entry.fallbackEntries[0]?.definitions[0] ??
-        entry.fallbackEntries[0]?.summary ??
-        "No definition available";
+        (fallbackDefinitions.length
+          ? fallbackDefinitions.map((d, j) => `${j + 1}. ${d}`).join("  ")
+          : (entry.fallbackEntries[0]?.summary ?? "No definition available"));
       return new Paragraph(`${i + 1}. ${entry.word}: ${definitionText}`);
     }),
   ];
