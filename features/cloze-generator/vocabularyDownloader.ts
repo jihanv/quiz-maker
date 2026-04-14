@@ -60,7 +60,11 @@ export async function downloadVocabularyDictionaryDocx(
             children: [new TextRun(`${entry.word}:`)],
           }),
           ...fallbackDefinitions.map(
-            (d, j) => new Paragraph(`   ${j + 1}. ${d}`),
+            (d, j) =>
+              new Paragraph({
+                indent: { left: 720, hanging: 360 },
+                children: [new TextRun(`(${j + 1}) ${d}`)],
+              }),
           ),
         ];
       return [
