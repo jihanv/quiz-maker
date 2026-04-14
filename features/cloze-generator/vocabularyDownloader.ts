@@ -1,6 +1,14 @@
 import type { MultipleChoiceData } from "./fileDownloader";
 import type { VocabularyDictionaryEntry } from "@/lib/types";
-import { Document, Packer, Paragraph, TextRun } from "docx";
+import {
+  AlignmentType,
+  Document,
+  LevelFormat,
+  LevelSuffix,
+  Packer,
+  Paragraph,
+  TextRun,
+} from "docx";
 
 export function getCorrectAnswerWords(item: MultipleChoiceData) {
   return item.questions.map((q) => q.choices[q.answer]);
@@ -35,36 +43,57 @@ export async function downloadVocabularyDictionaryDocx(
     new Paragraph({
       children: [new TextRun({ text: "Vocabulary Dictionary", bold: true })],
     }),
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ...entries.flatMap((entry, i) => {
       const fallbackDefinitions = entry.fallbackEntries[0]?.definitions ?? [];
       if (entry.definition)
-        return [new Paragraph(`${i + 1}. ${entry.word}: ${entry.definition}`)];
-      if (fallbackDefinitions.length === 1) {
         return [
           new Paragraph({
-            children: [
-              new TextRun(`${i + 1}. `),
-              new TextRun(`${entry.word}: `),
-              new TextRun(fallbackDefinitions[0]),
-            ],
+            numbering: { reference: "vocab-numbering", level: 0 },
+            children: [new TextRun(`${entry.word}: ${entry.definition}`)],
           }),
         ];
-      }
       if (fallbackDefinitions.length > 1)
         return [
-          new Paragraph(`${i + 1}. ${entry.word}:`),
+          new Paragraph({
+            numbering: { reference: "vocab-numbering", level: 0 },
+            children: [new TextRun(`${entry.word}:`)],
+          }),
           ...fallbackDefinitions.map(
             (d, j) => new Paragraph(`   ${j + 1}. ${d}`),
           ),
         ];
       return [
-        new Paragraph(
-          `${i + 1}. ${entry.word}: ${entry.fallbackEntries[0]?.summary ?? "No definition available"}`,
-        ),
+        new Paragraph({
+          numbering: { reference: "vocab-numbering", level: 0 },
+          children: [
+            new TextRun(
+              `${entry.word}:${entry.fallbackEntries[0]?.summary ?? "No definition available"}`,
+            ),
+          ],
+        }),
       ];
     }),
   ];
-  const doc = new Document({ sections: [{ children }] });
+  const doc = new Document({
+    numbering: {
+      config: [
+        {
+          reference: "vocab-numbering",
+          levels: [
+            {
+              level: 0,
+              format: LevelFormat.DECIMAL,
+              text: "%1.",
+              suffix: LevelSuffix.SPACE,
+              alignment: AlignmentType.LEFT,
+            },
+          ],
+        },
+      ],
+    },
+    sections: [{ children }],
+  });
   const blob = await Packer.toBlob(doc);
   downloadBlob(blob, filename);
 }
