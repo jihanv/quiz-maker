@@ -11,18 +11,20 @@ export function generateMultipleChoice(passage: string) {
 
   // //make test data
   const testData: MultipleChoiceSection[] = createTestData(sections);
+  const validTestData = testData.filter(
+    (row) => row.answerChoices && row.answerIndex !== undefined,
+  );
   let newText = "";
-  for (const question of testData) {
+  for (const question of validTestData) {
     const temp = question.sectionText.replace(
       question.difficultWord!,
       ` ${toCircledNumber(question.order)} `,
     );
     newText = newText + temp;
   }
-  // make answer choices
-  const vocabularyRows = testData.map((row) => ({
-    choices: row.answerChoices,
-    answer: row.answerIndex,
+  const vocabularyRows = validTestData.map((row) => ({
+    choices: row.answerChoices!,
+    answer: row.answerIndex!,
     partOfSpeech: row.partOfSpeech,
   }));
 
