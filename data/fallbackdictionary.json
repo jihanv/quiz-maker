@@ -4476,6 +4476,24 @@
     ]
   },
   {
+    "word": "backdrop",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definitions": [
+          {
+            "definition": "A painted cloth or wall forming the background of a stage set.",
+            "definition_ja": "舞台装置の背景をなす、描かれた布や壁。"
+          },
+          {
+            "definition": "The setting or background for an event, situation, or idea.",
+            "definition_ja": "出来事、状況、または考えの背景や状況。"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "word": "backlighting",
     "meanings": [
       {
