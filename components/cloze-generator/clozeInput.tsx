@@ -17,6 +17,7 @@ export default function ParagraphInput() {
     const {
         register,
         handleSubmit,
+        watch,
         formState: {
             // errors,
             isSubmitting
