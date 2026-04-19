@@ -522,7 +522,6 @@ ailing
 ailment
 aim
 aimless
-ain't
 air
 air-conditioned
 air-conditioning
@@ -1107,7 +1106,6 @@ ardent
 ardor
 arduous
 area
-aren't
 arena
 argon
 argot
@@ -2753,7 +2751,6 @@ campfire
 camping
 campsite
 campus
-can't
 canal
 canard
 canary
@@ -4418,7 +4415,6 @@ couch
 cougar
 cough
 could
-couldn't
 council
 councillor
 councilman
@@ -5448,7 +5444,6 @@ dictum
 did
 didactic
 didactics
-didn't
 die
 diehard
 dielectric
@@ -5908,7 +5903,6 @@ doddle
 dodge
 dodgy
 does
-doesn't
 doff
 dog
 dogfish
@@ -5949,7 +5943,6 @@ domineer
 domineering
 dominion
 domino
-don't
 donate
 donation
 done
@@ -8951,7 +8944,6 @@ hacker
 hackney
 hackneyed
 haddock
-hadn't
 hadron
 haematic
 haemoglobin
@@ -9095,7 +9087,6 @@ harshness
 harvest
 harvester
 hash
-hasn't
 hassle
 haste
 hasten
@@ -9119,7 +9110,6 @@ haunted
 haunting
 hauteur
 haven
-haven't
 haversack
 havoc
 hawk
@@ -9132,9 +9122,6 @@ hazardous
 haze
 hazel
 hazy
-he'd
-he'll
-he's
 head
 head-on
 headache
@@ -10832,7 +10819,6 @@ island
 islander
 isle
 islet
-isn't
 isochronous
 isolate
 isolated
@@ -10844,8 +10830,6 @@ issuance
 issue
 issuer
 isthmus
-it'll
-it's
 itch
 item
 iterate
@@ -11433,7 +11417,6 @@ lessen
 lesser
 lessor
 let
-let's
 lethal
 lethargic
 lethargy
@@ -11857,7 +11840,6 @@ lyrical
 lyrically
 lysis
 ma
-ma'am
 macabre
 macadam
 macaque
@@ -13630,7 +13612,6 @@ omnivore
 omnivorous
 on-screen
 oncoming
-one's
 one-man
 one-off
 one-piece
@@ -17994,8 +17975,6 @@ shaver
 shaving
 shavings
 shawl
-she'd
-she's
 sheaf
 shear
 shears
@@ -18090,7 +18069,6 @@ shortwave
 shot
 shotgun
 shoulder
-shouldn't
 shout
 shove
 shovel
@@ -20062,7 +20040,6 @@ thankful
 thankfully
 thanks
 thanksgiving
-that's
 thatch
 thaw
 theater
@@ -20103,9 +20080,6 @@ thesaurus
 these
 thesis
 thespian
-they'll
-they're
-they've
 thick
 thicken
 thicket
@@ -21913,7 +21887,6 @@ washing
 washing-up
 washout
 washroom
-wasn't
 wasp
 waspish
 wastage
@@ -21960,10 +21933,6 @@ way
 waylay
 wayside
 wayward
-we'd
-we'll
-we're
-we've
 weak
 weaken
 weakly
@@ -22035,7 +22004,6 @@ welt
 wend
 went
 were
-weren't
 west
 western
 westerner
@@ -22238,7 +22206,6 @@ womanhood
 womb
 women
 won
-won't
 wonder
 wonderful
 wonderfully
@@ -22317,7 +22284,6 @@ worthless
 worthwhile
 worthy
 would-be
-wouldn't
 wound
 wounded
 woven
@@ -22416,8 +22382,6 @@ yogurt
 yoke
 yokel
 yolk
-you're
-you've
 young
 youngster
 youth

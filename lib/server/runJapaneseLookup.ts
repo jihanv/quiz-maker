@@ -25,6 +25,15 @@ export async function runJapaneseLookup(
     fallbackEntry?.meanings.flatMap((meaning) =>
       meaning.definitions.map((item) => item.definition_ja).filter(Boolean),
     ) ?? [];
+  const fallbackExamples =
+    fallbackEntry?.meanings.flatMap((meaning) =>
+      meaning.definitions
+        .filter((item) => item.example && item.example_ja)
+        .map((item) => ({
+          english: item.example!,
+          japanese: item.example_ja!,
+        })),
+    ) ?? [];
   if (fallbackDefinitionsJa[0]) definition = fallbackDefinitionsJa[0];
   if (fallbackEntry) {
     fallbackEntries.push({
