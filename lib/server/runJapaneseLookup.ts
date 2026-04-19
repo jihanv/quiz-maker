@@ -19,13 +19,15 @@ export async function runJapaneseLookup(
 
       const url = `https://api.excelapi.org/dictionary/enja?word=${encodeURIComponent(word)}`;
 
-  try {
-    const response = await fetch(url, {
-      headers: { Accept: "text/plain", "User-Agent": "Mozilla/5.0" },
-    });
-    const text = (await response.text()).trim();
-    if (response.ok && text) definition = text;
-  } catch {}
+    if (!isFallbackWord) {
+      try {
+        const response = await fetch(url, {
+          headers: { Accept: "text/plain", "User-Agent": "Mozilla/5.0" },
+        });
+        const text = (await response.text()).trim();
+        if (response.ok && text) definition = text;
+      } catch {}
+    }
 
   if (!definition && includeFallback) {
     try {
