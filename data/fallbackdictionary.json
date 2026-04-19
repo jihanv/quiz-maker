@@ -40192,6 +40192,29 @@
     ]
   },
   {
+    "word": "noir",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definitions": [
+          {
+            "definition": "A style of film or fiction characterized by darkness, violence, moral ambiguity, and a gloomy atmosphere; short for film noir.",
+            "definition_ja": "暗さ、暴力、道徳的曖昧さ、陰鬱な雰囲気を特徴とする映画や小説の様式。film noir の略。"
+          }
+        ]
+      },
+      {
+        "partOfSpeech": "adjective",
+        "definitions": [
+          {
+            "definition": "Having the characteristics of noir in style, plot, or mood.",
+            "definition_ja": "作風、筋書き、または雰囲気においてノワールの特徴を持つこと。"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "word": "nomadism",
     "meanings": [
       {

@@ -110,10 +110,16 @@ function tokenizeWords(passage: string) {
 }
 
 function normalizeForLookup(token: string) {
-  return token.toLowerCase().replace(/^[^a-z]+|[^a-z]+$/g, ""); // strip non-letters at edges
-  // return token.toLowerCase().replace(/[^a-z]/g, "");
+  const word = token.toLowerCase().replace(/^[^a-z]+|[^a-z]+$/g, "");
+  if (dict.has(word)) return word;
+  if (word.endsWith("ies") && dict.has(word.slice(0, -3) + "y"))
+    return word.slice(0, -3) + "y";
+  if (word.endsWith("es") && dict.has(word.slice(0, -2)))
+    return word.slice(0, -2);
+  if (word.endsWith("s") && dict.has(word.slice(0, -1)))
+    return word.slice(0, -1);
+  return word;
 }
-
 function getZipf(word: string): number {
   const z = zipfFrequency(word, "en");
   return Number.isFinite(z) ? z : 100; // unknown => treat as very common/easy
