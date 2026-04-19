@@ -116,7 +116,7 @@ export default function ParagraphInput() {
                 <br />
                 <footer className="text-xs">© Jihan V. 2026</footer>
                 <footer className="text-xs">Multiple Choice Generator</footer>
-                <Dialog open={isSubmitting}>
+                <Dialog open={isSubmitting || isGeneratingVocabularyDictionary}>
                     <DialogContent
                         className="sm:max-w-md"
                         // hides the X button (DialogContent renders a close button by default)
