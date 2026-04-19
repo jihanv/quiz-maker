@@ -43,6 +43,11 @@ export async function downloadDocxFromItem(
   item: MultipleChoiceData,
   filename = "item.docx",
 ) {
+  if (item.questions.length === 0) {
+    alert("No valid cloze questions were generated for this passage.");
+    return;
+  }
+
   const children: Array<Paragraph | Table> = [];
 
   children.push(new Paragraph(""));
