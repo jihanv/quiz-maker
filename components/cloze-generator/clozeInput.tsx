@@ -48,6 +48,7 @@ export default function ParagraphInput() {
 
         const testDataToPrint: MultipleChoiceData = text.testData;
         setGeneratedTestData(testDataToPrint);
+        setLastGeneratedSentence(data.sentence);
         await downloadDocxFromItem(testDataToPrint)
 
     };
