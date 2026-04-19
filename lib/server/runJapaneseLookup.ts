@@ -14,10 +14,16 @@ export async function runJapaneseLookup(
 ): Promise<JapaneseLookupPassResult> {
       let definition: string | null = null;
       const fallbackEntries: JapaneseLookupFallbackEntry[] = [];
-      const normalizedWord = word.trim().toLowerCase();
-      const isFallbackWord = fallbackWords.dictionary.includes(normalizedWord);
+        const normalizedWord = word.trim().toLowerCase();
+        const isFallbackWord =
+          fallbackWords.dictionary.includes(normalizedWord);
+        const fallbackEntry = isFallbackWord
+          ? fallbackDictionary.find(
+              (entry) => entry.word.toLowerCase() === normalizedWord,
+            )
+          : undefined;
 
-      const url = `https://api.excelapi.org/dictionary/enja?word=${encodeURIComponent(word)}`;
+        const url = `https://api.excelapi.org/dictionary/enja?word=${encodeURIComponent(word)}`;
 
     if (!isFallbackWord) {
       try {
