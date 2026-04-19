@@ -40,6 +40,7 @@ export async function runJapaneseLookup(
       headword: fallbackEntry.word,
       summary: "",
       definitions: fallbackDefinitionsJa,
+      examples: fallbackExamples,
     });
   }
 
