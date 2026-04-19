@@ -75,15 +75,17 @@ export default function ParagraphInput() {
         setIsGeneratingVocabularyDictionary(false);
     };
 
-    const handleFullVocabularyDictionaryClick = () => {
+    const handleFullVocabularyDictionaryClick = async () => {
         if (!generatedTestData) return;
         const fullWordList = getUniqueAlphabetizedChoiceWords(generatedTestData);
         const fullLookupRows = fullWordList.flatMap((word) => {
             const question = generatedTestData.questions.find((q) => q.choices.includes(word));
             return question?.partOfSpeech ? [{ word, partOfSpeech: question.partOfSpeech }] : [];
         });
-        alert(`Found ${fullLookupRows.length} lookup rows.`);
+        const dictionaryEntries: VocabularyDictionaryEntry[] = [];
+        alert(`Prepared ${dictionaryEntries.length} entries from ${fullLookupRows.length} lookup rows.`);
     };
+
     return (
         <>
             <div
