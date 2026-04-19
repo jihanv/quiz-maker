@@ -53,6 +53,7 @@ export default function ParagraphInput() {
 
     const handleVocabularyDictionaryClick = async () => {
         if (!generatedTestData) return;
+        setIsGeneratingVocabularyDictionary(true);
         const lookupRows = generatedTestData.questions.map((q) => ({ word: q.choices[q.answer], partOfSpeech: q.partOfSpeech })).filter((row) => row.partOfSpeech);
         const dictionaryEntries: VocabularyDictionaryEntry[] = [];
         for (const row of lookupRows) {
@@ -63,6 +64,7 @@ export default function ParagraphInput() {
         }
         setGeneratedVocabularyEntries(dictionaryEntries);
         await downloadVocabularyDictionaryDocx(dictionaryEntries);
+        setIsGeneratingVocabularyDictionary(false);
         alert(`Loaded ${dictionaryEntries.length} vocabulary entries.`);
     };
 
