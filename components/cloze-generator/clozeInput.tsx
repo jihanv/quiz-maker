@@ -128,7 +128,7 @@ export default function ParagraphInput() {
                         <DialogHeader>
                             <DialogTitle className="flex items-center gap-2">
                                 <Loader2 className="h-5 w-5 animate-spin" />
-                                Generating test…
+                                {isGeneratingVocabularyDictionary ? "Generating vocabulary dictionary…" : "Generating test…"}
                             </DialogTitle>
                             <DialogDescription>
                                 Please wait—don’t close this tab/window while we build your document.
