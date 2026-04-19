@@ -83,7 +83,13 @@ export default function ParagraphInput() {
             return question?.partOfSpeech ? [{ word, partOfSpeech: question.partOfSpeech }] : [];
         });
         const dictionaryEntries: VocabularyDictionaryEntry[] = [];
-        alert(`Prepared ${dictionaryEntries.length} entries from ${fullLookupRows.length} lookup rows.`);
+        for (const row of fullLookupRows) {
+            const response = await fetch("/api/lookup", { method: "post", body: JSON.stringify(row), headers: { "Content-Type": "application/json" } });
+            if (!response.ok) continue;
+            const lookupResult: JapaneseLookupResponse = await response.json();
+            if (lookupResult.success) dictionaryEntries.push({ word: row.word, partOfSpeech: row.partOfSpeech, definition: lookupResult.definition, fallbackEntries: lookupResult.fallbackEntries });
+        }
+        alert(`Loaded ${dictionaryEntries.length} full vocabulary entries.`);
     };
 
     return (
