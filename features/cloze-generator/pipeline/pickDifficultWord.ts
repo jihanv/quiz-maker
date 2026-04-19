@@ -30,6 +30,9 @@ export type MultipleChoiceSection = {
 export function createTestData(
   passageSections: string[],
 ): MultipleChoiceSection[] {
+  temporaryDifficultWords.length = 0;
+  stem.clear();
+
   const object = passageSections.map((sectionText, i) => {
     const targetWord = pickDifficultWord(sectionText);
     let choices = targetWord.difficultWord
