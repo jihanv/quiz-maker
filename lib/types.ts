@@ -25,6 +25,7 @@ export type JapaneseLookupFallbackEntry = {
   headword: string;
   summary: string;
   definitions: string[];
+  examples?: string[];
 };
 
 export type JapaneseLookupSuccessResponse = {
