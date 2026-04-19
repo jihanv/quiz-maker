@@ -12,7 +12,11 @@ export function generateMultipleChoice(passage: string) {
   // //make test data
   const testData: MultipleChoiceSection[] = createTestData(sections);
   const validTestData = testData.filter(
-    (row) => row.answerChoices && row.answerIndex !== undefined,
+    (row) =>
+      row.difficultWord &&
+      row.answerChoices?.length === 4 &&
+      row.answerIndex !== undefined &&
+      row.answerIndex >= 0,
   );
   let newText = "";
   for (const question of validTestData) {
