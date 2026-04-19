@@ -22,10 +22,21 @@ export async function runJapaneseLookup(
                   (entry) => entry.word.toLowerCase() === normalizedWord,
                 )
               : undefined;
-            const fallbackDefinitionJa =
-              fallbackEntry?.meanings?.[0]?.definitions?.[0]?.definition_ja ??
-              null;
+              const fallbackDefinitionJa =
+                fallbackEntry?.meanings?.[0]?.definitions?.[0]?.definition_ja ??
+                null;
               if (fallbackDefinitionJa) definition = fallbackDefinitionJa;
+              if (fallbackEntry) {
+                fallbackEntries.push({
+                  headword: fallbackEntry.word,
+                  summary: "",
+                  definitions: fallbackEntry.meanings.flatMap((meaning) =>
+                    meaning.definitions
+                      .map((item) => item.definition_ja)
+                      .filter(Boolean),
+                  ),
+                });
+              }
 
               if (!isFallbackWord) {
                 const url = `https://api.excelapi.org/dictionary/enja?word=${encodeURIComponent(word)}`;
