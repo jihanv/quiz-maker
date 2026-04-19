@@ -2,7 +2,11 @@ import nlp from "compromise";
 // import fs from "node:fs";
 export type View = ReturnType<typeof nlp>;
 // import path from "node:path";
-import { NGSL_WORDS } from "@/lib/server/lexicons";
+
+import { DICT } from "@/lib/server/lexicons";
+
+const DICT_WORDS = [...DICT];
+
 import { LookupPartOfSpeech } from "@/lib/types";
 
 type CoarsePOS =
@@ -191,7 +195,7 @@ export function randomSamePosSameFormFromContext(
   while (out.size < count && tries < maxTries) {
     tries++;
 
-    const base = NGSL_WORDS[(Math.random() * NGSL_WORDS.length) | 0];
+    const base = DICT_WORDS[(Math.random() * DICT_WORDS.length) | 0];
     if (!base || base.length < 3) continue;
     if (!matchesPos(base, pos)) continue;
 
