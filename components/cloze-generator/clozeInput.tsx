@@ -131,8 +131,9 @@ export default function ParagraphInput() {
                                 {isGeneratingVocabularyDictionary ? "Generating vocabulary dictionary…" : "Generating test…"}
                             </DialogTitle>
                             <DialogDescription>
-                                Please wait—don’t close this tab/window while we build your document.
-                                作成中です。完了するまでこのタブ／ウィンドウは閉じないでください（切り替えはOKです）。
+                                {isGeneratingVocabularyDictionary
+                                    ? "Please wait—don’t close this tab/window while we build your vocabulary dictionary. 単語帳を作成中です。完了するまでこのタブ／ウィンドウは閉じないでください（切り替えはOKです）。"
+                                    : "Please wait—don’t close this tab/window while we build your test document. テスト文書を作成中です。完了するまでこのタブ／ウィンドウは閉じないでください（切り替えはOKです）。"}
                             </DialogDescription>
                         </DialogHeader>
                     </DialogContent>
