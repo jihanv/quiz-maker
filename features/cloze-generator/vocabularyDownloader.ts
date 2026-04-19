@@ -46,6 +46,11 @@ export async function downloadVocabularyDictionaryDocx(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ...entries.flatMap((entry, i) => {
       const fallbackDefinitions = entry.fallbackEntries[0]?.definitions ?? [];
+      const apiDefinitions =
+        entry.definition
+          ?.split("/")
+          .map((d) => d.trim())
+          .filter(Boolean) ?? [];
       if (fallbackDefinitions.length > 1)
         return [
           new Paragraph({
