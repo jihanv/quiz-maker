@@ -20496,6 +20496,24 @@
     ]
   },
   {
+    "word": "envision",
+    "meanings": [
+      {
+        "partOfSpeech": "verb",
+        "definitions": [
+          {
+            "definition": "To imagine or picture something in the mind.",
+            "definition_ja": "物事を心の中で思い描くこと。"
+          },
+          {
+            "definition": "To conceive of something as a future possibility; to foresee or visualize.",
+            "definition_ja": "将来の可能性として考えたり、予見したり、視覚的に思い描いたりすること。"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "word": "eohippus",
     "meanings": [
       {
