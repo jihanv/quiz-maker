@@ -99,7 +99,12 @@ export default function ParagraphInput() {
                             </Button>
                             <Button
                                 className="bg-black text-white transition-transform duration-150 ease-out hover:scale-[1.05] active:scale-[0.98] disabled:hover:scale-100"
-                                disabled={isSubmitting || isGeneratingVocabularyDictionary || !generatedTestData}
+                                disabled={
+                                    isSubmitting ||
+                                    isGeneratingVocabularyDictionary ||
+                                    !generatedTestData ||
+                                    hasInputChangedSinceLastGeneration
+                                }
                                 onClick={handleVocabularyDictionaryClick}
                                 type="button"
                                 variant="outline"
