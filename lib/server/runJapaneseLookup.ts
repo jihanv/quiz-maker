@@ -12,11 +12,12 @@ export async function runJapaneseLookup(
   word: string,
   includeFallback = true,
 ): Promise<JapaneseLookupPassResult> {
-    let definition: string | null = null;
-    const fallbackEntries: JapaneseLookupFallbackEntry[] = [];
-    const normalizedWord = word.trim().toLowerCase();
+      let definition: string | null = null;
+      const fallbackEntries: JapaneseLookupFallbackEntry[] = [];
+      const normalizedWord = word.trim().toLowerCase();
+      const isFallbackWord = fallbackWords.dictionary.includes(normalizedWord);
 
-    const url = `https://api.excelapi.org/dictionary/enja?word=${encodeURIComponent(word)}`;
+      const url = `https://api.excelapi.org/dictionary/enja?word=${encodeURIComponent(word)}`;
 
   try {
     const response = await fetch(url, {
