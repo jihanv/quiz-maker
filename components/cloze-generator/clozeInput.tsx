@@ -78,9 +78,12 @@ export default function ParagraphInput() {
     const handleFullVocabularyDictionaryClick = () => {
         if (!generatedTestData) return;
         const fullWordList = getUniqueAlphabetizedChoiceWords(generatedTestData);
-        alert(`Found ${fullWordList.length} unique words.`);
+        const fullLookupRows = fullWordList
+            .map((word) => generatedTestData.questions.find((q) => q.choices.includes(word)))
+            .filter((q) => q?.partOfSpeech)
+            .map((q) => ({ word: q!.choices.find((choice) => fullWordList.includes(choice))!, partOfSpeech: q!.partOfSpeech! }));
+        alert(`Found ${fullLookupRows.length} lookup rows.`);
     };
-
     return (
         <>
             <div
