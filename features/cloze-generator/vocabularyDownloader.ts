@@ -65,7 +65,7 @@ export async function downloadVocabularyDictionaryDocx(
               }),
           ),
         ];
-      if (entry.definition)
+      if (fallbackDefinitions.length > 1)
         return [
           new Paragraph({
             numbering: { reference: "vocab-numbering", level: 0 },
