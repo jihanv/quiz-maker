@@ -6,7 +6,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { JapaneseLookupResponse, ParagraphSuccessResponse, TParagraphSchema, VocabularyDictionaryEntry, paragraphSchema } from "@/lib/types";
 import { downloadDocxFromItem, MultipleChoiceData } from "@/features/cloze-generator/fileDownloader";
-import { downloadVocabularyDictionaryDocx } from "@/features/cloze-generator/vocabularyDownloader";
+import {
+    downloadVocabularyDictionaryDocx,
+    getUniqueAlphabetizedChoiceWords,
+} from "@/features/cloze-generator/vocabularyDownloader";
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Loader2 } from "lucide-react"
@@ -73,7 +76,9 @@ export default function ParagraphInput() {
     };
 
     const handleFullVocabularyDictionaryClick = () => {
-        alert("TODO: Generate Full Vocabulary Dictionary");
+        if (!generatedTestData) return;
+        const fullWordList = getUniqueAlphabetizedChoiceWords(generatedTestData);
+        alert(`Found ${fullWordList.length} unique words.`);
     };
 
     return (
@@ -111,14 +116,14 @@ export default function ParagraphInput() {
                             >
                                 Generate Vocabulary Dictionary
                             </Button>
-                            {/* <Button
+                            <Button
                                 disabled={isSubmitting || isGeneratingVocabularyDictionary || !generatedTestData}
                                 onClick={handleFullVocabularyDictionaryClick}
                                 type="button"
                                 variant="outline"
                             >
                                 Generate Full Vocabulary Dictionary
-                            </Button> */}
+                            </Button>
                         </div>
                     </div>
                 </form>
