@@ -126,3 +126,10 @@ export async function downloadVocabularyDictionaryDocx(
   const blob = await Packer.toBlob(doc);
   downloadBlob(blob, filename);
 }
+
+export async function downloadFullVocabularyDictionaryDocx(
+  entries: VocabularyDictionaryEntry[],
+  filename = "full-vocabulary-dictionary.docx",
+) {
+  await downloadVocabularyDictionaryDocx(entries, filename);
+}
