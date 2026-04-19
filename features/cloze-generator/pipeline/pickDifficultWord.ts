@@ -32,14 +32,21 @@ export function createTestData(
 ): MultipleChoiceSection[] {
   const object = passageSections.map((sectionText, i) => {
     const targetWord = pickDifficultWord(sectionText);
-    let choices = generateChoices(sectionText, targetWord.difficultWord);
-    const answerIndex = choices?.indexOf(targetWord.difficultWord);
-    const partOfSpeech = getLookupPartOfSpeechFromSentence(
-      sectionText,
-      targetWord.difficultWord,
-    );
+    let choices = targetWord.difficultWord
+      ? generateChoices(sectionText, targetWord.difficultWord)
+      : undefined;
+    const answerIndex =
+      targetWord.difficultWord && choices
+        ? choices.indexOf(targetWord.difficultWord)
+        : undefined;
+    const partOfSpeech = targetWord.difficultWord
+      ? getLookupPartOfSpeechFromSentence(sectionText, targetWord.difficultWord)
+      : null;
 
-    if (startsWithUppercase(targetWord.difficultWord)) {
+    if (
+      targetWord.difficultWord &&
+      startsWithUppercase(targetWord.difficultWord)
+    ) {
       choices = choices?.map((s) =>
         s.length ? s[0].toUpperCase() + s.slice(1) : s,
       );
@@ -92,14 +99,16 @@ export function pickDifficultWord(sectionText: string) {
       }
     }
   }
-  stem.add(stemmer(clean(word)));
-  temporaryDifficultWords.push(word);
+  if (word) {
+    stem.add(stemmer(clean(word)));
+    temporaryDifficultWords.push(word);
+  }
   // console.log(temporaryDifficultWords);
   // console.log(stem);
 
   return {
-    wordIndex: difficultWordIndex,
-    difficultWord: word.replace(/[^a-z]/gi, ""),
+    wordIndex: word ? difficultWordIndex : null,
+    difficultWord: word ? word.replace(/[^a-z]/gi, "") : null,
   };
 }
 
