@@ -65,7 +65,6 @@ export default function ParagraphInput() {
         setGeneratedVocabularyEntries(dictionaryEntries);
         await downloadVocabularyDictionaryDocx(dictionaryEntries);
         setIsGeneratingVocabularyDictionary(false);
-        alert(`Loaded ${dictionaryEntries.length} vocabulary entries.`);
     };
 
     const handleFullVocabularyDictionaryClick = () => {
@@ -95,7 +94,7 @@ export default function ParagraphInput() {
                             </Button>
                             <Button
                                 className="bg-black text-white transition-transform duration-150 ease-out hover:scale-[1.05] active:scale-[0.98] disabled:hover:scale-100"
-                                disabled={isSubmitting || !generatedTestData}
+                                disabled={isSubmitting || isGeneratingVocabularyDictionary || !generatedTestData}
                                 onClick={handleVocabularyDictionaryClick}
                                 type="button"
                                 variant="outline"
@@ -103,7 +102,7 @@ export default function ParagraphInput() {
                                 Generate Vocabulary Dictionary
                             </Button>
                             {/* <Button
-                                disabled={isSubmitting || !generatedTestData}
+                                disabled={isSubmitting || isGeneratingVocabularyDictionary || !generatedTestData}
                                 onClick={handleFullVocabularyDictionaryClick}
                                 type="button"
                                 variant="outline"
