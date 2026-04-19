@@ -65,19 +65,12 @@ export async function downloadVocabularyDictionaryDocx(
               }),
           ),
         ];
-      if (fallbackDefinitions.length > 1)
+      if (entry.definition)
         return [
           new Paragraph({
             numbering: { reference: "vocab-numbering", level: 0 },
-            children: [new TextRun(`${entry.word}:`)],
+            children: [new TextRun(`${entry.word}: ${entry.definition}`)],
           }),
-          ...fallbackDefinitions.map(
-            (d, j) =>
-              new Paragraph({
-                indent: { left: 720, hanging: 360 },
-                children: [new TextRun(`(${j + 1}) ${d}`)],
-              }),
-          ),
         ];
       return [
         new Paragraph({
