@@ -46,14 +46,21 @@ export async function downloadVocabularyDictionaryDocx(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ...entries.flatMap((entry, i) => {
       const fallbackDefinitions = entry.fallbackEntries[0]?.definitions ?? [];
-      if (entry.definition)
+      if (fallbackDefinitions.length > 1)
         return [
           new Paragraph({
             numbering: { reference: "vocab-numbering", level: 0 },
-            children: [new TextRun(`${entry.word}: ${entry.definition}`)],
+            children: [new TextRun(`${entry.word}:`)],
           }),
+          ...fallbackDefinitions.map(
+            (d, j) =>
+              new Paragraph({
+                indent: { left: 720, hanging: 360 },
+                children: [new TextRun(`(${j + 1}) ${d}`)],
+              }),
+          ),
         ];
-      if (fallbackDefinitions.length > 1)
+      if (entry.definition)
         return [
           new Paragraph({
             numbering: { reference: "vocab-numbering", level: 0 },
