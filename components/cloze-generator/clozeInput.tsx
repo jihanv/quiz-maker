@@ -31,6 +31,8 @@ export default function ParagraphInput() {
     const [generatedVocabularyEntries, setGeneratedVocabularyEntries] = useState<VocabularyDictionaryEntry[]>([]);
     const [isGeneratingVocabularyDictionary, setIsGeneratingVocabularyDictionary] = useState(false);
     const [lastGeneratedSentence, setLastGeneratedSentence] = useState("");
+    const currentSentence = watch("sentence") ?? "";
+    const hasInputChangedSinceLastGeneration = currentSentence !== lastGeneratedSentence;
 
     const onSubmit = async (data: TParagraphSchema) => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
