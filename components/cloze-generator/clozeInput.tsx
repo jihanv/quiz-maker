@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { JapaneseLookupResponse, ParagraphSuccessResponse, TParagraphSchema, VocabularyDictionaryEntry, paragraphSchema } from "@/lib/types";
 import { downloadDocxFromItem, MultipleChoiceData } from "@/features/cloze-generator/fileDownloader";
 import {
+    downloadFullVocabularyDictionaryDocx,
     downloadVocabularyDictionaryDocx,
     getUniqueAlphabetizedChoiceWords,
 } from "@/features/cloze-generator/vocabularyDownloader";
@@ -89,7 +90,8 @@ export default function ParagraphInput() {
             const lookupResult: JapaneseLookupResponse = await response.json();
             if (lookupResult.success) dictionaryEntries.push({ word: row.word, partOfSpeech: row.partOfSpeech, definition: lookupResult.definition, fallbackEntries: lookupResult.fallbackEntries });
         }
-        alert(`Loaded ${dictionaryEntries.length} full vocabulary entries.`);
+        setGeneratedVocabularyEntries(dictionaryEntries);
+        await downloadFullVocabularyDictionaryDocx(dictionaryEntries);
     };
 
     return (
