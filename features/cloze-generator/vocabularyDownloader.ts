@@ -51,13 +51,13 @@ export async function downloadVocabularyDictionaryDocx(
           ?.split("/")
           .map((d) => d.trim())
           .filter(Boolean) ?? [];
-      if (fallbackDefinitions.length > 1)
+      if (apiDefinitions.length > 1)
         return [
           new Paragraph({
             numbering: { reference: "vocab-numbering", level: 0 },
             children: [new TextRun(`${entry.word}:`)],
           }),
-          ...fallbackDefinitions.map(
+          ...apiDefinitions.map(
             (d, j) =>
               new Paragraph({
                 indent: { left: 720, hanging: 360 },
