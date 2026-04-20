@@ -53,6 +53,9 @@ export async function downloadVocabularyDictionaryDocx(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ...entries.flatMap((entry, i) => {
       const fallbackDefinitions = entry.fallbackEntries[0]?.definitions ?? [];
+      const fallbackExamples = includeExamples
+        ? (entry.fallbackEntries[0]?.examples ?? [])
+        : [];
       const apiDefinitions =
         entry.definition
           ?.split("/")
@@ -85,6 +88,17 @@ export async function downloadVocabularyDictionaryDocx(
                 children: [new TextRun(`(${j + 1}) ${d}`)],
               }),
           ),
+        ];
+      if (fallbackDefinitions.length > 0 && fallbackExamples.length > 0)
+        return [
+          new Paragraph({
+            numbering: { reference: "vocab-numbering", level: 0 },
+            children: [new TextRun(`${entry.word}: ${fallbackDefinitions[0]}`)],
+          }),
+          ...fallbackExamples.flatMap((example) => [
+            new Paragraph(`   Example: ${example.english}`),
+            new Paragraph(`   例文: ${example.japanese}`),
+          ]),
         ];
       if (entry.definition)
         return [
@@ -132,5 +146,5 @@ export async function downloadFullVocabularyDictionaryDocx(
   entries: VocabularyDictionaryEntry[],
   filename = "full-vocabulary-dictionary.docx",
 ) {
-  await downloadVocabularyDictionaryDocx(entries, filename);
+  await downloadVocabularyDictionaryDocx(entries, filename, true);
 }
