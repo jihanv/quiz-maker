@@ -44,6 +44,7 @@ function downloadBlob(blob: Blob, filename: string) {
 export async function downloadVocabularyDictionaryDocx(
   entries: VocabularyDictionaryEntry[],
   filename = "vocabulary-dictionary.docx",
+  includeExamples = false,
 ) {
   const children = [
     new Paragraph({
