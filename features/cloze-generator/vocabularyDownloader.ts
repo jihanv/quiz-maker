@@ -75,7 +75,7 @@ export async function downloadVocabularyDictionaryDocx(
               }),
           ),
         ];
-      if (fallbackDefinitions.length > 1)
+      if (fallbackDefinitions.length > 1 && fallbackExamples.length === 0)
         return [
           new Paragraph({
             numbering: { reference: "vocab-numbering", level: 0 },
@@ -93,8 +93,15 @@ export async function downloadVocabularyDictionaryDocx(
         return [
           new Paragraph({
             numbering: { reference: "vocab-numbering", level: 0 },
-            children: [new TextRun(`${entry.word}: ${fallbackDefinitions[0]}`)],
+            children: [new TextRun(`${entry.word}:`)],
           }),
+          ...fallbackDefinitions.map(
+            (d, j) =>
+              new Paragraph({
+                indent: { left: 720, hanging: 360 },
+                children: [new TextRun(`(${j + 1}) ${d}`)],
+              }),
+          ),
           ...fallbackExamples.flatMap((example) => [
             new Paragraph(`   Example: ${example.english}`),
             new Paragraph(`   例文: ${example.japanese}`),
