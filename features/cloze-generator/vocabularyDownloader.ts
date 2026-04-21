@@ -78,7 +78,10 @@ export async function downloadVocabularyDictionaryDocx(
               }),
           ),
         ];
-      if (fallbackDefinitions.length > 1 && fallbackExamples.length === 0)
+      if (
+        fallbackDefinitions.length > 1 &&
+        fallbackDefinitionItems.length === 0
+      )
         return [
           new Paragraph({
             numbering: { reference: "vocab-numbering", level: 0 },
@@ -92,22 +95,29 @@ export async function downloadVocabularyDictionaryDocx(
               }),
           ),
         ];
-      if (fallbackDefinitions.length > 0 && fallbackExamples.length > 0)
+      if (fallbackDefinitionItems.length > 0)
         return [
           new Paragraph({
             numbering: { reference: "vocab-numbering", level: 0 },
             children: [new TextRun(`${entry.word}:`)],
           }),
-          ...fallbackDefinitions.map(
-            (d, j) =>
-              new Paragraph({
-                indent: { left: 720, hanging: 360 },
-                children: [new TextRun(`(${j + 1}) ${d}`)],
-              }),
-          ),
-          ...fallbackExamples.flatMap((example) => [
-            new Paragraph(`   Example: ${example.english}`),
-            new Paragraph(`   例文: ${example.japanese}`),
+          ...fallbackDefinitionItems.flatMap((item, j) => [
+            new Paragraph({
+              indent: { left: 720, hanging: 360 },
+              children: [new TextRun(`(${j + 1}) ${item.definition}`)],
+            }),
+            ...(item.example
+              ? [
+                  new Paragraph({
+                    indent: { left: 1080 },
+                    children: [new TextRun(`Example: ${item.example.english}`)],
+                  }),
+                  new Paragraph({
+                    indent: { left: 1080 },
+                    children: [new TextRun(`例文: ${item.example.japanese}`)],
+                  }),
+                ]
+              : []),
           ]),
         ];
       if (entry.definition)
