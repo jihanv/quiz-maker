@@ -53,6 +53,9 @@ export async function downloadVocabularyDictionaryDocx(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ...entries.flatMap((entry, i) => {
       const fallbackDefinitions = entry.fallbackEntries[0]?.definitions ?? [];
+      const fallbackDefinitionItems = includeExamples
+        ? (entry.fallbackEntries[0]?.definitionItems ?? [])
+        : [];
       const fallbackExamples = includeExamples
         ? (entry.fallbackEntries[0]?.examples ?? [])
         : [];
