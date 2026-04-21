@@ -56,9 +56,9 @@ export async function downloadVocabularyDictionaryDocx(
       const fallbackDefinitionItems = includeExamples
         ? (entry.fallbackEntries[0]?.definitionItems ?? [])
         : [];
-      const fallbackExamples = includeExamples
-        ? (entry.fallbackEntries[0]?.examples ?? [])
-        : [];
+      // const fallbackExamples = includeExamples
+      //   ? (entry.fallbackEntries[0]?.examples ?? [])
+      //   : [];
       const apiDefinitions =
         entry.definition
           ?.split("/")

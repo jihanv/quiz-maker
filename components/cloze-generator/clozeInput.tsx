@@ -34,6 +34,7 @@ export default function ParagraphInput() {
     const [generatedTestData, setGeneratedTestData] = useState<MultipleChoiceData | null>(null);
     const [generatedVocabularyEntries, setGeneratedVocabularyEntries] = useState<VocabularyDictionaryEntry[]>([]);
     const [isGeneratingVocabularyDictionary, setIsGeneratingVocabularyDictionary] = useState(false);
+    const [isGeneratingFullVocabularyDictionary, setIsGeneratingFullVocabularyDictionary] = useState(false);
     const [lastGeneratedSentence, setLastGeneratedSentence] = useState("");
     const currentSentence = watch("sentence") ?? "";
     const hasInputChangedSinceLastGeneration = currentSentence !== lastGeneratedSentence;
@@ -78,6 +79,7 @@ export default function ParagraphInput() {
 
     const handleFullVocabularyDictionaryClick = async () => {
         if (!generatedTestData) return;
+        setIsGeneratingFullVocabularyDictionary(true);
         const fullWordList = getUniqueAlphabetizedChoiceWords(generatedTestData);
         const fullLookupRows = fullWordList.flatMap((word) => {
             const question = generatedTestData.questions.find((q) => q.choices.includes(word));
@@ -92,6 +94,7 @@ export default function ParagraphInput() {
         }
         setGeneratedVocabularyEntries(dictionaryEntries);
         await downloadFullVocabularyDictionaryDocx(dictionaryEntries);
+        setIsGeneratingFullVocabularyDictionary(false);
     };
 
     return (
@@ -130,6 +133,7 @@ export default function ParagraphInput() {
                                 Generate Vocabulary Dictionary
                             </Button>
                             <Button
+                                className="bg-black text-white transition-transform duration-150 ease-out hover:scale-[1.05] active:scale-[0.98] disabled:hover:scale-100"
                                 disabled={isSubmitting || isGeneratingVocabularyDictionary || !generatedTestData}
                                 onClick={handleFullVocabularyDictionaryClick}
                                 type="button"
@@ -143,27 +147,32 @@ export default function ParagraphInput() {
                 <br />
                 <footer className="text-xs">© Jihan V. 2026</footer>
                 <footer className="text-xs">Multiple Choice Generator</footer>
-                <Dialog open={isSubmitting || isGeneratingVocabularyDictionary}>
-                    <DialogContent
-                        className="sm:max-w-md"
-                        // hides the X button (DialogContent renders a close button by default)
-                        // if your shadcn version supports it:
-                        // closeButton={false}
-                        onPointerDownOutside={(e) => e.preventDefault()}
-                        onEscapeKeyDown={(e) => e.preventDefault()}
-                    >
-                        <DialogHeader>
-                            <DialogTitle className="flex items-center gap-2">
-                                <Loader2 className="h-5 w-5 animate-spin" />
-                                {isGeneratingVocabularyDictionary ? "Generating vocabulary dictionary…" : "Generating test…"}
-                            </DialogTitle>
-                            <DialogDescription>
-                                {isGeneratingVocabularyDictionary
+                <Dialog open={isSubmitting || isGeneratingVocabularyDictionary || isGeneratingFullVocabularyDictionary}>                    <DialogContent
+                    className="sm:max-w-md"
+                    // hides the X button (DialogContent renders a close button by default)
+                    // if your shadcn version supports it:
+                    // closeButton={false}
+                    onPointerDownOutside={(e) => e.preventDefault()}
+                    onEscapeKeyDown={(e) => e.preventDefault()}
+                >
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2">
+                            <Loader2 className="h-5 w-5 animate-spin" />
+                            {isGeneratingFullVocabularyDictionary
+                                ? "Generating full vocabulary dictionary…"
+                                : isGeneratingVocabularyDictionary
+                                    ? "Generating vocabulary dictionary…"
+                                    : "Generating test…"}
+                        </DialogTitle>
+                        <DialogDescription>
+                            {isGeneratingFullVocabularyDictionary
+                                ? "Please wait—don’t close this tab/window while we build your full vocabulary dictionary. 全単語の単語帳を作成中です。完了するまでこのタブ／ウィンドウは閉じないでください（切り替えはOKです）。"
+                                : isGeneratingVocabularyDictionary
                                     ? "Please wait—don’t close this tab/window while we build your vocabulary dictionary. 単語帳を作成中です。完了するまでこのタブ／ウィンドウは閉じないでください（切り替えはOKです）。"
                                     : "Please wait—don’t close this tab/window while we build your test document. テスト文書を作成中です。完了するまでこのタブ／ウィンドウは閉じないでください（切り替えはOKです）。"}
-                            </DialogDescription>
-                        </DialogHeader>
-                    </DialogContent>
+                        </DialogDescription>
+                    </DialogHeader>
+                </DialogContent>
                 </Dialog>
             </div >
 
