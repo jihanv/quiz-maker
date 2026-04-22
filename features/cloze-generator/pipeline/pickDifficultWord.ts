@@ -1,18 +1,13 @@
 import nlp from "compromise/two";
 import { zipfFrequency } from "nodewordfreq";
-import fs from "node:fs";
 import {
   generateChoices,
   getLookupPartOfSpeechFromSentence,
 } from "./createWordChoices";
 import { clean, startsWithUppercase } from "@/lib/utils";
 import { stemmer } from "stemmer";
-import path from "node:path";
 import { LookupPartOfSpeech } from "@/lib/types";
-
-const dictPath = path.join(process.cwd(), "data", "dictionary.json");
-const data = JSON.parse(fs.readFileSync(dictPath, "utf8"));
-const dict = new Set(data.dictionary); // Set = fast lookup
+import { DICT as dict } from "@/lib/server/lexicons";
 
 const temporaryDifficultWords: string[] = [];
 const stem = new Set<string>();
