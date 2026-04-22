@@ -35,21 +35,17 @@ export function createTestData(
 
   const object = passageSections.map((sectionText, i) => {
     const targetWord = pickDifficultWord(sectionText);
-    let choices = targetWord.difficultWord
-      ? generateChoices(sectionText, targetWord.difficultWord)
+    const difficultWord = targetWord.difficultWord;
+    let choices = difficultWord
+      ? generateChoices(sectionText, difficultWord)
       : undefined;
     const answerIndex =
-      targetWord.difficultWord && choices
-        ? choices.indexOf(targetWord.difficultWord)
-        : undefined;
-    const partOfSpeech = targetWord.difficultWord
-      ? getLookupPartOfSpeechFromSentence(sectionText, targetWord.difficultWord)
+      difficultWord && choices ? choices.indexOf(difficultWord) : undefined;
+    const partOfSpeech = difficultWord
+      ? getLookupPartOfSpeechFromSentence(sectionText, difficultWord)
       : null;
 
-    if (
-      targetWord.difficultWord &&
-      startsWithUppercase(targetWord.difficultWord)
-    ) {
+    if (difficultWord && startsWithUppercase(difficultWord)) {
       choices = choices?.map((s) =>
         s.length ? s[0].toUpperCase() + s.slice(1) : s,
       );
@@ -58,7 +54,7 @@ export function createTestData(
     return {
       order: i + 1,
       sectionText,
-      difficultWord: targetWord.difficultWord,
+      difficultWord: difficultWord,
       difficultWordTokenIndex: targetWord.wordIndex,
       answerChoices: choices,
       answerIndex: answerIndex,
