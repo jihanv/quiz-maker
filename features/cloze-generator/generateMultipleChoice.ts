@@ -11,29 +11,29 @@ export function generateMultipleChoice(passage: string) {
 
   // //make test data
   const testData: MultipleChoiceSection[] = createTestData(sections);
-  const validTestData = testData.filter(
+  const validQuestions = testData.filter(
     (row) =>
       row.difficultWord &&
       row.answerChoices?.length === 4 &&
       row.answerIndex !== undefined &&
       row.answerIndex >= 0,
   );
-  let newText = "";
-  for (const question of validTestData) {
-    const temp = question.sectionText.replace(
+  let editedPassage = "";
+  for (const question of validQuestions) {
+    const sectionWithPlaceholder = question.sectionText.replace(
       question.difficultWord!,
       ` ${toCircledNumber(question.order)} `,
     );
-    newText = newText + temp;
+    editedPassage = editedPassage + sectionWithPlaceholder;
   }
-  const vocabularyRows = validTestData.map((row) => ({
+  const answerChoices = validQuestions.map((row) => ({
     choices: row.answerChoices!,
     answer: row.answerIndex!,
     partOfSpeech: row.partOfSpeech,
   }));
 
   return {
-    editedPassage: newText,
-    answerChoices: vocabularyRows,
+    editedPassage: editedPassage,
+    answerChoices: answerChoices,
   };
 }
