@@ -1,8 +1,9 @@
 import nlp from "compromise/two";
 import { zipfFrequency } from "nodewordfreq";
 import {
-  generateChoices,
-  getLookupPartOfSpeechFromSentence,
+  generateChoicesFromWordInfo,
+  getFormInSentence,
+  toLookupPartOfSpeech,
 } from "./createWordChoices";
 import { clean, startsWithUppercase } from "@/lib/utils";
 import { stemmer } from "stemmer";
@@ -31,14 +32,20 @@ export function createTestData(
   const object = passageSections.map((sectionText, i) => {
     const targetWord = pickDifficultWord(sectionText);
     const difficultWord = targetWord.difficultWord;
-    let choices = difficultWord
-      ? generateChoices(sectionText, difficultWord)
-      : undefined;
-    const answerIndex =
-      difficultWord && choices ? choices.indexOf(difficultWord) : undefined;
-    const partOfSpeech = difficultWord
-      ? getLookupPartOfSpeechFromSentence(sectionText, difficultWord)
+
+    const wordInfo = targetWord.difficultWord
+      ? getFormInSentence(sectionText, targetWord.difficultWord)
       : null;
+
+    let choices =
+      targetWord.difficultWord && wordInfo
+        ? generateChoicesFromWordInfo(wordInfo, targetWord.difficultWord)
+        : undefined;
+    const answerIndex =
+      targetWord.difficultWord && choices
+        ? choices.indexOf(targetWord.difficultWord)
+        : undefined;
+    const partOfSpeech = wordInfo ? toLookupPartOfSpeech(wordInfo.pos) : null;
 
     if (difficultWord && startsWithUppercase(difficultWord)) {
       choices = choices?.map((s) =>
