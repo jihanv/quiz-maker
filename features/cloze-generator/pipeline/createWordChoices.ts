@@ -83,7 +83,7 @@ function getCoarsePOS(hit: TaggableSelection): CoarsePOS {
   return "Unknown";
 }
 
-function getFormInSentence(
+export function getFormInSentence(
   sentence: string,
   word: string,
   occurrence = 0,
@@ -221,19 +221,26 @@ export function getLookupPartOfSpeechFromSentence(
   const wordInfo = getFormInSentence(sentence, word);
   return wordInfo ? toLookupPartOfSpeech(wordInfo.pos) : null;
 }
+export function generateChoicesFromWordInfo(
+  wordInfo: { pos: CoarsePOS; form: WordForm },
+  word: string,
+) {
+  const choices = randomSamePosSameFormFromContext(
+    wordInfo.pos,
+    wordInfo.form,
+    word,
+  );
+  choices.push(word);
+
+  shuffleInPlace(choices);
+
+  return choices;
+}
+
 export function generateChoices(sententence: string, word: string) {
   const wordInfo = getFormInSentence(sententence, word);
   if (wordInfo) {
-    const choices = randomSamePosSameFormFromContext(
-      wordInfo?.pos,
-      wordInfo?.form,
-      word,
-    );
-    choices.push(word);
-
-    shuffleInPlace(choices);
-
-    return choices;
+    return generateChoicesFromWordInfo(wordInfo, word);
   }
 }
 
