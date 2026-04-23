@@ -33,18 +33,16 @@ export function createTestData(
     const targetWord = pickDifficultWord(sectionText);
     const difficultWord = targetWord.difficultWord;
 
-    const wordInfo = targetWord.difficultWord
-      ? getFormInSentence(sectionText, targetWord.difficultWord)
+    const wordInfo = difficultWord
+      ? getFormInSentence(sectionText, difficultWord)
       : null;
 
     let choices =
-      targetWord.difficultWord && wordInfo
-        ? generateChoicesFromWordInfo(wordInfo, targetWord.difficultWord)
+      difficultWord && wordInfo
+        ? generateChoicesFromWordInfo(wordInfo, difficultWord)
         : undefined;
     const answerIndex =
-      targetWord.difficultWord && choices
-        ? choices.indexOf(targetWord.difficultWord)
-        : undefined;
+      difficultWord && choices ? choices.indexOf(difficultWord) : undefined;
     const partOfSpeech = wordInfo ? toLookupPartOfSpeech(wordInfo.pos) : null;
 
     if (difficultWord && startsWithUppercase(difficultWord)) {
